@@ -1,9 +1,9 @@
 # MLDataLabeler
 
-This project is used to label the data for supervised learning. The data is captured from multiple sensors such as color(RGBC), IMU.
+This module is used to label the data for supervised learning. The data is captured from multiple sensors such as color(RGBC), IMU.
 The data is read from the serial port and processed into different color space (RGB, XYZ, L\*a\*b\*).
 
-The User interface is written using QT. I have used the QT designer to create the ui layout. 
+The User interface is written using QT. We have used the QT designer to create the ui layout. 
 
 To convert qt.ui file to python.py file please follow these below instructions.
 
