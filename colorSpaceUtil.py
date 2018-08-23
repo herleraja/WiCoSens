@@ -1,6 +1,7 @@
-import numpy as np
 import colorsys
 import traceback
+import os
+import numpy as np
 from numpy import genfromtxt
 
 def rgbc2YCbCr( r, g, b, c=0):
@@ -77,6 +78,7 @@ def rgbc2hsvDegree( r, g, b, c=0):
         h = (60 * ((b - r) / df) + 120) % 360
     elif mx == b:
         h = (60 * ((r - g) / df) + 240) % 360
+
     if mx == 0:
         s = 0
     else:
@@ -127,9 +129,9 @@ switcher = {
     }
 
 
-def fileColorSpaceCoverstionFunction(current_csv_file_path, new_converted_csv_file_path=None, color_Space='HSV'):
+def fileColorSpaceConversionFunction(current_csv_file_path, new_converted_csv_file_path=None, color_Space='HSV'):
 
-    colorSpaceCoverstionFunction = switcher.get(color_Space)
+    colorSpaceConversionFunction = switcher.get(color_Space)
 
     dt = genfromtxt(current_csv_file_path, delimiter=',')
     labels = dt[:, -1]
@@ -147,7 +149,7 @@ def fileColorSpaceCoverstionFunction(current_csv_file_path, new_converted_csv_fi
         new_line = str(dt[i][0]) + ',' + str(dt[i][1]) + ',' + str(dt[i][2]) + ',' + str(dt[i][3])
 
         for j in np.arange(0, len(dt_all_colors[i]), 3):
-            converted_value = colorSpaceCoverstionFunction(float(dt_all_colors[i][j]), float(dt_all_colors[i][j + 1]), float(dt_all_colors[i][j + 2]))
+            converted_value = colorSpaceConversionFunction(float(dt_all_colors[i][j]), float(dt_all_colors[i][j + 1]), float(dt_all_colors[i][j + 2]))
             new_line += ',' + str(converted_value[0]) + ',' + str(converted_value[1]) + ',' + str(converted_value[2])
 
         new_line = new_line + ',' + str(int(dt[i][-1])) + '\n'
@@ -160,15 +162,24 @@ def fileColorSpaceCoverstionFunction(current_csv_file_path, new_converted_csv_fi
 
 if __name__ == "__main__":
     try:
+
         #To test the file conversion method.
-        fileColorSpaceCoverstionFunction('./recording_folder/rack_red_test.csv', './recording_folder/rack_red_test_hsv.csv',
-                                         color_Space='HSV')
-        fileColorSpaceCoverstionFunction('./recording_folder/rack_red_train.csv', './recording_folder/rack_red_train_hsv.csv',
-                                         color_Space='HSV')
-        fileColorSpaceCoverstionFunction('./recording_folder/container_test.csv', './recording_folder/container_test_hsv.csv',
-                                         color_Space='HSV')
-        fileColorSpaceCoverstionFunction('./recording_folder/container_train.csv', './recording_folder/container_train_hsv.csv',
-                                         color_Space='HSV')
+
+        color_Space = 'HSVDegree'
+        source_dir_path = "./MLDataClassifiers/data1/rgb/"
+        destination_dir_path = "./MLDataClassifiers/data1/" + color_Space.lower() + "/"
+        os.makedirs(os.path.dirname(destination_dir_path), exist_ok=True)
+
+        fileColorSpaceConversionFunction(source_dir_path+'rack_test.csv', destination_dir_path+'rack_test.csv',
+                                         color_Space=color_Space)
+        fileColorSpaceConversionFunction(source_dir_path+'rack_train.csv', destination_dir_path+'rack_train.csv',
+                                         color_Space=color_Space)
+        fileColorSpaceConversionFunction(source_dir_path+'container_test.csv', destination_dir_path+'container_test.csv',
+                                         color_Space=color_Space)
+        fileColorSpaceConversionFunction(source_dir_path+'container_train.csv', destination_dir_path+'container_train.csv',
+                                         color_Space=color_Space)
+
+        print("The files are converted to ***", color_Space, "*** color space")
 
 
     except:

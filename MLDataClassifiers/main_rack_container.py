@@ -3,39 +3,49 @@ import tensorflow as tf
 import keras
 import pickle
 import os
-import time
 import serial as serial
 import traceback
 import colorSpaceUtil
+import matplotlib.pyplot as plt
+import itertools
 
-from sklearn.metrics import precision_score, recall_score, confusion_matrix
+from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix, accuracy_score, classification_report
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import GridSearchCV
+from keras.wrappers.scikit_learn import KerasClassifier
 from numpy import genfromtxt
+
+#Configuration related inputs
+color_space = 'HSVDegree'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+source_dir_path = "./data1/" + color_space.lower() + "/"
+config_save_load_dir_path = "./configs/" + color_space.lower() + "/"
+loadConfigurationsFromFiles = False
 
 #device="/dev/tty.usbmodem2853891"
 port = "COM3"  # COM for windows, it changes when we use unix system
 ser = serial.Serial(port, 115200, timeout=None)
+
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
 
-loadConfigurationsFromFiles = False
 
-def build_model(n_classes):
+def build_model(number_class):
     model = tf.keras.Sequential()
     # Must define the input shape in the first layer of the neural network
     model.add(tf.keras.layers.Dense(10, input_shape=(36,), activation='relu'))
-    #model.add(tf.keras.layers.Dropout(0.3))
+    #model.add(tf.keras.layers.Dropout(0.1))
     model.add(tf.keras.layers.Dense(1024, activation='relu'))
-    #model.add(tf.keras.layers.Dropout(0.3))
+    #model.add(tf.keras.layers.Dropout(0.1))
+    model.add(tf.keras.layers.Dense(612, activation='relu'))
     #model.add(tf.keras.layers.Flatten())
     model.add(tf.keras.layers.Dense(256, activation='relu'))
     #model.add(tf.keras.layers.Dropout(0.5))
-    model.add(tf.keras.layers.Dense(n_classes, activation='softmax'))
+    model.add(tf.keras.layers.Dense(number_class, activation='softmax'))
     # Take a look at the model summary
     model.summary()
 
     model.compile(loss='categorical_crossentropy',
-                  optimizer='adam',
+                  optimizer='rmsprop',
                   metrics=['accuracy'])
     return model
 
@@ -47,35 +57,26 @@ def parse_file(csv_path):
     dt_all_colors = dt[:, range(4, len(dt[0])-1)]
     return dt_all_colors, labels
 
-def saveConfigurations(model_rack, model_container):
 
-    os.makedirs(os.path.dirname("./configs/"), exist_ok=True)
-    '''
-    model_json = model_rack.to_json()
-    with open("./configs/model_rack.json", "w") as json_file:
-        json_file.write(model_json)
-    model_rack.save_weights("./configs/model_rack_weights.h5")  # serialize weights to HDF5
+def save_configurations():
 
-    model_json = model_container.to_json()
-    with open("./configs/model_container.json", "w") as json_file:
-        json_file.write(model_json)
-    model_container.save_weights("./configs/model_container_weights.h5")  # serialize weights to HDF5
-    '''
-    model_rack.save('./configs/model_rack.h5')
-    model_container.save('./configs/model_container.h5')
-    pickle.dump(scalar_rack, open("./configs/scalar_rack.p", "wb"))
-    pickle.dump(scalar_container, open("./configs/scalar_container.p", "wb"))
+    os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
+
+    model_rack.save(config_save_load_dir_path+'model_rack.h5')
+    model_container.save(config_save_load_dir_path+'model_container.h5')
+    pickle.dump(scalar_rack, open(config_save_load_dir_path+"scalar_rack.p", "wb"))
+    pickle.dump(scalar_container, open(config_save_load_dir_path+"scalar_container.p", "wb"))
 
     print("Saved machine learning models and scalar configuration into files !!")
 
 
 def get_trainig_data():
-    train_rack_data, train_rack_labels_raw = parse_file('./data/rack_red_train_hsv.csv')
+    train_rack_data, train_rack_labels_raw = parse_file(source_dir_path+'rack_train.csv')
     scalar_rack.fit(train_rack_data)
     train_rack_data = scalar_rack.transform(train_rack_data)
     train_rack_labels = keras.utils.to_categorical(train_rack_labels_raw, 2)
 
-    train_container_data, train_container_labels_raw = parse_file('./data/container_train_hsv.csv')
+    train_container_data, train_container_labels_raw = parse_file(source_dir_path+'container_train.csv')
     scalar_container.fit(train_container_data)
     train_container_data = scalar_container.transform(train_container_data)
     train_container_labels = keras.utils.to_categorical(train_container_labels_raw, 5)
@@ -84,15 +85,73 @@ def get_trainig_data():
 
 
 def get_testing_data():
-    test_rack_data, test_rack_labels_raw = parse_file('./data/rack_red_test_hsv.csv')
+    test_rack_data, test_rack_labels_raw = parse_file(source_dir_path+'rack_test.csv')
     test_rack_data = scalar_rack.transform(test_rack_data)
     test_rack_labels = keras.utils.to_categorical(test_rack_labels_raw, 2)
 
-    test_container_data, test_container_labels_raw = parse_file('./data/container_test_hsv.csv')
+    test_container_data, test_container_labels_raw = parse_file(source_dir_path+'container_test.csv')
     test_container_data = scalar_container.transform(test_container_data)
     test_container_labels = keras.utils.to_categorical(test_container_labels_raw, 5)
 
     return (test_rack_data, test_rack_labels, test_rack_labels_raw), (test_container_data, test_container_labels, test_container_labels_raw)
+
+def plot_confusion_matrix(cm, classes,
+                          normalize=False,
+                          title='Confusion matrix',
+                          cmap=plt.cm.OrRd): #Blues,OrRd, YlOrRd
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis] * 100.0
+        for x in range(0, len(cm[0, :])):
+            xv = cm[x, :]
+            for y in range(0, len(xv)):
+                vv = xv[y]
+
+                cm[x, y] = int(np.round(vv * 10.0)) / 10.0
+
+        print("Normalized confusion matrix")
+    else:
+        print('Confusion matrix, without normalization')
+
+    #print(cm)
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, cm[i, j],
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+
+def display_result(actual, predicted):
+
+    mtx = confusion_matrix(actual, predicted)
+    mtx = mtx[1:, 1:]  # remove class 0 - do nothing
+    print('Confusion matrix\n{}'.format(mtx))
+    print('Precision : ', precision_score(actual, predicted, average="weighted"))
+    print('Recall : ', recall_score(actual, predicted, average="weighted"))
+    print('F1 Score : ', f1_score(actual, predicted, average="weighted"))
+    print('Accuracy : ', accuracy_score(actual, predicted))
+    print('Classification Report :\n{}'.format(classification_report(actual, predicted,  digits=5)))
+
+    plt.figure(figsize=(12, 12))
+    plot_confusion_matrix(mtx, classes=[1, 2, 3, 4], normalize=False,
+                          title='Box Identification (non normalized)')
+    #plt.show()
+    plt.savefig(config_save_load_dir_path+'confusion_matrix.png')
 
 
 (train_container_data, train_container_labels, train_container_labels_raw), (
@@ -101,57 +160,36 @@ def get_testing_data():
     test_container_data, test_container_labels, test_container_labels_raw) = get_testing_data()
 
 if loadConfigurationsFromFiles:
-    '''
-    json_file = open("./configs/model_rack.json", 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
-    model_rack = model_from_json(loaded_model_json)
-    model_rack.load_weights("./configs/model_rack_weights.h5")
+    model_rack = keras.models.load_model(config_save_load_dir_path+'model_rack.h5')
+    model_container = keras.models.load_model(config_save_load_dir_path+'model_container.h5')
 
-    json_file = open("./configs/model_container.json", 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
-    model_container = model_from_json(loaded_model_json)
-    model_container.load_weights("./configs/model_container_weights.h5")
-    '''
-    model_rack = keras.models.load_model('./configs/model_rack.h5')
-    model_container = keras.models.load_model('./configs/model_container.h5')
-
-    scalar_rack = pickle.load(open("./configs/scalar_rack.p", "rb"))
-    scalar_container = pickle.load(open("./configs/scalar_container.p", "rb"))
+    scalar_rack = pickle.load(open(config_save_load_dir_path+"scalar_rack.p", "rb"))
+    scalar_container = pickle.load(open(config_save_load_dir_path+"scalar_container.p", "rb"))
 
     print("Loaded configurations from files !! ")
 
 else:
+
     model_rack = build_model(2)
     model_rack.fit(train_rack_data, train_rack_labels, epochs=20, validation_data=(test_rack_data, test_rack_labels),
                batch_size=500)
 
     model_container = build_model(5)
-    model_container.fit(train_container_data, train_container_labels, epochs=20,
-               validation_data=(test_container_data, test_container_labels), batch_size=500)
+    model_container.fit(train_container_data, train_container_labels, epochs=10, validation_data=(test_container_data, test_container_labels), batch_size=500)
 
-    saveConfigurations(model_rack, model_container)
+    save_configurations()
+ 
+test_predicted_res = model_container.predict(test_container_data, batch_size=1).argmax(axis=-1)
 
-labels_test_raw = [int(v) for v in train_rack_labels_raw]
+display_result(test_container_labels_raw, test_predicted_res)
 
-x = train_rack_data[0:1]
-x = scalar_rack.transform(x)
-start_time = time.time()
-p = model_rack.predict(x, batch_size=1).argmax(axis=-1)
-print(p)
-elapsed_time = time.time() - start_time
-print(elapsed_time)
-
-test_predicted_res = model_container.predict(test_container_data, batch_size= 1).argmax(axis=-1)
-
-mtx = confusion_matrix(test_container_labels_raw, test_predicted_res)
-mtx = mtx[1:, 1:]   # remove class 0 - do nothing
-print(mtx)
-print(precision_score(test_container_labels_raw, test_predicted_res, average="weighted"))
-print(recall_score(test_container_labels_raw, test_predicted_res, average="weighted"))
 
 isRackPredicted = False
+isContainerPredicted = False
+
+container_predicted = None
+rack_predicted = None
+
 try:
     while True:
 
@@ -162,10 +200,11 @@ try:
         if dt.__len__() != 54:
             continue
 
-        frame = np.asarray([])
+        colorSpaceConversionFunction = colorSpaceUtil.switcher.get(color_space)
 
+        frame = np.asarray([])
         for i in np.arange(6, 54, 4):
-            frame = np.append(frame, colorSpaceUtil.rgbc2hsv(float(dt[i]), float(dt[i+1]), float(dt[i+2]), float(dt[i+3])))
+            frame = np.append(frame, colorSpaceConversionFunction(float(dt[i]), float(dt[i+1]), float(dt[i+2]), float(dt[i+3])))
 
         frame = frame.reshape(1, 36)
 
@@ -175,16 +214,36 @@ try:
             if rack_predicted != 0:
                 isRackPredicted = True
                 continue
-        else:
+        elif not isContainerPredicted:
             frame = scalar_container.transform(frame)
-            container_prediction = model_container.predict(frame, batch_size=1).argmax(axis=-1)
-            if container_prediction != 0:
-                print("Rack Number", rack_predicted, "Container Number", container_prediction)
+            container_predicted = model_container.predict(frame, batch_size=1).argmax(axis=-1)
+            if container_predicted != 0:
+                isContainerPredicted = True
+                continue
+        elif isContainerPredicted:
+            frame = scalar_rack.transform(frame)
+            rack_predicted_new = model_rack.predict(frame, batch_size=1).argmax(axis=-1)
+            if rack_predicted == rack_predicted_new:
                 isRackPredicted = False
+                isContainerPredicted = False
+                print("Rack Number", rack_predicted, "Container Number", container_predicted)
                 continue
 except:
     traceback.print_exc()
     ser.close()
 
 
+'''
+#Fine tuning the parameters
+kerasClassifier = KerasClassifier(build_fn=build_model)
+param = {'epochs': [10, 20],
+         'batch_size': [500, 200],
+         'optimizer': ['adam', 'rmsprop'],
+         }
 
+grid_search = GridSearchCV(estimator=kerasClassifier, param_grid=param, scoring='accuracy', cv=10)
+grid_search.fit(train_container_data, train_container_labels_raw)
+print(grid_search.best_params_)
+
+
+'''

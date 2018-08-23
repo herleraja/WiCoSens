@@ -14,7 +14,7 @@ ax2 = fig.add_subplot(2,1,2)
 
 # -- initSerialPort() ---------------------------------------------------
 def initSerialPort():
-	sh = serial.Serial("COM6" , 115200, timeout=None)
+	sh = serial.Serial("COM3" , 115200, timeout=None)
 	sh.isOpen()
 
 	for i in range(5):  # -- discard the first 5 lines
