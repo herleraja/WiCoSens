@@ -11,6 +11,10 @@ To convert qt.ui file to python.py file please follow these below instructions.
 
     example: cd C:\ProgramData\Anaconda3\Scripts
 
-* Step 2: Execute the following instruction --> pyuic5.exe -x filename.ui -o ouputfilename.py
+* Step 2: if you not find the pyuic5.exe file then please install PyQT5 using pip.
+
+    example : pip install PyQT5==5.9
+
+* Step 3: Execute the following instruction --> pyuic5.exe -x filename.ui -o ouputfilename.py
 
     example: pyuic5.exe -x "C:\Users\HackoMan\Google Drive\MasterThesis\Code\QtDesigner\Lable_Data.ui" -o "C:\Users\HackoMan\Google Drive\MasterThesis\Code\QtDesigner\Lable_Data.py"
