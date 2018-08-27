@@ -307,7 +307,7 @@ class Ui_MainWindow(object):
         self.mainTabObj.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.load_dictionary('dict.txt')
+        self.load_dictionary('container_dict')
         self.displayRandomContainerNumber();
         self.addButtonOperations()
         self.addFiledsValidators()
@@ -616,7 +616,7 @@ class Ui_MainWindow(object):
         if hasattr(self, 'file') and not self.file.closed:
             self.file.close()
         if hasattr(self, 'container_dict'):
-            self.save_dictionary('dict.txt')
+            self.save_dictionary('container_dict.txt')
 
     def save_dictionary(self, file_name):
         print('Dictionary contents\n{}'.format(self.container_dict.items()))

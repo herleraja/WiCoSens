@@ -6,16 +6,19 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-import traceback
+import atexit
 import os
 import sys
+import traceback
+
 import serial
-import atexit
+from PyQt5 import QtCore, QtGui, QtWidgets
+
 import colorSpaceUtil
 
 ser = None
 file = None
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -185,7 +188,7 @@ class Ui_MainWindow(object):
         self.colorSpaceButtonsHorizontalLayout.addWidget(self.colorSpaceRGBButton)
         self.colorSpaceHSVButton = QtWidgets.QPushButton(self.formLayoutWidget)
         self.colorSpaceHSVButton.setCheckable(True)
-        #self.colorSpaceHSVButton.setChecked(True)
+        # self.colorSpaceHSVButton.setChecked(True)
         self.colorSpaceHSVButton.setAutoExclusive(True)
         self.colorSpaceHSVButton.setObjectName("colorSpaceHSVButton")
         self.colorSpaceButtonsHorizontalLayout.addWidget(self.colorSpaceHSVButton)
@@ -274,7 +277,7 @@ class Ui_MainWindow(object):
         self.mainTabObj.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        #self.setUpSerialPort()
+        # self.setUpSerialPort()
         self.addButtonOperations()
         self.addFiledsValidators()
 
@@ -310,7 +313,8 @@ class Ui_MainWindow(object):
         self.colorSpaceYCbCrButton.setText(_translate("MainWindow", "YCbCr"))
         self.colorSpaceRGBButton.setText(_translate("MainWindow", "RGB"))
         self.colorSpaceHSVButton.setText(_translate("MainWindow", "HSV"))
-        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab), _translate("MainWindow", "Data labeling"))
+        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab),
+                                   _translate("MainWindow", "Data labeling"))
         self.baudrateLabel.setText(_translate("MainWindow", "Baudrate"))
         self.baudrateComboBox.setCurrentText(_translate("MainWindow", "115200"))
         self.baudrateComboBox.setItemText(0, _translate("MainWindow", "115200"))
@@ -334,8 +338,6 @@ class Ui_MainWindow(object):
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.settingTab), _translate("MainWindow", "Settings"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.classifierTab), _translate("MainWindow", "Classify"))
 
-
-
     def setUpSerialPort(self):
         baudrate = self.baudrateComboBox.currentText()
         port = self.portlineEdit.text()
@@ -357,51 +359,71 @@ class Ui_MainWindow(object):
         self.fileNameLineEdit.setValidator(validator)
         self.classLabelLineEdit.setValidator(validator)
 
-
     def captureSensorData(self):
         try:
 
             current_label = self.classLabelLineEdit.text()
 
             new_line = self.ser.readline().decode('utf-8').rstrip()
-            #new_line = "test1, Test2, Test3"
+            # new_line = "test1, Test2, Test3"
 
             ## frame contains accel+ color data
             line_array = new_line.split(',')
 
             if line_array.__len__() == 54:
 
-                new_line = line_array[0] + ',' + line_array[1] + ',' +line_array[2] + ',' +line_array[3]
+                new_line = line_array[0] + ',' + line_array[1] + ',' + line_array[2] + ',' + line_array[3]
 
-                #for i in (6,10,14,18,22,26,30,34,38,42,46,50):
+                # for i in (6,10,14,18,22,26,30,34,38,42,46,50):
                 #    new_line += self.rgb2hsv(float(line_array[i]), float(line_array[i+1]), float(line_array[i+2]),float(line_array[i+3]))
 
-
                 if self.colSensorButton1.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[6]),float(line_array[7]),float(line_array[8]),float(line_array[9]))   # Right side(R5) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[6]), float(line_array[7]),
+                                                          float(line_array[8]),
+                                                          float(line_array[9]))  # Right side(R5) sensor
                 if self.colSensorButton2.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[10]), float(line_array[11]), float(line_array[12]),float(line_array[13]))  # Right side(R4) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[10]), float(line_array[11]),
+                                                          float(line_array[12]),
+                                                          float(line_array[13]))  # Right side(R4) sensor
                 if self.colSensorButton3.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[14]),float(line_array[15]),float(line_array[16]),float(line_array[17]))   # Right side(R3) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[14]), float(line_array[15]),
+                                                          float(line_array[16]),
+                                                          float(line_array[17]))  # Right side(R3) sensor
                 if self.colSensorButton4.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[18]), float(line_array[19]), float(line_array[20]),float(line_array[21]))  # Right side(R2) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[18]), float(line_array[19]),
+                                                          float(line_array[20]),
+                                                          float(line_array[21]))  # Right side(R2) sensor
                 if self.colSensorButton5.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[22]),float(line_array[23]),float(line_array[24]),float(line_array[25]))   # Right side(R1) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[22]), float(line_array[23]),
+                                                          float(line_array[24]),
+                                                          float(line_array[25]))  # Right side(R1) sensor
                 if self.colSensorButton6.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[26]), float(line_array[27]), float(line_array[28]),float(line_array[29]))  # Right side(R0) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[26]), float(line_array[27]),
+                                                          float(line_array[28]),
+                                                          float(line_array[29]))  # Right side(R0) sensor
                 if self.colSensorButton7.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[30]), float(line_array[31]), float(line_array[32]),float(line_array[33]))  # middle sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[30]), float(line_array[31]),
+                                                          float(line_array[32]), float(line_array[33]))  # middle sensor
                 if self.colSensorButton8.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[34]),float(line_array[35]),float(line_array[36]),float(line_array[37]))   # Left side(L1) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[34]), float(line_array[35]),
+                                                          float(line_array[36]),
+                                                          float(line_array[37]))  # Left side(L1) sensor
                 if self.colSensorButton9.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[38]), float(line_array[39]), float(line_array[40]),float(line_array[41]))  # Left side(L2) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[38]), float(line_array[39]),
+                                                          float(line_array[40]),
+                                                          float(line_array[41]))  # Left side(L2) sensor
                 if self.colSensorButton10.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[42]),float(line_array[43]),float(line_array[44]),float(line_array[45]))   # Left side(L3) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[42]), float(line_array[43]),
+                                                          float(line_array[44]),
+                                                          float(line_array[45]))  # Left side(L3) sensor
                 if self.colSensorButton11.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[46]), float(line_array[47]), float(line_array[48]),float(line_array[49]))  # Left side(L4) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[46]), float(line_array[47]),
+                                                          float(line_array[48]),
+                                                          float(line_array[49]))  # Left side(L4) sensor
                 if self.colSensorButton12.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[50]), float(line_array[51]), float(line_array[52]),float(line_array[53]))  # Left side(L5) sensor
-
+                    new_line += self.colorSpaceCoverstion(float(line_array[50]), float(line_array[51]),
+                                                          float(line_array[52]),
+                                                          float(line_array[53]))  # Left side(L5) sensor
 
                 new_line = new_line + ',' + current_label + '\n'
 
@@ -435,11 +457,11 @@ class Ui_MainWindow(object):
         color1, color2, color3 = colorSpaceCoverstionFunction(r, g, b, c)
         return ',' + str(color1) + ',' + str(color2) + ',' + str(color3)
 
-
     def startCaptureBtnPressedEvent(self):
         try:
-            if(self.isValidFields()):
-                print("Data stored in file: << {0} >> and file located in : << {1} >> ".format(self.fileNameLineEdit.text(),self.recordingFolderLocationLineEdit.text()))
+            if (self.isValidFields()):
+                print("Data stored in file: << {0} >> and file located in : << {1} >> ".format(
+                    self.fileNameLineEdit.text(), self.recordingFolderLocationLineEdit.text()))
                 self.startCaptureBtn.setEnabled(False)
                 self.stopCaptureBtn.setEnabled(True)
 
@@ -448,7 +470,6 @@ class Ui_MainWindow(object):
 
                 self.setUpSerialPort()
                 self.openFileForWriting()  # Create/Open file for saving sensor data
-
 
                 if not self.startCaptureBtn.isEnabled():
                     QtCore.QTimer.singleShot(1, self.captureSensorData)
@@ -460,12 +481,11 @@ class Ui_MainWindow(object):
             traceback.print_exc()
             self.displayWarningPopUp(traceback.format_exc())
 
-
     def openFileForWriting(self):
         write_path = self.recordingFolderLocationLineEdit.text()
         os.makedirs(os.path.dirname(write_path), exist_ok=True)
         file_name = self.fileNameLineEdit.text()
-        file_name  = write_path + file_name + ".csv"
+        file_name = write_path + file_name + ".csv"
         self.file = open(file_name, 'a')
 
     def stopCaptureSensorData(self):
@@ -476,9 +496,8 @@ class Ui_MainWindow(object):
         self.startCaptureBtn.repaint()
         self.stopCaptureBtn.repaint()
 
-
     def isValidFields(self):
-        return self.fileNameLineEdit.text().__len__()>0 and self.classLabelLineEdit.text().__len__()>0 and self.recordingFolderLocationLineEdit.text().__len__()>0
+        return self.fileNameLineEdit.text().__len__() > 0 and self.classLabelLineEdit.text().__len__() > 0 and self.recordingFolderLocationLineEdit.text().__len__() > 0
 
     def resetFields(self):
         if self.startCaptureBtn.isEnabled():
@@ -506,7 +525,6 @@ class Ui_MainWindow(object):
         else:
             self.displayWarningPopUp("Please stop capturing data before the reset")
 
-
     def displayWarningPopUp(self, warningText="Warning !!"):
         msgBox = QtWidgets.QMessageBox()
         msgBox.setText(warningText)
@@ -517,12 +535,11 @@ class Ui_MainWindow(object):
     def closeWindow(self):
         QtCore.QCoreApplication.instance().quit()
 
-
     def releaseResource(self):
         print("Releasing Resources.... ")
         if hasattr(self, 'ser') and self.ser.isOpen():
             self.ser.close()
-        if hasattr(self, 'file') and not self.file.closed :
+        if hasattr(self, 'file') and not self.file.closed:
             self.file.close()
 
 
@@ -534,7 +551,3 @@ if __name__ == "__main__":
     MainWindow.show()
     atexit.register(ui.releaseResource)
     sys.exit(app.exec_())
-
-
-
-

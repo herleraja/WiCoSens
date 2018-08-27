@@ -1,10 +1,12 @@
 import colorsys
-import traceback
 import os
+import traceback
+
 import numpy as np
 from numpy import genfromtxt
 
-def rgbc2YCbCr( r, g, b, c=0):
+
+def rgbc2YCbCr(r, g, b, c=0):
     if c != 0:
         r, g, b = r / c, g / c, b / c  # Normalising the rgb data by dividing by clear bit
 
@@ -18,15 +20,14 @@ def rgbc2YCbCr( r, g, b, c=0):
 
     cie = np.dot(matrix, rgb);
 
-    cie = cie * 1/255
+    cie = cie * 1 / 255
 
-    cie = cie + [16 , 128, 128]
+    cie = cie + [16, 128, 128]
 
-    return cie[0],cie[1],cie[2]
+    return cie[0], cie[1], cie[2]
 
 
-
-def rgbc2lab( r, g, b, c=0):
+def rgbc2lab(r, g, b, c=0):
     if c != 0:
         r, g, b = r / c, g / c, b / c  # Normalising the rgb data by dividing by clear bit
 
@@ -52,16 +53,17 @@ def rgbc2lab( r, g, b, c=0):
     # Calculate the b
     b = 200 * (lab_func(cie[1]) - lab_func(cie[2]));
 
-    return L,a,b
+    return L, a, b
 
 
 def lab_func(t):
-    if (t > 0.008856):
+    if t > 0.008856:
         return np.power(t, 1 / 3.0);
     else:
         return 7.787 * t + 16 / 116.0;
 
-def rgbc2hsvDegree( r, g, b, c=0):
+
+def rgbc2hsvDegree(r, g, b, c=0):
     if c != 0:
         r, g, b = r / c, g / c, b / c  # Normalising the rgb data by dividing by clear bit
 
@@ -86,21 +88,21 @@ def rgbc2hsvDegree( r, g, b, c=0):
     v = mx
     return h, s, v
 
+
 def rgbc2hsv(r, g, b, c=0):
-	if c != 0:
-		r, g, b = r / c, g / c, b / c  # Normalising the rgb data by dividing by clear bit
+    if c != 0:
+        r, g, b = r / c, g / c, b / c  # Normalising the rgb data by dividing by clear bit
+    hsv = colorsys.rgb_to_hsv(r, g, b)
+    return hsv[0], hsv[1], hsv[2]
 
-	hsv = colorsys.rgb_to_hsv(r, g, b)
-
-	return hsv[0],hsv[1],hsv[2]
 
 def rgbc2rgb(r, g, b, c=0):
-	if c != 0:
-		r, g, b = r / c, g / c, b / c  # Normalising the rgb data by dividing by clear bit
-	return r, g, b
+    if c != 0:
+        r, g, b = r / c, g / c, b / c  # Normalising the rgb data by dividing by clear bit
+    return r, g, b
 
 
-def rgbc2CieXYZ( r, g, b, c=0):
+def rgbc2CieXYZ(r, g, b, c=0):
     if c != 0:
         r, g, b = r / c, g / c, b / c  # Normalising the rgb data by dividing by clear bit
 
@@ -117,7 +119,8 @@ def rgbc2CieXYZ( r, g, b, c=0):
 
     cie = np.dot(matrix, rgb);
 
-    return cie[0],cie[1],cie[2]
+    return cie[0], cie[1], cie[2]
+
 
 switcher = {
     'YCbCr': rgbc2YCbCr,
@@ -126,11 +129,10 @@ switcher = {
     'HSVDegree': rgbc2hsvDegree,
     'HSV': rgbc2hsv,
     'RGB': rgbc2rgb
-    }
+}
 
 
 def fileColorSpaceConversionFunction(current_csv_file_path, new_converted_csv_file_path=None, color_Space='HSV'):
-
     colorSpaceConversionFunction = switcher.get(color_Space)
 
     dt = genfromtxt(current_csv_file_path, delimiter=',')
@@ -144,12 +146,12 @@ def fileColorSpaceConversionFunction(current_csv_file_path, new_converted_csv_fi
         new_converted_csv_file_path = current_csv_file_path_split[0] + '_' + color_Space.lower() + '.csv'
     new_converted_csv_file = open(new_converted_csv_file_path, 'a')
 
-
     for i in range(len(dt_all_colors)):
         new_line = str(dt[i][0]) + ',' + str(dt[i][1]) + ',' + str(dt[i][2]) + ',' + str(dt[i][3])
 
         for j in np.arange(0, len(dt_all_colors[i]), 3):
-            converted_value = colorSpaceConversionFunction(float(dt_all_colors[i][j]), float(dt_all_colors[i][j + 1]), float(dt_all_colors[i][j + 2]))
+            converted_value = colorSpaceConversionFunction(float(dt_all_colors[i][j]), float(dt_all_colors[i][j + 1]),
+                                                           float(dt_all_colors[i][j + 2]))
             new_line += ',' + str(converted_value[0]) + ',' + str(converted_value[1]) + ',' + str(converted_value[2])
 
         new_line = new_line + ',' + str(int(dt[i][-1])) + '\n'
@@ -163,20 +165,22 @@ def fileColorSpaceConversionFunction(current_csv_file_path, new_converted_csv_fi
 if __name__ == "__main__":
     try:
 
-        #To test the file conversion method.
+        # To test the file conversion method.
 
         color_Space = 'HSVDegree'
         source_dir_path = "./MLDataClassifiers/data1/rgb/"
         destination_dir_path = "./MLDataClassifiers/data1/" + color_Space.lower() + "/"
         os.makedirs(os.path.dirname(destination_dir_path), exist_ok=True)
 
-        fileColorSpaceConversionFunction(source_dir_path+'rack_test.csv', destination_dir_path+'rack_test.csv',
+        fileColorSpaceConversionFunction(source_dir_path + 'rack_test.csv', destination_dir_path + 'rack_test.csv',
                                          color_Space=color_Space)
-        fileColorSpaceConversionFunction(source_dir_path+'rack_train.csv', destination_dir_path+'rack_train.csv',
+        fileColorSpaceConversionFunction(source_dir_path + 'rack_train.csv', destination_dir_path + 'rack_train.csv',
                                          color_Space=color_Space)
-        fileColorSpaceConversionFunction(source_dir_path+'container_test.csv', destination_dir_path+'container_test.csv',
+        fileColorSpaceConversionFunction(source_dir_path + 'container_test.csv',
+                                         destination_dir_path + 'container_test.csv',
                                          color_Space=color_Space)
-        fileColorSpaceConversionFunction(source_dir_path+'container_train.csv', destination_dir_path+'container_train.csv',
+        fileColorSpaceConversionFunction(source_dir_path + 'container_train.csv',
+                                         destination_dir_path + 'container_train.csv',
                                          color_Space=color_Space)
 
         print("The files are converted to ***", color_Space, "*** color space")
