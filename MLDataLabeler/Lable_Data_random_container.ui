@@ -42,7 +42,7 @@
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>1287</width>
+          <width>1295</width>
           <height>631</height>
          </rect>
         </property>
@@ -50,28 +50,14 @@
          <property name="sizeConstraint">
           <enum>QLayout::SetNoConstraint</enum>
          </property>
-         <item row="2" column="0">
+         <item row="7" column="0">
           <widget class="QLabel" name="sensorEnableDisableLabel">
            <property name="text">
             <string>Enable / Disable Color Sensor</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="captureLabel">
-           <property name="text">
-            <string>Capture Sensor Data</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="sensorTextLabel">
-           <property name="text">
-            <string>Captured Sensor Data</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
+         <item row="7" column="1">
           <layout class="QHBoxLayout" name="sensorButtonHorizontalLayout">
            <item>
             <widget class="QPushButton" name="colSensorButton1">
@@ -234,58 +220,7 @@
            </item>
           </layout>
          </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="fileNameLineEdit"/>
-         </item>
-         <item row="5" column="1">
-          <widget class="QTextEdit" name="sensorTextEdit">
-           <property name="undoRedoEnabled">
-            <bool>false</bool>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="1">
-          <layout class="QHBoxLayout" name="closeResetHLayout">
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="resetBtn">
-             <property name="text">
-              <string>Reset</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="closeBtn">
-             <property name="text">
-              <string>Close</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="colorSpaceLabel">
-           <property name="text">
-            <string>Color Space</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
+         <item row="8" column="1">
           <layout class="QHBoxLayout" name="colorSpaceButtonsHorizontalLayout">
            <item>
             <widget class="QPushButton" name="colorSpaceXYZButton">
@@ -360,17 +295,72 @@
            </item>
           </layout>
          </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="fileNameLabel">
-           <property name="text">
-            <string>FileName</string>
+         <item row="10" column="1">
+          <widget class="QTextEdit" name="sensorTextEdit">
+           <property name="undoRedoEnabled">
+            <bool>false</bool>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item row="10" column="0">
+          <widget class="QLabel" name="sensorTextLabel">
+           <property name="text">
+            <string>Captured Sensor Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="1">
+          <layout class="QHBoxLayout" name="closeResetHLayout">
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="resetBtn">
+             <property name="text">
+              <string>Reset</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="closeBtn">
+             <property name="text">
+              <string>Close</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="8" column="0">
+          <widget class="QLabel" name="colorSpaceLabel">
+           <property name="text">
+            <string>Color Space</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
           <widget class="QLineEdit" name="classLabelLineEdit">
            <property name="enabled">
-            <bool>true</bool>
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="classLabelLabel">
+           <property name="text">
+            <string>ClassLabel</string>
            </property>
           </widget>
          </item>
@@ -415,23 +405,29 @@
              </property>
             </widget>
            </item>
+           <item>
+            <spacer name="horizontalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="classLabelLabel">
-           <property name="text">
-            <string>ClassLabel</string>
-           </property>
-          </widget>
-         </item>
          <item row="6" column="0">
-          <widget class="QLabel" name="containerNumberLabel">
+          <widget class="QLabel" name="fileNameLabel">
            <property name="text">
-            <string>Container Number</string>
+            <string>FileName</string>
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
+         <item row="1" column="1">
           <widget class="QLabel" name="containerNumberLabelValueDisplay">
            <property name="enabled">
             <bool>true</bool>
@@ -494,6 +490,143 @@
             <set>Qt::AlignCenter</set>
            </property>
           </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="containerNumberLabel">
+           <property name="text">
+            <string>Container Number</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QLineEdit" name="fileNameLineEdit"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="captureLabel">
+           <property name="text">
+            <string>Capture Sensor Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="9" column="0">
+          <widget class="QLabel" name="randomNumberLabel">
+           <property name="text">
+            <string>Use random number generator </string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <layout class="QHBoxLayout" name="randomNumberHorizontalLayout">
+           <item>
+            <widget class="QLabel" name="ranodmNumberEnableLabel">
+             <property name="text">
+              <string>Enable Randomness</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="randomNumberCheckBox">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_7">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="randomNumberUpperLimitLabel">
+             <property name="text">
+              <string>Random Number Upper Limit</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="randomNumberUpperLimitLineEdit">
+             <property name="text">
+              <string>24</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_10">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
