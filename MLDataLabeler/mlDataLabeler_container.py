@@ -533,10 +533,10 @@ class Ui_MainWindow(object):
         self.displayRandomContainerNumber();
 
     def displayRandomContainerNumber(self):
-        totalContainers = 2
-        maxSamplesPerKeyCount = 2
-        #skip_container_numbers = [1, 6, 11, 16]
-        skip_container_numbers = [1]
+        totalContainers = 24
+        maxSamplesPerKeyCount = 1
+        skip_container_numbers = [1, 6, 11, 16]
+        #skip_container_numbers = [1]
 
         if not hasattr(self, 'container_dict'):
             self.container_dict = {}
