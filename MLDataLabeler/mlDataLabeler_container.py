@@ -535,30 +535,35 @@ class Ui_MainWindow(object):
     def displayRandomContainerNumber(self):
         totalContainers = 2
         maxSamplesPerKeyCount = 2
+        #skip_container_numbers = [1, 6, 11, 16]
+        skip_container_numbers = [1]
 
         if not hasattr(self, 'container_dict'):
             self.container_dict = {}
 
-        if sum(self.container_dict.values()) == (totalContainers + 1) * maxSamplesPerKeyCount:
+        if sum(self.container_dict.values()) == (totalContainers - skip_container_numbers.__len__() + 1) * maxSamplesPerKeyCount:
             print(
                 "\n\nThe sample reached maximum size limit / all the container samples taken. "
                 "To take more samples please change **maxSamplesPerKeyCount** variable.\n\n")
             exit()
 
         while True:
-            self.random_container_number = str(
-                random.randint(0, totalContainers))  # to display random number from 0 to 24
+            self.random_container_number = random.randint(0, totalContainers)  # to display random number from 0 to 24
+
+            if self.random_container_number in skip_container_numbers:  #skip the mentioned box numbers
+                continue
+
             if self.random_container_number in self.container_dict:
                 if self.container_dict[self.random_container_number] < maxSamplesPerKeyCount:
                     # self.container_dict[random_container_number] = self.container_dict[random_container_number] + 1
                     break
                 else:
-                    continue
+                    continue  # Try other value
             else:
                 # self.container_dict[random_container_number] = 1
                 break
 
-        self.containerNumberLabelValueDisplay.setText(self.random_container_number)
+        self.containerNumberLabelValueDisplay.setText(str(self.random_container_number))
         self.containerNumberLabelValueDisplay.repaint()
 
     def isValidFields(self):

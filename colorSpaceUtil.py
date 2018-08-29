@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
         # To test the file conversion method.
 
-        color_Space = 'HSVDegree'
+        color_Space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
         source_dir_path = "./MLDataClassifiers/data1/rgb/"
         destination_dir_path = "./MLDataClassifiers/data1/" + color_Space.lower() + "/"
         os.makedirs(os.path.dirname(destination_dir_path), exist_ok=True)
@@ -179,8 +179,8 @@ if __name__ == "__main__":
         fileColorSpaceConversionFunction(source_dir_path + 'container_test.csv',
                                          destination_dir_path + 'container_test.csv',
                                          color_Space=color_Space)
-        fileColorSpaceConversionFunction(source_dir_path + 'container_train.csv',
-                                         destination_dir_path + 'container_train.csv',
+        fileColorSpaceConversionFunction(source_dir_path + 'rack2_container_train.csv',
+                                         destination_dir_path + 'rack2_container_train.csv',
                                          color_Space=color_Space)
 
         print("The files are converted to ***", color_Space, "*** color space")

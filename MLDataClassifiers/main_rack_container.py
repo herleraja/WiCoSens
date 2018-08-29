@@ -16,9 +16,9 @@ from sklearn.preprocessing import StandardScaler
 import colorSpaceUtil
 
 # Configuration related inputs
-color_space = 'HSVDegree'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 source_dir_path = "./data1/" + color_space.lower() + "/"
-config_save_load_dir_path = "./configs/" + color_space.lower() + "/"
+config_save_load_dir_path = "./configs/container_20/" + color_space.lower() + "/"
 loadConfigurationsFromFiles = False
 
 # device="/dev/tty.usbmodem2853891"
@@ -74,10 +74,10 @@ def get_trainig_data():
     train_rack_data = scalar_rack.transform(train_rack_data)
     train_rack_labels = keras.utils.to_categorical(train_rack_labels_raw, 2)
 
-    train_container_data, train_container_labels_raw = parse_file(source_dir_path + 'container_train.csv')
+    train_container_data, train_container_labels_raw = parse_file(source_dir_path + 'rack2_container_train.csv')
     scalar_container.fit(train_container_data)
     train_container_data = scalar_container.transform(train_container_data)
-    train_container_labels = keras.utils.to_categorical(train_container_labels_raw, 5)
+    train_container_labels = keras.utils.to_categorical(train_container_labels_raw)
 
     return (train_container_data, train_container_labels, train_container_labels_raw), (
         train_rack_data, train_rack_labels, train_rack_labels_raw)
@@ -88,9 +88,9 @@ def get_testing_data():
     test_rack_data = scalar_rack.transform(test_rack_data)
     test_rack_labels = keras.utils.to_categorical(test_rack_labels_raw, 2)
 
-    test_container_data, test_container_labels_raw = parse_file(source_dir_path + 'container_test.csv')
+    test_container_data, test_container_labels_raw = parse_file(source_dir_path + 'rack2_container_test.csv')
     test_container_data = scalar_container.transform(test_container_data)
-    test_container_labels = keras.utils.to_categorical(test_container_labels_raw, 5)
+    test_container_labels = keras.utils.to_categorical(test_container_labels_raw)
 
     return (test_rack_data, test_rack_labels, test_rack_labels_raw), (
         test_container_data, test_container_labels, test_container_labels_raw)
@@ -147,11 +147,10 @@ def display_result(actual, predicted, type):
     print('Accuracy : ', accuracy_score(actual, predicted))
     print('Classification Report :\n{}'.format(classification_report(actual, predicted, digits=5)))
 
-    plt.figure(figsize=(12, 12))
-    plot_confusion_matrix(mtx, classes=[1, 2, 3, 4], normalize=False,
-                          title='Box Identification (non normalized)')
+    #plt.figure(figsize=(12, 12))
+    #plot_confusion_matrix(mtx, classes=[1, 2, 3, 4], normalize=False,title='Box Identification (non normalized)')
     # plt.show()
-    plt.savefig(config_save_load_dir_path +type+ '_confusion_matrix.png')
+    #plt.savefig(config_save_load_dir_path +type+ '_confusion_matrix.png')
 
 
 (train_container_data, train_container_labels, train_container_labels_raw), (
@@ -174,7 +173,7 @@ else:
     model_rack.fit(train_rack_data, train_rack_labels, epochs=20, validation_data=(test_rack_data, test_rack_labels),
                    batch_size=500)
 
-    model_container = build_model(5)
+    model_container = build_model(20)
     model_container.fit(train_container_data, train_container_labels, epochs=10,
                         validation_data=(test_container_data, test_container_labels), batch_size=500)
 
