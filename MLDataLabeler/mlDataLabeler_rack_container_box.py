@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Users\NUCER\Documents\git\WiCoSens\MLDataLabeler\Lable_Data_random_container.ui'
+# Form implementation generated from reading ui file 'C:\Users\NUCER\Documents\git\WiCoSens\MLDataLabeler\mlDataLabeler_rack_container_box.ui'
 #
 # Created by: PyQt5 UI code generator 5.9
 #
@@ -21,8 +21,7 @@ import colorSpaceUtil
 ser = None
 file = None
 container_dict = None
-random_container_number = None
-
+#random_container_number = None
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -49,9 +48,30 @@ class Ui_MainWindow(object):
         self.dataLabelingTabGridLayout.setSizeConstraint(QtWidgets.QLayout.SetNoConstraint)
         self.dataLabelingTabGridLayout.setContentsMargins(0, 0, 0, 0)
         self.dataLabelingTabGridLayout.setObjectName("dataLabelingTabGridLayout")
-        self.sensorEnableDisableLabel = QtWidgets.QLabel(self.formLayoutWidget)
-        self.sensorEnableDisableLabel.setObjectName("sensorEnableDisableLabel")
-        self.dataLabelingTabGridLayout.addWidget(self.sensorEnableDisableLabel, 7, 0, 1, 1)
+        self.classLabelHorizontalLayout = QtWidgets.QHBoxLayout()
+        self.classLabelHorizontalLayout.setObjectName("classLabelHorizontalLayout")
+        self.boxLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.boxLabel.setObjectName("boxLabel")
+        self.classLabelHorizontalLayout.addWidget(self.boxLabel)
+        self.boxLabelLineEdit = QtWidgets.QLineEdit(self.formLayoutWidget)
+        self.boxLabelLineEdit.setEnabled(False)
+        self.boxLabelLineEdit.setObjectName("boxLabelLineEdit")
+        self.classLabelHorizontalLayout.addWidget(self.boxLabelLineEdit)
+        self.rackLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.rackLabel.setObjectName("rackLabel")
+        self.classLabelHorizontalLayout.addWidget(self.rackLabel)
+        self.rackLabelLineEdit = QtWidgets.QLineEdit(self.formLayoutWidget)
+        self.rackLabelLineEdit.setEnabled(False)
+        self.rackLabelLineEdit.setObjectName("rackLabelLineEdit")
+        self.classLabelHorizontalLayout.addWidget(self.rackLabelLineEdit)
+        self.containerLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.containerLabel.setObjectName("containerLabel")
+        self.classLabelHorizontalLayout.addWidget(self.containerLabel)
+        self.containerLabelLineEdit = QtWidgets.QLineEdit(self.formLayoutWidget)
+        self.containerLabelLineEdit.setEnabled(False)
+        self.containerLabelLineEdit.setObjectName("containerLabelLineEdit")
+        self.classLabelHorizontalLayout.addWidget(self.containerLabelLineEdit)
+        self.dataLabelingTabGridLayout.addLayout(self.classLabelHorizontalLayout, 2, 1, 1, 1)
         self.sensorButtonHorizontalLayout = QtWidgets.QHBoxLayout()
         self.sensorButtonHorizontalLayout.setObjectName("sensorButtonHorizontalLayout")
         self.colSensorButton1 = QtWidgets.QPushButton(self.formLayoutWidget)
@@ -115,7 +135,7 @@ class Ui_MainWindow(object):
         self.colSensorButton12.setChecked(True)
         self.colSensorButton12.setObjectName("colSensorButton12")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton12)
-        self.dataLabelingTabGridLayout.addLayout(self.sensorButtonHorizontalLayout, 7, 1, 1, 1)
+        self.dataLabelingTabGridLayout.addLayout(self.sensorButtonHorizontalLayout, 8, 1, 1, 1)
         self.colorSpaceButtonsHorizontalLayout = QtWidgets.QHBoxLayout()
         self.colorSpaceButtonsHorizontalLayout.setObjectName("colorSpaceButtonsHorizontalLayout")
         self.colorSpaceXYZButton = QtWidgets.QPushButton(self.formLayoutWidget)
@@ -145,15 +165,41 @@ class Ui_MainWindow(object):
         self.colorSpaceHSVButton.setAutoExclusive(True)
         self.colorSpaceHSVButton.setObjectName("colorSpaceHSVButton")
         self.colorSpaceButtonsHorizontalLayout.addWidget(self.colorSpaceHSVButton)
-        self.dataLabelingTabGridLayout.addLayout(self.colorSpaceButtonsHorizontalLayout, 8, 1, 1, 1)
+        self.dataLabelingTabGridLayout.addLayout(self.colorSpaceButtonsHorizontalLayout, 9, 1, 1, 1)
+        self.sensorEnableDisableLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.sensorEnableDisableLabel.setObjectName("sensorEnableDisableLabel")
+        self.dataLabelingTabGridLayout.addWidget(self.sensorEnableDisableLabel, 8, 0, 1, 1)
+        self.containerNumberLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.containerNumberLabel.setObjectName("containerNumberLabel")
+        self.dataLabelingTabGridLayout.addWidget(self.containerNumberLabel, 1, 0, 1, 1)
+        self.capturSensorDataHLayout = QtWidgets.QHBoxLayout()
+        self.capturSensorDataHLayout.setObjectName("capturSensorDataHLayout")
+        self.startCaptureBtn = QtWidgets.QPushButton(self.formLayoutWidget)
+        self.startCaptureBtn.setMouseTracking(False)
+        self.startCaptureBtn.setObjectName("startCaptureBtn")
+        self.capturSensorDataHLayout.addWidget(self.startCaptureBtn)
+        self.stopCaptureBtn = QtWidgets.QPushButton(self.formLayoutWidget)
+        self.stopCaptureBtn.setEnabled(False)
+        self.stopCaptureBtn.setObjectName("stopCaptureBtn")
+        self.capturSensorDataHLayout.addWidget(self.stopCaptureBtn)
+        self.dataLabelingTabGridLayout.addLayout(self.capturSensorDataHLayout, 3, 1, 1, 1)
+        self.colorSpaceLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.colorSpaceLabel.setObjectName("colorSpaceLabel")
+        self.dataLabelingTabGridLayout.addWidget(self.colorSpaceLabel, 9, 0, 1, 1)
+        self.captureLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.captureLabel.setObjectName("captureLabel")
+        self.dataLabelingTabGridLayout.addWidget(self.captureLabel, 3, 0, 1, 1)
+        self.randomNumberLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.randomNumberLabel.setObjectName("randomNumberLabel")
+        self.dataLabelingTabGridLayout.addWidget(self.randomNumberLabel, 10, 0, 1, 1)
+        self.sensorTextLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.sensorTextLabel.setObjectName("sensorTextLabel")
+        self.dataLabelingTabGridLayout.addWidget(self.sensorTextLabel, 11, 0, 1, 1)
         self.sensorTextEdit = QtWidgets.QTextEdit(self.formLayoutWidget)
         self.sensorTextEdit.setUndoRedoEnabled(False)
         self.sensorTextEdit.setReadOnly(True)
         self.sensorTextEdit.setObjectName("sensorTextEdit")
-        self.dataLabelingTabGridLayout.addWidget(self.sensorTextEdit, 10, 1, 1, 1)
-        self.sensorTextLabel = QtWidgets.QLabel(self.formLayoutWidget)
-        self.sensorTextLabel.setObjectName("sensorTextLabel")
-        self.dataLabelingTabGridLayout.addWidget(self.sensorTextLabel, 10, 0, 1, 1)
+        self.dataLabelingTabGridLayout.addWidget(self.sensorTextEdit, 11, 1, 1, 1)
         self.closeResetHLayout = QtWidgets.QHBoxLayout()
         self.closeResetHLayout.setObjectName("closeResetHLayout")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -164,37 +210,12 @@ class Ui_MainWindow(object):
         self.closeBtn = QtWidgets.QPushButton(self.formLayoutWidget)
         self.closeBtn.setObjectName("closeBtn")
         self.closeResetHLayout.addWidget(self.closeBtn)
-        self.dataLabelingTabGridLayout.addLayout(self.closeResetHLayout, 14, 1, 1, 1)
-        self.colorSpaceLabel = QtWidgets.QLabel(self.formLayoutWidget)
-        self.colorSpaceLabel.setObjectName("colorSpaceLabel")
-        self.dataLabelingTabGridLayout.addWidget(self.colorSpaceLabel, 8, 0, 1, 1)
-        self.classLabelLineEdit = QtWidgets.QLineEdit(self.formLayoutWidget)
-        self.classLabelLineEdit.setEnabled(False)
-        self.classLabelLineEdit.setObjectName("classLabelLineEdit")
-        self.dataLabelingTabGridLayout.addWidget(self.classLabelLineEdit, 2, 1, 1, 1)
-        self.classLabelLabel = QtWidgets.QLabel(self.formLayoutWidget)
-        self.classLabelLabel.setObjectName("classLabelLabel")
-        self.dataLabelingTabGridLayout.addWidget(self.classLabelLabel, 2, 0, 1, 1)
-        self.capturSensorDataHLayout = QtWidgets.QHBoxLayout()
-        self.capturSensorDataHLayout.setObjectName("capturSensorDataHLayout")
-        spacerItem1 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.capturSensorDataHLayout.addItem(spacerItem1)
-        self.startCaptureBtn = QtWidgets.QPushButton(self.formLayoutWidget)
-        self.startCaptureBtn.setMouseTracking(False)
-        self.startCaptureBtn.setObjectName("startCaptureBtn")
-        self.capturSensorDataHLayout.addWidget(self.startCaptureBtn)
-        self.stopCaptureBtn = QtWidgets.QPushButton(self.formLayoutWidget)
-        self.stopCaptureBtn.setEnabled(False)
-        self.stopCaptureBtn.setObjectName("stopCaptureBtn")
-        self.capturSensorDataHLayout.addWidget(self.stopCaptureBtn)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.capturSensorDataHLayout.addItem(spacerItem2)
-        self.dataLabelingTabGridLayout.addLayout(self.capturSensorDataHLayout, 4, 1, 1, 1)
+        self.dataLabelingTabGridLayout.addLayout(self.closeResetHLayout, 15, 1, 1, 1)
         self.fileNameLabel = QtWidgets.QLabel(self.formLayoutWidget)
         self.fileNameLabel.setObjectName("fileNameLabel")
-        self.dataLabelingTabGridLayout.addWidget(self.fileNameLabel, 6, 0, 1, 1)
+        self.dataLabelingTabGridLayout.addWidget(self.fileNameLabel, 7, 0, 1, 1)
         self.containerNumberLabelValueDisplay = QtWidgets.QLabel(self.formLayoutWidget)
-        self.containerNumberLabelValueDisplay.setEnabled(True)
+        self.containerNumberLabelValueDisplay.setEnabled(False)
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 170, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -202,7 +223,7 @@ class Ui_MainWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 170, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+        brush = QtGui.QBrush(QtGui.QColor(255, 170, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
         self.containerNumberLabelValueDisplay.setPalette(palette)
@@ -212,25 +233,11 @@ class Ui_MainWindow(object):
         font.setItalic(True)
         font.setWeight(75)
         self.containerNumberLabelValueDisplay.setFont(font)
-        self.containerNumberLabelValueDisplay.setAutoFillBackground(True)
+        self.containerNumberLabelValueDisplay.setAutoFillBackground(False)
         self.containerNumberLabelValueDisplay.setTextFormat(QtCore.Qt.PlainText)
         self.containerNumberLabelValueDisplay.setAlignment(QtCore.Qt.AlignCenter)
         self.containerNumberLabelValueDisplay.setObjectName("containerNumberLabelValueDisplay")
         self.dataLabelingTabGridLayout.addWidget(self.containerNumberLabelValueDisplay, 1, 1, 1, 1)
-        self.containerNumberLabel = QtWidgets.QLabel(self.formLayoutWidget)
-        self.containerNumberLabel.setObjectName("containerNumberLabel")
-        self.dataLabelingTabGridLayout.addWidget(self.containerNumberLabel, 1, 0, 1, 1)
-        self.fileNameLineEdit = QtWidgets.QLineEdit(self.formLayoutWidget)
-        self.fileNameLineEdit.setObjectName("fileNameLineEdit")
-        self.dataLabelingTabGridLayout.addWidget(self.fileNameLineEdit, 6, 1, 1, 1)
-        self.captureLabel = QtWidgets.QLabel(self.formLayoutWidget)
-        self.captureLabel.setObjectName("captureLabel")
-        self.dataLabelingTabGridLayout.addWidget(self.captureLabel, 4, 0, 1, 1)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.dataLabelingTabGridLayout.addItem(spacerItem3, 5, 1, 1, 1)
-        self.randomNumberLabel = QtWidgets.QLabel(self.formLayoutWidget)
-        self.randomNumberLabel.setObjectName("randomNumberLabel")
-        self.dataLabelingTabGridLayout.addWidget(self.randomNumberLabel, 9, 0, 1, 1)
         self.randomNumberHorizontalLayout = QtWidgets.QHBoxLayout()
         self.randomNumberHorizontalLayout.setObjectName("randomNumberHorizontalLayout")
         self.ranodmNumberEnableLabel = QtWidgets.QLabel(self.formLayoutWidget)
@@ -241,23 +248,57 @@ class Ui_MainWindow(object):
         self.randomNumberCheckBox.setChecked(True)
         self.randomNumberCheckBox.setObjectName("randomNumberCheckBox")
         self.randomNumberHorizontalLayout.addWidget(self.randomNumberCheckBox)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.randomNumberHorizontalLayout.addItem(spacerItem4)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.randomNumberHorizontalLayout.addItem(spacerItem1)
         self.randomNumberUpperLimitLabel = QtWidgets.QLabel(self.formLayoutWidget)
         self.randomNumberUpperLimitLabel.setObjectName("randomNumberUpperLimitLabel")
         self.randomNumberHorizontalLayout.addWidget(self.randomNumberUpperLimitLabel)
         self.randomNumberUpperLimitLineEdit = QtWidgets.QLineEdit(self.formLayoutWidget)
         self.randomNumberUpperLimitLineEdit.setObjectName("randomNumberUpperLimitLineEdit")
         self.randomNumberHorizontalLayout.addWidget(self.randomNumberUpperLimitLineEdit)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.randomNumberHorizontalLayout.addItem(spacerItem2)
+        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.randomNumberHorizontalLayout.addItem(spacerItem3)
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.randomNumberHorizontalLayout.addItem(spacerItem4)
         spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.randomNumberHorizontalLayout.addItem(spacerItem5)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.randomNumberHorizontalLayout.addItem(spacerItem6)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.randomNumberHorizontalLayout.addItem(spacerItem7)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.randomNumberHorizontalLayout.addItem(spacerItem8)
-        self.dataLabelingTabGridLayout.addLayout(self.randomNumberHorizontalLayout, 9, 1, 1, 1)
+        self.dataLabelingTabGridLayout.addLayout(self.randomNumberHorizontalLayout, 10, 1, 1, 1)
+        self.fileNameLineEdit = QtWidgets.QLineEdit(self.formLayoutWidget)
+        self.fileNameLineEdit.setObjectName("fileNameLineEdit")
+        self.dataLabelingTabGridLayout.addWidget(self.fileNameLineEdit, 7, 1, 1, 1)
+        self.classLabelLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.classLabelLabel.setObjectName("classLabelLabel")
+        self.dataLabelingTabGridLayout.addWidget(self.classLabelLabel, 2, 0, 1, 1)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.dataLabelingTabGridLayout.addItem(spacerItem6, 6, 0, 1, 1)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.dataLabelingTabGridLayout.addItem(spacerItem7, 4, 0, 1, 1)
+        self.tagButtonGroupBox = QtWidgets.QGroupBox(self.formLayoutWidget)
+        self.tagButtonGroupBox.setObjectName("tagButtonGroupBox")
+        self.emptyTagPushButton = QtWidgets.QPushButton(self.tagButtonGroupBox)
+        self.emptyTagPushButton.setGeometry(QtCore.QRect(10, 20, 371, 23))
+        self.emptyTagPushButton.setCheckable(True)
+        self.emptyTagPushButton.setChecked(False)
+        self.emptyTagPushButton.setAutoExclusive(True)
+        self.emptyTagPushButton.setAutoDefault(True)
+        self.emptyTagPushButton.setDefault(False)
+        self.emptyTagPushButton.setFlat(False)
+        self.emptyTagPushButton.setObjectName("emptyTagPushButton")
+        self.rackLabelCapturePushButton = QtWidgets.QPushButton(self.tagButtonGroupBox)
+        self.rackLabelCapturePushButton.setGeometry(QtCore.QRect(380, 20, 371, 23))
+        self.rackLabelCapturePushButton.setCheckable(True)
+        self.rackLabelCapturePushButton.setAutoExclusive(True)
+        self.rackLabelCapturePushButton.setObjectName("rackLabelCapturePushButton")
+        self.containerLabelCapturePushButton = QtWidgets.QPushButton(self.tagButtonGroupBox)
+        self.containerLabelCapturePushButton.setGeometry(QtCore.QRect(750, 20, 371, 23))
+        self.containerLabelCapturePushButton.setCheckable(True)
+        self.containerLabelCapturePushButton.setAutoExclusive(True)
+        self.containerLabelCapturePushButton.setObjectName("containerLabelCapturePushButton")
+        self.dataLabelingTabGridLayout.addWidget(self.tagButtonGroupBox, 4, 1, 1, 1)
+        spacerItem8 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.dataLabelingTabGridLayout.addItem(spacerItem8, 5, 0, 1, 1)
         self.mainTabObj.addTab(self.dataLabelingTab, "")
         self.settingTab = QtWidgets.QWidget()
         self.settingTab.setObjectName("settingTab")
@@ -307,9 +348,6 @@ class Ui_MainWindow(object):
         self.portHorizontalLayout.addWidget(self.portlineEdit)
         self.setialPortSettingsVerticalLayout.addLayout(self.portHorizontalLayout)
         self.settingTabMainGridLayout.addLayout(self.setialPortSettingsVerticalLayout, 0, 1, 1, 1)
-        self.serialPortSettingsLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
-        self.serialPortSettingsLabel.setObjectName("serialPortSettingsLabel")
-        self.settingTabMainGridLayout.addWidget(self.serialPortSettingsLabel, 0, 0, 1, 1)
         self.recordingFolderLocationhorizontalLayout = QtWidgets.QHBoxLayout()
         self.recordingFolderLocationhorizontalLayout.setObjectName("recordingFolderLocationhorizontalLayout")
         spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -318,6 +356,9 @@ class Ui_MainWindow(object):
         self.recordingFolderLocationLineEdit.setObjectName("recordingFolderLocationLineEdit")
         self.recordingFolderLocationhorizontalLayout.addWidget(self.recordingFolderLocationLineEdit)
         self.settingTabMainGridLayout.addLayout(self.recordingFolderLocationhorizontalLayout, 1, 1, 1, 1)
+        self.serialPortSettingsLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
+        self.serialPortSettingsLabel.setObjectName("serialPortSettingsLabel")
+        self.settingTabMainGridLayout.addWidget(self.serialPortSettingsLabel, 0, 0, 1, 1)
         self.recordingFolderLocationLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
         self.recordingFolderLocationLabel.setObjectName("recordingFolderLocationLabel")
         self.settingTabMainGridLayout.addWidget(self.recordingFolderLocationLabel, 1, 0, 1, 1)
@@ -342,19 +383,22 @@ class Ui_MainWindow(object):
         self.mainTabObj.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.load_dictionary('container_dict')
+        self.load_dictionary('container_dict.txt')
 
         if self.randomNumberCheckBox.isChecked():
             self.displayRandomContainerNumber()
-            self.classLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
+            self.boxLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
 
         self.addButtonOperations()
         self.addFiledsValidators()
 
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Data Collection"))
-        self.sensorEnableDisableLabel.setText(_translate("MainWindow", "Enable / Disable Color Sensor"))
+        self.boxLabel.setText(_translate("MainWindow", "Box Label"))
+        self.rackLabel.setText(_translate("MainWindow", "Rack Label"))
+        self.containerLabel.setText(_translate("MainWindow", "Container Label"))
         self.colSensorButton1.setText(_translate("MainWindow", "R5"))
         self.colSensorButton2.setText(_translate("MainWindow", "R4"))
         self.colSensorButton3.setText(_translate("MainWindow", "R3"))
@@ -372,25 +416,30 @@ class Ui_MainWindow(object):
         self.colorSpaceYCbCrButton.setText(_translate("MainWindow", "YCbCr"))
         self.colorSpaceRGBButton.setText(_translate("MainWindow", "RGB"))
         self.colorSpaceHSVButton.setText(_translate("MainWindow", "HSV"))
-        self.sensorTextLabel.setText(_translate("MainWindow", "Captured Sensor Data"))
-        self.resetBtn.setText(_translate("MainWindow", "Reset"))
-        self.closeBtn.setText(_translate("MainWindow", "Close"))
-        self.colorSpaceLabel.setText(_translate("MainWindow", "Color Space"))
-        self.classLabelLabel.setText(_translate("MainWindow", "ClassLabel"))
+        self.sensorEnableDisableLabel.setText(_translate("MainWindow", "Enable / Disable Color Sensor"))
+        self.containerNumberLabel.setText(_translate("MainWindow", "Container Number"))
         self.startCaptureBtn.setToolTip(_translate("MainWindow", "click to capture the sensor data"))
         self.startCaptureBtn.setWhatsThis(_translate("MainWindow", "click to capture the sensor data"))
         self.startCaptureBtn.setText(_translate("MainWindow", "Start"))
         self.stopCaptureBtn.setText(_translate("MainWindow", "Stop"))
-        self.fileNameLabel.setText(_translate("MainWindow", "FileName"))
-        self.containerNumberLabelValueDisplay.setText(_translate("MainWindow", "999"))
-        self.containerNumberLabel.setText(_translate("MainWindow", "Container Number"))
+        self.colorSpaceLabel.setText(_translate("MainWindow", "Color Space"))
         self.captureLabel.setText(_translate("MainWindow", "Capture Sensor Data"))
         self.randomNumberLabel.setText(_translate("MainWindow", "Use random number generator "))
+        self.sensorTextLabel.setText(_translate("MainWindow", "Captured Sensor Data"))
+        self.resetBtn.setText(_translate("MainWindow", "Reset"))
+        self.closeBtn.setText(_translate("MainWindow", "Close"))
+        self.fileNameLabel.setText(_translate("MainWindow", "FileName"))
+        self.containerNumberLabelValueDisplay.setText(_translate("MainWindow", "999"))
         self.ranodmNumberEnableLabel.setText(_translate("MainWindow", "Enable Randomness"))
         self.randomNumberUpperLimitLabel.setText(_translate("MainWindow", "Random Number Upper Limit"))
         self.randomNumberUpperLimitLineEdit.setText(_translate("MainWindow", "24"))
-        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab),
-                                   _translate("MainWindow", "Data labeling"))
+        self.fileNameLineEdit.setText(_translate("MainWindow", "rack1"))
+        self.classLabelLabel.setText(_translate("MainWindow", "Class Labels"))
+        self.tagButtonGroupBox.setTitle(_translate("MainWindow", "Tag Button"))
+        self.emptyTagPushButton.setText(_translate("MainWindow", "Empty Tag"))
+        self.rackLabelCapturePushButton.setText(_translate("MainWindow", "Tag Rack Label"))
+        self.containerLabelCapturePushButton.setText(_translate("MainWindow", "Tag Container Label"))
+        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab), _translate("MainWindow", "Data labeling"))
         self.baudrateLabel.setText(_translate("MainWindow", "Baudrate"))
         self.baudrateComboBox.setCurrentText(_translate("MainWindow", "115200"))
         self.baudrateComboBox.setItemText(0, _translate("MainWindow", "115200"))
@@ -408,11 +457,12 @@ class Ui_MainWindow(object):
         self.baudrateComboBox.setItemText(12, _translate("MainWindow", "300"))
         self.portLabel.setText(_translate("MainWindow", "Port"))
         self.portlineEdit.setText(_translate("MainWindow", "COM3"))
-        self.serialPortSettingsLabel.setText(_translate("MainWindow", "Serial Port Settings"))
         self.recordingFolderLocationLineEdit.setText(_translate("MainWindow", "recording_folder/"))
+        self.serialPortSettingsLabel.setText(_translate("MainWindow", "Serial Port Settings"))
         self.recordingFolderLocationLabel.setText(_translate("MainWindow", "Recording Folder Location"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.settingTab), _translate("MainWindow", "Settings"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.classifierTab), _translate("MainWindow", "Classify"))
+
 
     def setUpSerialPort(self):
         baudrate = self.baudrateComboBox.currentText()
@@ -437,12 +487,28 @@ class Ui_MainWindow(object):
         validator = QtGui.QRegExpValidator(regexp)
 
         self.fileNameLineEdit.setValidator(validator)
-        self.classLabelLineEdit.setValidator(validator)
+        self.boxLabelLineEdit.setValidator(validator)
+
+    def getClassLabels(self):
+        rack_label = container_label = box_label = '0'
+
+        if self.emptyTagPushButton.isChecked():
+            rack_label = container_label = box_label = '0'
+
+        elif self.rackLabelCapturePushButton.isChecked():
+            rack_label = self.rackLabelLineEdit.text()
+            box_label = self.boxLabelLineEdit.text()
+
+        elif self.containerLabelCapturePushButton.isChecked():
+            container_label = self.containerLabelLineEdit.text()
+            box_label = self.boxLabelLineEdit.text()
+
+        labels = ',' + rack_label + ',' + container_label + ',' + box_label
+
+        return labels
 
     def captureSensorData(self):
         try:
-
-            current_label = self.classLabelLineEdit.text()
 
             new_line = self.ser.readline().decode('utf-8').rstrip()
             # new_line = "test1, Test2, Test3"
@@ -505,7 +571,7 @@ class Ui_MainWindow(object):
                                                           float(line_array[52]),
                                                           float(line_array[53]))  # Left side(L5) sensor
 
-                new_line = new_line + ',' + current_label + '\n'
+                new_line = new_line + self.getClassLabels() + '\n'
 
                 self.file.write(new_line)
                 self.file.flush()
@@ -550,10 +616,10 @@ class Ui_MainWindow(object):
                 self.openFileForWriting()  # Create/Open file for saving sensor data
 
                 if self.randomNumberCheckBox.isChecked():
-                    self.classLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
-                    self.classLabelLineEdit.repaint()
+                    self.boxLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
+                    self.boxLabelLineEdit.repaint()
 
-                classLabel = int(self.classLabelLineEdit.text())  # To add class label to dictionary
+                classLabel = int(self.boxLabelLineEdit.text())  # To add class label to dictionary
 
                 if not self.startCaptureBtn.isEnabled():
 
@@ -584,15 +650,15 @@ class Ui_MainWindow(object):
 
         if self.randomNumberCheckBox.isChecked():
             self.displayRandomContainerNumber()
-            # self.classLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())  # last record update issue
+            # self.boxLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())  # last record update issue
 
     def randomNumberCheckBoxPressedEvent(self):
         if self.randomNumberCheckBox.isChecked():
-            self.classLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
-            self.classLabelLineEdit.setEnabled(False)
+            self.boxLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
+            self.boxLabelLineEdit.setEnabled(False)
             self.randomNumberUpperLimitLineEdit.setEnabled(True)
         else:
-            self.classLabelLineEdit.setEnabled(True)
+            self.boxLabelLineEdit.setEnabled(True)
             self.randomNumberUpperLimitLineEdit.setEnabled(False)
 
     def randomNumberUpperLimitLineEditTextChangeEvent(self):
@@ -623,13 +689,13 @@ class Ui_MainWindow(object):
             exit()
 
         while True:
-            self.random_container_number = random.randint(0, totalContainers)  # to display random number from 0 to 24
+            random_container_number = random.randint(0, totalContainers)  # to display random number from 0 to 24
 
-            if self.random_container_number in skip_container_numbers:  # skip the mentioned box numbers
+            if random_container_number in skip_container_numbers:  # skip the mentioned box numbers
                 continue
 
-            if self.random_container_number in self.container_dict:
-                if self.container_dict[self.random_container_number] < maxSamplesPerKeyCount:
+            if random_container_number in self.container_dict:
+                if self.container_dict[random_container_number] < maxSamplesPerKeyCount:
                     # self.container_dict[random_container_number] = self.container_dict[random_container_number] + 1
                     break
                 else:
@@ -638,17 +704,19 @@ class Ui_MainWindow(object):
                 # self.container_dict[random_container_number] = 1
                 break
 
-        self.containerNumberLabelValueDisplay.setText(str(self.random_container_number))
+        self.containerNumberLabelValueDisplay.setText(str(random_container_number))
         self.containerNumberLabelValueDisplay.repaint()
+
+
 
     def isValidFields(self):
 
-        return_value = self.fileNameLineEdit.text().__len__() > 0 and self.classLabelLineEdit.text().__len__() > 0 \
+        return_value = self.fileNameLineEdit.text().__len__() > 0 and self.boxLabelLineEdit.text().__len__() > 0 \
                        and self.recordingFolderLocationLineEdit.text().__len__() > 0
         if not return_value:
             self.displayWarningPopUp("Please fill the required fields !!")
             return return_value
-        # if self.randomNumberCheckBox.isChecked() and self.classLabelLineEdit.text() != self.containerNumberLabelValueDisplay.text():
+        # if self.randomNumberCheckBox.isChecked() and self.boxLabelLineEdit.text() != self.containerNumberLabelValueDisplay.text():
         # self.displayWarningPopUp("Class Label is not same as generated container number.")
         # return False
         return return_value
@@ -656,7 +724,7 @@ class Ui_MainWindow(object):
     def resetFields(self):
         if self.startCaptureBtn.isEnabled():
             self.fileNameLineEdit.clear()
-            self.classLabelLineEdit.clear()
+            self.boxLabelLineEdit.clear()
             self.sensorTextEdit.clear()
             self.colSensorButton1.setChecked(True)
             self.colSensorButton2.setChecked(True)
@@ -707,7 +775,7 @@ class Ui_MainWindow(object):
     def load_dictionary(self, file_name):
         try:
             with open(file_name, "rb") as myFile:
-                self.container_dict = pickle.load(myFile)
+                container_dict = pickle.load(myFile)
                 myFile.close()
         except FileNotFoundError:
             print('\nDictionary file not found ! This occurs only in initial load'
