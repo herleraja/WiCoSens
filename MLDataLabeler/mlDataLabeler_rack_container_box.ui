@@ -661,7 +661,7 @@
          <item row="4" column="1">
           <widget class="QGroupBox" name="tagButtonGroupBox">
            <property name="title">
-            <string>Tag Button</string>
+            <string/>
            </property>
            <widget class="QPushButton" name="emptyTagPushButton">
             <property name="geometry">
@@ -679,7 +679,7 @@
              <bool>true</bool>
             </property>
             <property name="checked">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="autoExclusive">
              <bool>true</bool>

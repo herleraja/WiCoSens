@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 import atexit
+import csv
 import os
 import pickle
 import random
@@ -18,10 +19,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import colorSpaceUtil
 
-ser = None
-file = None
-container_dict = None
-#random_container_number = None
+ser = file = container_dict = rack_container_box_dict = None
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -280,7 +279,7 @@ class Ui_MainWindow(object):
         self.emptyTagPushButton = QtWidgets.QPushButton(self.tagButtonGroupBox)
         self.emptyTagPushButton.setGeometry(QtCore.QRect(10, 20, 371, 23))
         self.emptyTagPushButton.setCheckable(True)
-        self.emptyTagPushButton.setChecked(False)
+        self.emptyTagPushButton.setChecked(True)
         self.emptyTagPushButton.setAutoExclusive(True)
         self.emptyTagPushButton.setAutoDefault(True)
         self.emptyTagPushButton.setDefault(False)
@@ -383,15 +382,17 @@ class Ui_MainWindow(object):
         self.mainTabObj.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.load_dictionary('container_dict.txt')
+        self.load_dictionary()
 
         if self.randomNumberCheckBox.isChecked():
             self.displayRandomContainerNumber()
             self.boxLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
+            rack_container_values = self.rack_container_box_dict[self.boxLabelLineEdit.text()].split(',')
+            self.rackLabelLineEdit.setText(rack_container_values[0])
+            self.containerLabelLineEdit.setText(rack_container_values[1])
 
         self.addButtonOperations()
         self.addFiledsValidators()
-
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -439,7 +440,8 @@ class Ui_MainWindow(object):
         self.emptyTagPushButton.setText(_translate("MainWindow", "Empty Tag"))
         self.rackLabelCapturePushButton.setText(_translate("MainWindow", "Tag Rack Label"))
         self.containerLabelCapturePushButton.setText(_translate("MainWindow", "Tag Container Label"))
-        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab), _translate("MainWindow", "Data labeling"))
+        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab),
+                                   _translate("MainWindow", "Data labeling"))
         self.baudrateLabel.setText(_translate("MainWindow", "Baudrate"))
         self.baudrateComboBox.setCurrentText(_translate("MainWindow", "115200"))
         self.baudrateComboBox.setItemText(0, _translate("MainWindow", "115200"))
@@ -463,7 +465,6 @@ class Ui_MainWindow(object):
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.settingTab), _translate("MainWindow", "Settings"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.classifierTab), _translate("MainWindow", "Classify"))
 
-
     def setUpSerialPort(self):
         baudrate = self.baudrateComboBox.currentText()
         port = self.portlineEdit.text()
@@ -478,8 +479,12 @@ class Ui_MainWindow(object):
         self.stopCaptureBtn.clicked.connect(self.stopCaptureBtnPressedEvent)
         self.randomNumberCheckBox.clicked.connect(self.randomNumberCheckBoxPressedEvent)
         self.randomNumberUpperLimitLineEdit.textChanged.connect(self.randomNumberUpperLimitLineEditTextChangeEvent)
+
         self.startCaptureBtn.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Space))
         self.stopCaptureBtn.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Escape))
+        self.emptyTagPushButton.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_F1))
+        self.rackLabelCapturePushButton.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_F2))
+        self.containerLabelCapturePushButton.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_F3))
 
     def addFiledsValidators(self):
 
@@ -619,6 +624,12 @@ class Ui_MainWindow(object):
                     self.boxLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
                     self.boxLabelLineEdit.repaint()
 
+                    rack_container_values = self.rack_container_box_dict[self.boxLabelLineEdit.text()].split(',')
+                    self.rackLabelLineEdit.setText(rack_container_values[0])
+                    self.rackLabelLineEdit.repaint()
+                    self.containerLabelLineEdit.setText(rack_container_values[1])
+                    self.containerLabelLineEdit.repaint()
+
                 classLabel = int(self.boxLabelLineEdit.text())  # To add class label to dictionary
 
                 if not self.startCaptureBtn.isEnabled():
@@ -689,24 +700,23 @@ class Ui_MainWindow(object):
             exit()
 
         while True:
-            random_container_number = random.randint(0, totalContainers)  # to display random number from 0 to 24
+            random_box_number = random.randint(0, totalContainers)  # to display random number from 0 to 24
 
-            if random_container_number in skip_container_numbers:  # skip the mentioned box numbers
+            if random_box_number in skip_container_numbers:  # skip the mentioned box numbers
                 continue
 
-            if random_container_number in self.container_dict:
-                if self.container_dict[random_container_number] < maxSamplesPerKeyCount:
-                    # self.container_dict[random_container_number] = self.container_dict[random_container_number] + 1
+            if random_box_number in self.container_dict:
+                if self.container_dict[random_box_number] < maxSamplesPerKeyCount:
+                    # self.container_dict[random_box_number] = self.container_dict[random_box_number] + 1
                     break
                 else:
                     continue  # Try other value
             else:
-                # self.container_dict[random_container_number] = 1
+                # self.container_dict[random_box_number] = 1
                 break
 
-        self.containerNumberLabelValueDisplay.setText(str(random_container_number))
+        self.containerNumberLabelValueDisplay.setText(str(random_box_number))
         self.containerNumberLabelValueDisplay.repaint()
-
 
 
     def isValidFields(self):
@@ -772,10 +782,20 @@ class Ui_MainWindow(object):
             pickle.dump(self.container_dict, myFile)
             myFile.close()
 
-    def load_dictionary(self, file_name):
+    def load_dictionary(self):
+
+        if not hasattr(self, 'rack_container_box_dict'):
+            self.rack_container_box_dict = {}
+
+        with open('box_rac_container_label_map_input.csv') as rack_container_box_dict_file:
+            reader = csv.reader(rack_container_box_dict_file)
+            for row in reader:
+                self.rack_container_box_dict[row[0]] = row[1] + ',' + row[2]
+        rack_container_box_dict_file.close()
+
         try:
-            with open(file_name, "rb") as myFile:
-                container_dict = pickle.load(myFile)
+            with open('container_dict.txt', "rb") as myFile:
+                self.container_dict = pickle.load(myFile)
                 myFile.close()
         except FileNotFoundError:
             print('\nDictionary file not found ! This occurs only in initial load'
