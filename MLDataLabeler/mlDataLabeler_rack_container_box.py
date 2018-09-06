@@ -61,12 +61,12 @@ class Ui_MainWindow(object):
         self.stopCaptureBtn.setEnabled(False)
         self.stopCaptureBtn.setObjectName("stopCaptureBtn")
         self.closeResetHLayout.addWidget(self.stopCaptureBtn)
+        self.clearPushButton = QtWidgets.QPushButton(self.formLayoutWidget)
+        self.clearPushButton.setObjectName("clearPushButton")
+        self.closeResetHLayout.addWidget(self.clearPushButton)
         self.resetBtn = QtWidgets.QPushButton(self.formLayoutWidget)
         self.resetBtn.setObjectName("resetBtn")
         self.closeResetHLayout.addWidget(self.resetBtn)
-        self.closeBtn = QtWidgets.QPushButton(self.formLayoutWidget)
-        self.closeBtn.setObjectName("closeBtn")
-        self.closeResetHLayout.addWidget(self.closeBtn)
         self.dataLabelingTabGridLayout.addLayout(self.closeResetHLayout, 14, 1, 1, 1)
         self.containerNumberLabelValueDisplay = QtWidgets.QLabel(self.formLayoutWidget)
         self.containerNumberLabelValueDisplay.setEnabled(False)
@@ -404,6 +404,7 @@ class Ui_MainWindow(object):
         self.addButtonOperations()
         self.addFiledsValidators()
 
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Data Collection"))
@@ -411,8 +412,8 @@ class Ui_MainWindow(object):
         self.startCaptureBtn.setWhatsThis(_translate("MainWindow", "click to capture the sensor data"))
         self.startCaptureBtn.setText(_translate("MainWindow", "Start"))
         self.stopCaptureBtn.setText(_translate("MainWindow", "Stop"))
+        self.clearPushButton.setText(_translate("MainWindow", "Clear"))
         self.resetBtn.setText(_translate("MainWindow", "Reset"))
-        self.closeBtn.setText(_translate("MainWindow", "Close"))
         self.containerNumberLabelValueDisplay.setText(_translate("MainWindow", "999"))
         self.containerNumberLabel.setText(_translate("MainWindow", "Box  Number"))
         self.rackLabel.setText(_translate("MainWindow", "Rack Label"))
@@ -431,8 +432,7 @@ class Ui_MainWindow(object):
         self.stateChangePushButton.setText(_translate("MainWindow", "State Change"))
         self.randomBoxNumberGeneratorPushButton.setText(_translate("MainWindow", "Generate Random Box Number"))
         self.saveDataManuallyPushButton.setText(_translate("MainWindow", "Save Data Manually"))
-        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab),
-                                   _translate("MainWindow", "Data labeling"))
+        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab), _translate("MainWindow", "Data labeling"))
         self.recordingFolderLocationLabel.setText(_translate("MainWindow", "Recording Folder Location"))
         self.serialPortSettingsLabel.setText(_translate("MainWindow", "Serial Port Settings"))
         self.baudrateLabel.setText(_translate("MainWindow", "Baudrate"))
@@ -477,6 +477,7 @@ class Ui_MainWindow(object):
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.settingTab), _translate("MainWindow", "Settings"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.classifierTab), _translate("MainWindow", "Classify"))
 
+
     def setUpSerialPort(self):
         baudrate = self.baudrateComboBox.currentText()
         port = self.portlineEdit.text()
@@ -486,7 +487,7 @@ class Ui_MainWindow(object):
             return
 
     def addButtonOperations(self):
-        self.closeBtn.clicked.connect(self.closeWindow)
+        self.clearPushButton.clicked.connect(self.clearSensorData)
         self.resetBtn.clicked.connect(self.resetFields)
         self.startCaptureBtn.clicked.connect(self.startBtnPressedEvent)
         self.stopCaptureBtn.clicked.connect(self.stopCaptureBtnPressedEvent)
@@ -806,8 +807,8 @@ class Ui_MainWindow(object):
         msgbox.setIcon(QtWidgets.QMessageBox.Warning)
         msgbox.exec()
 
-    def closeWindow(self):
-        QtCore.QCoreApplication.instance().quit()
+    def clearSensorData(self):
+        self.sensorTextEdit.clear()
 
     def releaseResource(self):
         print("Releasing Resources.... ")

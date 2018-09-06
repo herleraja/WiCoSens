@@ -92,16 +92,16 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="resetBtn">
+            <widget class="QPushButton" name="clearPushButton">
              <property name="text">
-              <string>Reset</string>
+              <string>Clear</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="closeBtn">
+            <widget class="QPushButton" name="resetBtn">
              <property name="text">
-              <string>Close</string>
+              <string>Reset</string>
              </property>
             </widget>
            </item>
