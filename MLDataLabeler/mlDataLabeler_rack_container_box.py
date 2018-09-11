@@ -514,6 +514,7 @@ class Ui_MainWindow(object):
         regexp = QtCore.QRegExp('[a-zA-Z0-9_ -]+')
         regexpValidator = QtGui.QRegExpValidator(regexp)
         intValidator = QtGui.QIntValidator()
+        intValidator.setRange(0, 96)
         self.fileNameLineEdit.setValidator(regexpValidator)
         self.boxLabelLineEdit.setValidator(regexpValidator)
         self.randomNumberLowerLimitLineEdit.setValidator(intValidator)
@@ -566,57 +567,57 @@ class Ui_MainWindow(object):
             new_line = self.ser.readline().decode('utf-8').rstrip()
             line_array = new_line.split(',')
 
-            if line_array.__len__() == 54:
+            if line_array.__len__() == 52:
 
                 new_line = line_array[0] + ',' + line_array[1] + ',' + line_array[2] + ',' + line_array[3]
 
                 if self.colSensorButton1.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[6]), float(line_array[7]),
-                                                          float(line_array[8]),
-                                                          float(line_array[9]))  # Right side(R5) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[4]), float(line_array[5]),
+                                                          float(line_array[6]),
+                                                          float(line_array[7]))  # Right side(R5) sensor
                 if self.colSensorButton2.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[10]), float(line_array[11]),
-                                                          float(line_array[12]),
-                                                          float(line_array[13]))  # Right side(R4) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[8]), float(line_array[9]),
+                                                          float(line_array[10]),
+                                                          float(line_array[11]))  # Right side(R4) sensor
                 if self.colSensorButton3.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[14]), float(line_array[15]),
-                                                          float(line_array[16]),
-                                                          float(line_array[17]))  # Right side(R3) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[12]), float(line_array[13]),
+                                                          float(line_array[14]),
+                                                          float(line_array[15]))  # Right side(R3) sensor
                 if self.colSensorButton4.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[18]), float(line_array[19]),
-                                                          float(line_array[20]),
-                                                          float(line_array[21]))  # Right side(R2) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[16]), float(line_array[17]),
+                                                          float(line_array[18]),
+                                                          float(line_array[19]))  # Right side(R2) sensor
                 if self.colSensorButton5.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[22]), float(line_array[23]),
-                                                          float(line_array[24]),
-                                                          float(line_array[25]))  # Right side(R1) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[20]), float(line_array[21]),
+                                                          float(line_array[22]),
+                                                          float(line_array[23]))  # Right side(R1) sensor
                 if self.colSensorButton6.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[26]), float(line_array[27]),
-                                                          float(line_array[28]),
-                                                          float(line_array[29]))  # Right side(R0) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[24]), float(line_array[25]),
+                                                          float(line_array[26]),
+                                                          float(line_array[27]))  # Right side(R0) sensor
                 if self.colSensorButton7.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[30]), float(line_array[31]),
-                                                          float(line_array[32]), float(line_array[33]))  # middle sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[28]), float(line_array[29]),
+                                                          float(line_array[30]), float(line_array[31]))  # middle sensor
                 if self.colSensorButton8.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[34]), float(line_array[35]),
-                                                          float(line_array[36]),
-                                                          float(line_array[37]))  # Left side(L1) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[32]), float(line_array[33]),
+                                                          float(line_array[34]),
+                                                          float(line_array[35]))  # Left side(L1) sensor
                 if self.colSensorButton9.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[38]), float(line_array[39]),
-                                                          float(line_array[40]),
-                                                          float(line_array[41]))  # Left side(L2) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[36]), float(line_array[37]),
+                                                          float(line_array[38]),
+                                                          float(line_array[39]))  # Left side(L2) sensor
                 if self.colSensorButton10.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[42]), float(line_array[43]),
-                                                          float(line_array[44]),
-                                                          float(line_array[45]))  # Left side(L3) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[40]), float(line_array[41]),
+                                                          float(line_array[42]),
+                                                          float(line_array[43]))  # Left side(L3) sensor
                 if self.colSensorButton11.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[46]), float(line_array[47]),
-                                                          float(line_array[48]),
-                                                          float(line_array[49]))  # Left side(L4) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[44]), float(line_array[45]),
+                                                          float(line_array[46]),
+                                                          float(line_array[47]))  # Left side(L4) sensor
                 if self.colSensorButton12.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[50]), float(line_array[51]),
-                                                          float(line_array[52]),
-                                                          float(line_array[53]))  # Left side(L5) sensor
+                    new_line += self.colorSpaceCoverstion(float(line_array[48]), float(line_array[49]),
+                                                          float(line_array[50]),
+                                                          float(line_array[51]))  # Left side(L5) sensor
 
                 new_line = new_line + self.getClassLabels()
 
@@ -697,8 +698,7 @@ class Ui_MainWindow(object):
                 randomNumberLowerLimit = int(self.randomNumberLowerLimitLineEdit.text())
                 randomNumberUpperLimit = int(self.randomNumberUpperLimitLineEdit.text())
 
-                if 0 <= randomNumberLowerLimit <= 96 and 0 <= randomNumberUpperLimit <= 96 \
-                        and randomNumberLowerLimit <= randomNumberUpperLimit:
+                if randomNumberLowerLimit <= randomNumberUpperLimit:
                     self.container_dict = {}  # To reset the dictionary
                     self.displayRandomBoxNumber()  # To reset the random number value
                 else:
