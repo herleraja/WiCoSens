@@ -40,7 +40,7 @@ def build_model(number_class):
     # Take a look at the model summary
     model.summary()
     model.compile(loss='categorical_crossentropy',
-                  optimizer='adam',  #rmsprop
+                  optimizer='rmsprop',  # rmsprop, adam
                   metrics=['accuracy'])
     return model
 
@@ -136,11 +136,11 @@ def plot_confusion_matrix(cm, classes,
 def display_result(actual, predicted, type):
     mtx = confusion_matrix(actual, predicted)
     mtx = mtx[1:, 1:]  # remove class 0 - do nothing
-    print('Confusion matrix\n{}'.format(mtx))
+    print('Confusion matrix\n{}\n'.format(mtx))
     print('Precision : ', precision_score(actual, predicted, average="weighted"))
     print('Recall : ', recall_score(actual, predicted, average="weighted"))
     print('F1 Score : ', f1_score(actual, predicted, average="weighted"))
-    print('Accuracy : ', accuracy_score(actual, predicted))
+    print('Accuracy : {}\n'.format(accuracy_score(actual, predicted)))
     print('Classification Report :\n{}'.format(classification_report(actual, predicted, digits=5)))
 
     plt.figure(figsize=(12, 12))
@@ -148,111 +148,110 @@ def display_result(actual, predicted, type):
     #plt.show()
     plt.savefig(config_save_load_dir_path + type + '_confusion_matrix.png')
 
+if __name__ == "__main__":
+    (train_container_data, train_container_labels, train_container_labels_raw), (
+        train_rack_data, train_rack_labels, train_rack_labels_raw) = get_trainig_data()
+    (test_rack_data, test_rack_labels, test_rack_labels_raw), (
+        test_container_data, test_container_labels, test_container_labels_raw) = get_testing_data()
 
-(train_container_data, train_container_labels, train_container_labels_raw), (
-    train_rack_data, train_rack_labels, train_rack_labels_raw) = get_trainig_data()
-(test_rack_data, test_rack_labels, test_rack_labels_raw), (
-    test_container_data, test_container_labels, test_container_labels_raw) = get_testing_data()
+    if loadConfigurationsFromFiles:
+        model_rack = keras.models.load_model(config_save_load_dir_path + 'model_rack.h5')
+        model_container = keras.models.load_model(config_save_load_dir_path + 'model_container.h5')
 
-if loadConfigurationsFromFiles:
-    model_rack = keras.models.load_model(config_save_load_dir_path + 'model_rack.h5')
-    model_container = keras.models.load_model(config_save_load_dir_path + 'model_container.h5')
+        scalar_rack = pickle.load(open(config_save_load_dir_path + "scalar_rack.p", "rb"))
+        scalar_container = pickle.load(open(config_save_load_dir_path + "scalar_container.p", "rb"))
 
-    scalar_rack = pickle.load(open(config_save_load_dir_path + "scalar_rack.p", "rb"))
-    scalar_container = pickle.load(open(config_save_load_dir_path + "scalar_container.p", "rb"))
+        print("Loaded configurations from files !! ")
 
-    print("Loaded configurations from files !! ")
+    else:
 
-else:
+        model_rack = build_model(2)
+        model_rack.fit(train_rack_data, train_rack_labels, epochs=20, validation_data=(test_rack_data, test_rack_labels),
+                       batch_size=500)
 
-    model_rack = build_model(2)
-    model_rack.fit(train_rack_data, train_rack_labels, epochs=20, validation_data=(test_rack_data, test_rack_labels),
-                   batch_size=500)
+        model_container = build_model(25)
+        model_container.fit(train_container_data, train_container_labels, epochs=20, validation_data=(test_container_data, test_container_labels), batch_size=500)
 
-    model_container = build_model(25)
-    model_container.fit(train_container_data, train_container_labels, epochs=10,
-                        validation_data=(test_container_data, test_container_labels), batch_size=500)
+        save_configurations()
 
-    save_configurations()
+    test_predicted_container_res = model_container.predict(test_container_data, batch_size=1).argmax(axis=-1)
 
-test_predicted_container_res = model_container.predict(test_container_data, batch_size=1).argmax(axis=-1)
+    test_predicted_rack_res = model_rack.predict(test_rack_data, batch_size=1).argmax(axis=-1)
 
-test_predicted_rack_res = model_rack.predict(test_rack_data, batch_size=1).argmax(axis=-1)
+    print('Color Space: '.format(color_space))
+    print('Classification result for rack')
+    display_result(test_rack_labels_raw, test_predicted_rack_res, 'rack')  #Print the classification result
 
-print('Color Space: '.format(color_space))
-print('Classification result for rack')
-display_result(test_rack_labels_raw, test_predicted_rack_res, 'rack')  #Print the classification result
-
-print('Classification result for container')
-display_result(test_container_labels_raw, test_predicted_container_res, 'container')  #Print the classification result
-
-
-'''
-# device="/dev/tty.usbmodem2853891"
-port = "COM3"  # COM for windows, it changes when we use unix system
-ser = serial.Serial(port, 115200, timeout=None)
+    print('Classification result for container')
+    display_result(test_container_labels_raw, test_predicted_container_res, 'container')  #Print the classification result
 
 
-isRackPredicted = False
-isContainerPredicted = False
-
-container_predicted = None
-rack_predicted = None
-
-try:
-    while True:
-
-        frame_raw = ser.readline().decode('utf-8').rstrip()
-
-        ## frame contains accel+ color data
-        dt = frame_raw.split(',')
-        if dt.__len__() != 54:
-            continue
-
-        colorSpaceConversionFunction = colorSpaceUtil.switcher.get(color_space)
-
-        frame = np.asarray([])
-        for i in np.arange(6, 54, 4):
-            frame = np.append(frame, colorSpaceConversionFunction(float(dt[i]), float(dt[i + 1]), float(dt[i + 2]),
-                                                                  float(dt[i + 3])))
-
-        frame = frame.reshape(1, 36)
-
-        if not isRackPredicted:
-            frame = scalar_rack.transform(frame)
-            rack_predicted = model_rack.predict(frame, batch_size=1).argmax(axis=-1)
-            if rack_predicted != 0:
-                isRackPredicted = True
+    '''
+    # device="/dev/tty.usbmodem2853891"
+    port = "COM3"  # COM for windows, it changes when we use unix system
+    ser = serial.Serial(port, 115200, timeout=None)
+    
+    
+    isRackPredicted = False
+    isContainerPredicted = False
+    
+    container_predicted = None
+    rack_predicted = None
+    
+    try:
+        while True:
+    
+            frame_raw = ser.readline().decode('utf-8').rstrip()
+    
+            ## frame contains accel+ color data
+            dt = frame_raw.split(',')
+            if dt.__len__() != 52:
                 continue
-        elif not isContainerPredicted:
-            frame = scalar_container.transform(frame)
-            container_predicted = model_container.predict(frame, batch_size=1).argmax(axis=-1)
-            if container_predicted != 0:
-                isContainerPredicted = True
-                continue
-        elif isContainerPredicted:
-            frame = scalar_rack.transform(frame)
-            rack_predicted_new = model_rack.predict(frame, batch_size=1).argmax(axis=-1)
-            if rack_predicted == rack_predicted_new:
-                isRackPredicted = False
-                isContainerPredicted = False
-                print("Rack Number", rack_predicted, "Container Number", container_predicted)
-                continue
-except:
-    traceback.print_exc()
-    ser.close()
-
-
-#Fine tuning the parameters
-kerasClassifier = KerasClassifier(build_fn=build_model)
-param = {'epochs': [10, 20],
-         'batch_size': [500, 200],
-         'optimizer': ['adam', 'rmsprop'],
-         }
-
-grid_search = GridSearchCV(estimator=kerasClassifier, param_grid=param, scoring='accuracy', cv=10)
-grid_search.fit(train_container_data, train_container_labels_raw)
-print(grid_search.best_params_)
-
-
-'''
+    
+            colorSpaceConversionFunction = colorSpaceUtil.switcher.get(color_space)
+    
+            frame = np.asarray([])
+            for i in np.arange(4, 52, 4):
+                frame = np.append(frame, colorSpaceConversionFunction(float(dt[i]), float(dt[i + 1]), float(dt[i + 2]),
+                                                                      float(dt[i + 3])))
+    
+            frame = frame.reshape(1, 36)
+    
+            if not isRackPredicted:
+                frame = scalar_rack.transform(frame)
+                rack_predicted = model_rack.predict(frame, batch_size=1).argmax(axis=-1)
+                if rack_predicted != 0:
+                    isRackPredicted = True
+                    continue
+            elif not isContainerPredicted:
+                frame = scalar_container.transform(frame)
+                container_predicted = model_container.predict(frame, batch_size=1).argmax(axis=-1)
+                if container_predicted != 0:
+                    isContainerPredicted = True
+                    continue
+            elif isContainerPredicted:
+                frame = scalar_rack.transform(frame)
+                rack_predicted_new = model_rack.predict(frame, batch_size=1).argmax(axis=-1)
+                if rack_predicted == rack_predicted_new:
+                    isRackPredicted = False
+                    isContainerPredicted = False
+                    print("Rack Number", rack_predicted, "Container Number", container_predicted)
+                    continue
+    except:
+        traceback.print_exc()
+        ser.close()
+    
+    
+    #Fine tuning the parameters
+    kerasClassifier = KerasClassifier(build_fn=build_model)
+    param = {'epochs': [10, 20],
+             'batch_size': [500, 200],
+             'optimizer': ['adam', 'rmsprop'],
+             }
+    
+    grid_search = GridSearchCV(estimator=kerasClassifier, param_grid=param, scoring='accuracy', cv=10)
+    grid_search.fit(train_container_data, train_container_labels_raw)
+    print(grid_search.best_params_)
+    
+    
+    '''

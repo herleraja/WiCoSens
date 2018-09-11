@@ -1,10 +1,13 @@
-import matplotlib.pyplot as plt
 import numpy as np
-from sklearn import datasets
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import matplotlib.pyplot as plt
+
+from sklearn import datasets,neighbors,svm, tree
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression
 
 n_neighbors = 6
 
