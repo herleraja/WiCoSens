@@ -71,6 +71,19 @@
            </property>
           </widget>
          </item>
+         <item row="9" column="0">
+          <spacer name="verticalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item row="7" column="1">
           <layout class="QHBoxLayout" name="randomNumberHorizontalLayout">
            <item>
@@ -172,58 +185,47 @@
            </item>
           </layout>
          </item>
-         <item row="14" column="1">
-          <layout class="QHBoxLayout" name="closeResetHLayout">
+         <item row="2" column="1">
+          <layout class="QHBoxLayout" name="classLabelHorizontalLayout">
            <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="startCaptureBtn">
-             <property name="mouseTracking">
-              <bool>false</bool>
-             </property>
-             <property name="toolTip">
-              <string>click to capture the sensor data</string>
-             </property>
-             <property name="whatsThis">
-              <string>click to capture the sensor data</string>
-             </property>
+            <widget class="QLabel" name="rackLabel">
              <property name="text">
-              <string>Start</string>
+              <string>Rack Label</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="stopCaptureBtn">
+            <widget class="QLineEdit" name="rackLabelLineEdit">
              <property name="enabled">
               <bool>false</bool>
              </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="containerLabel">
              <property name="text">
-              <string>Stop</string>
+              <string>Container Label</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="clearPushButton">
-             <property name="text">
-              <string>Clear</string>
+            <widget class="QLineEdit" name="containerLabelLineEdit">
+             <property name="enabled">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="resetBtn">
+            <widget class="QLabel" name="boxLabel">
              <property name="text">
-              <string>Reset</string>
+              <string>Box Label</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="boxLabelLineEdit">
+             <property name="enabled">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -300,19 +302,6 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
          <item row="7" column="0">
           <widget class="QLabel" name="randomNumberLabel">
            <property name="text">
@@ -327,51 +316,18 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <layout class="QHBoxLayout" name="classLabelHorizontalLayout">
-           <item>
-            <widget class="QLabel" name="rackLabel">
-             <property name="text">
-              <string>Rack Label</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="rackLabelLineEdit">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="containerLabel">
-             <property name="text">
-              <string>Container Label</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="containerLabelLineEdit">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="boxLabel">
-             <property name="text">
-              <string>Box Label</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="boxLabelLineEdit">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
+         <item row="3" column="0">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item row="10" column="0">
           <spacer name="verticalSpacer_2">
@@ -399,18 +355,87 @@
            </property>
           </spacer>
          </item>
-         <item row="9" column="0">
-          <spacer name="verticalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
+         <item row="14" column="1">
+          <layout class="QHBoxLayout" name="closeResetHLayout">
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="startCaptureBtn">
+             <property name="mouseTracking">
+              <bool>false</bool>
+             </property>
+             <property name="toolTip">
+              <string>click to capture the sensor data</string>
+             </property>
+             <property name="whatsThis">
+              <string>click to capture the sensor data</string>
+             </property>
+             <property name="text">
+              <string>Start</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="stopCaptureBtn">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Stop</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="clearPushButton">
+             <property name="text">
+              <string>Clear</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="resetBtn">
+             <property name="text">
+              <string>Reset</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="11" column="1">
+          <layout class="QHBoxLayout" name="captureBtnsHorizontalLayout">
+           <item>
+            <widget class="QPushButton" name="stateChangePushButton">
+             <property name="text">
+              <string>State Change</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="randomBoxNumberGeneratorPushButton">
+             <property name="text">
+              <string>Generate Random Box Number</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="saveDataManuallyPushButton">
+             <property name="text">
+              <string>Save Data Manually</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item row="3" column="1">
           <widget class="QGroupBox" name="tagButtonGroupBox">
@@ -493,31 +518,6 @@
             </property>
            </widget>
           </widget>
-         </item>
-         <item row="11" column="1">
-          <layout class="QHBoxLayout" name="captureBtnsHorizontalLayout">
-           <item>
-            <widget class="QPushButton" name="stateChangePushButton">
-             <property name="text">
-              <string>State Change</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="randomBoxNumberGeneratorPushButton">
-             <property name="text">
-              <string>Generate Random Box Number</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="saveDataManuallyPushButton">
-             <property name="text">
-              <string>Save Data Manually</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
          </item>
         </layout>
        </widget>

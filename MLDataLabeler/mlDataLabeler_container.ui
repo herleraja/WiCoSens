@@ -50,13 +50,6 @@
          <property name="sizeConstraint">
           <enum>QLayout::SetNoConstraint</enum>
          </property>
-         <item row="7" column="0">
-          <widget class="QLabel" name="sensorEnableDisableLabel">
-           <property name="text">
-            <string>Enable / Disable Color Sensor</string>
-           </property>
-          </widget>
-         </item>
          <item row="7" column="1">
           <layout class="QHBoxLayout" name="sensorButtonHorizontalLayout">
            <item>
@@ -295,6 +288,20 @@
            </item>
           </layout>
          </item>
+         <item row="10" column="0">
+          <widget class="QLabel" name="sensorTextLabel">
+           <property name="text">
+            <string>Captured Sensor Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="sensorEnableDisableLabel">
+           <property name="text">
+            <string>Enable / Disable Color Sensor</string>
+           </property>
+          </widget>
+         </item>
          <item row="10" column="1">
           <widget class="QTextEdit" name="sensorTextEdit">
            <property name="undoRedoEnabled">
@@ -305,12 +312,177 @@
            </property>
           </widget>
          </item>
-         <item row="10" column="0">
-          <widget class="QLabel" name="sensorTextLabel">
+         <item row="1" column="0">
+          <widget class="QLabel" name="containerNumberLabel">
            <property name="text">
-            <string>Captured Sensor Data</string>
+            <string>Container Number</string>
            </property>
           </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="containerNumberLabelValueDisplay">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="palette">
+            <palette>
+             <active>
+              <colorrole role="WindowText">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>255</red>
+                 <green>170</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+             </active>
+             <inactive>
+              <colorrole role="WindowText">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>255</red>
+                 <green>170</green>
+                 <blue>0</blue>
+                </color>
+               </brush>
+              </colorrole>
+             </inactive>
+             <disabled>
+              <colorrole role="WindowText">
+               <brush brushstyle="SolidPattern">
+                <color alpha="255">
+                 <red>120</red>
+                 <green>120</green>
+                 <blue>120</blue>
+                </color>
+               </brush>
+              </colorrole>
+             </disabled>
+            </palette>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>25</pointsize>
+             <weight>75</weight>
+             <italic>true</italic>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>999</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::PlainText</enum>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <layout class="QHBoxLayout" name="randomNumberHorizontalLayout">
+           <item>
+            <spacer name="horizontalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="ranodmNumberEnableLabel">
+             <property name="text">
+              <string>Enable Randomness</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="randomNumberCheckBox">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_7">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="randomNumberLowerLimitLabel">
+             <property name="text">
+              <string>Lower Limit</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="randomNumberLowerLimitLineEdit">
+             <property name="text">
+              <string>0</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_11">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="randomNumberUpperLimitLabel">
+             <property name="text">
+              <string>Upper Limit</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="randomNumberUpperLimitLineEdit">
+             <property name="text">
+              <string>24</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
          <item row="14" column="1">
           <layout class="QHBoxLayout" name="closeResetHLayout">
@@ -343,24 +515,17 @@
            </item>
           </layout>
          </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="fileNameLabel">
+           <property name="text">
+            <string>FileName</string>
+           </property>
+          </widget>
+         </item>
          <item row="8" column="0">
           <widget class="QLabel" name="colorSpaceLabel">
            <property name="text">
             <string>Color Space</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="classLabelLineEdit">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="classLabelLabel">
-           <property name="text">
-            <string>ClassLabel</string>
            </property>
           </widget>
          </item>
@@ -420,86 +585,29 @@
            </item>
           </layout>
          </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="fileNameLabel">
-           <property name="text">
-            <string>FileName</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="containerNumberLabelValueDisplay">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="palette">
-            <palette>
-             <active>
-              <colorrole role="WindowText">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>255</red>
-                 <green>170</green>
-                 <blue>0</blue>
-                </color>
-               </brush>
-              </colorrole>
-             </active>
-             <inactive>
-              <colorrole role="WindowText">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>255</red>
-                 <green>170</green>
-                 <blue>0</blue>
-                </color>
-               </brush>
-              </colorrole>
-             </inactive>
-             <disabled>
-              <colorrole role="WindowText">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>120</red>
-                 <green>120</green>
-                 <blue>120</blue>
-                </color>
-               </brush>
-              </colorrole>
-             </disabled>
-            </palette>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>25</pointsize>
-             <weight>75</weight>
-             <italic>true</italic>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="autoFillBackground">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>999</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="containerNumberLabel">
-           <property name="text">
-            <string>Container Number</string>
-           </property>
-          </widget>
-         </item>
          <item row="6" column="1">
           <widget class="QLineEdit" name="fileNameLineEdit"/>
+         </item>
+         <item row="9" column="0">
+          <widget class="QLabel" name="randomNumberLabel">
+           <property name="text">
+            <string>Random number setting</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="classLabelLabel">
+           <property name="text">
+            <string>ClassLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="classLabelLineEdit">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
          <item row="4" column="0">
           <widget class="QLabel" name="captureLabel">
@@ -520,113 +628,6 @@
             </size>
            </property>
           </spacer>
-         </item>
-         <item row="9" column="0">
-          <widget class="QLabel" name="randomNumberLabel">
-           <property name="text">
-            <string>Use random number generator </string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="1">
-          <layout class="QHBoxLayout" name="randomNumberHorizontalLayout">
-           <item>
-            <widget class="QLabel" name="ranodmNumberEnableLabel">
-             <property name="text">
-              <string>Enable Randomness</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="randomNumberCheckBox">
-             <property name="text">
-              <string/>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_7">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="randomNumberUpperLimitLabel">
-             <property name="text">
-              <string>Random Number Upper Limit</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="randomNumberUpperLimitLineEdit">
-             <property name="text">
-              <string>24</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_6">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_10">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_9">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_8">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
          </item>
         </layout>
        </widget>

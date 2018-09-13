@@ -685,11 +685,13 @@ class Ui_MainWindow(object):
             self.boxLabelLineEdit.setEnabled(False)
             self.rackLabelLineEdit.setEnabled(False)
             self.containerLabelLineEdit.setEnabled(False)
+            self.randomNumberLowerLimitLineEdit.setEnabled(True)
             self.randomNumberUpperLimitLineEdit.setEnabled(True)
         else:
             self.boxLabelLineEdit.setEnabled(True)
             self.rackLabelLineEdit.setEnabled(True)
             self.containerLabelLineEdit.setEnabled(True)
+            self.randomNumberLowerLimitLineEdit.setEnabled(False)
             self.randomNumberUpperLimitLineEdit.setEnabled(False)
 
     def randomNumberUpperLowerLimitLineEditTextChangeEvent(self):
