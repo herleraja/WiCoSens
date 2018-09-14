@@ -25,7 +25,7 @@
        <string/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="movable">
        <bool>true</bool>
@@ -586,7 +586,11 @@
           </layout>
          </item>
          <item row="6" column="1">
-          <widget class="QLineEdit" name="fileNameLineEdit"/>
+          <widget class="QLineEdit" name="fileNameLineEdit">
+           <property name="text">
+            <string>container_train</string>
+           </property>
+          </widget>
          </item>
          <item row="9" column="0">
           <widget class="QLabel" name="randomNumberLabel">
@@ -641,8 +645,8 @@
          <rect>
           <x>0</x>
           <y>10</y>
-          <width>351</width>
-          <height>131</height>
+          <width>911</width>
+          <height>111</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="settingTabMainGridLayout">
@@ -801,7 +805,7 @@
            <item>
             <widget class="QLineEdit" name="recordingFolderLocationLineEdit">
              <property name="text">
-              <string>recording_folder/</string>
+              <string>datarecording_discrete/rgb/</string>
              </property>
             </widget>
            </item>

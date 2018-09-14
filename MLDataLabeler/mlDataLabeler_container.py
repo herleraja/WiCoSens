@@ -18,6 +18,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import colorSpaceUtil
 
+
 class Ui_MainWindow(object):
     ser = file = None
     container_dict = random_container_number = {}
@@ -380,7 +381,7 @@ class Ui_MainWindow(object):
         self.randomNumberLowerLimitLabel.setText(_translate("MainWindow", "Lower Limit"))
         self.randomNumberLowerLimitLineEdit.setText(_translate("MainWindow", "0"))
         self.randomNumberUpperLimitLabel.setText(_translate("MainWindow", "Upper Limit"))
-        self.randomNumberUpperLimitLineEdit.setText(_translate("MainWindow", "24"))
+        self.randomNumberUpperLimitLineEdit.setText(_translate("MainWindow", "10"))
         self.resetBtn.setText(_translate("MainWindow", "Reset"))
         self.closeBtn.setText(_translate("MainWindow", "Close"))
         self.fileNameLabel.setText(_translate("MainWindow", "FileName"))
@@ -412,7 +413,7 @@ class Ui_MainWindow(object):
         self.portLabel.setText(_translate("MainWindow", "Port"))
         self.portlineEdit.setText(_translate("MainWindow", "COM3"))
         self.serialPortSettingsLabel.setText(_translate("MainWindow", "Serial Port Settings"))
-        self.recordingFolderLocationLineEdit.setText(_translate("MainWindow", "recording_folder/"))
+        self.recordingFolderLocationLineEdit.setText(_translate("MainWindow", "datarecording_discrete/rgb/"))
         self.recordingFolderLocationLabel.setText(_translate("MainWindow", "Recording Folder Location"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.settingTab), _translate("MainWindow", "Settings"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.classifierTab), _translate("MainWindow", "Classify"))
@@ -692,7 +693,7 @@ class Ui_MainWindow(object):
             self.colorSpaceXYZButton.setChecked(False)
             self.colorSpaceRGBButton.setChecked(True)
             self.randomNumberLowerLimitLineEdit.setText('0')
-            self.randomNumberUpperLimitLineEdit.setText('24')
+            self.randomNumberUpperLimitLineEdit.setText('2')
 
         else:
             self.displayWarningPopUp("Please stop capturing data before the reset")
@@ -725,6 +726,7 @@ class Ui_MainWindow(object):
         try:
             with open(file_name, "rb") as myFile:
                 self.container_dict = pickle.load(myFile)
+                print('loaded dictionary. The dictionary contents are : \n{}'.format(self.container_dict.items()))
                 myFile.close()
         except FileNotFoundError:
             print('\nDictionary file not found ! This occurs only in initial load'
