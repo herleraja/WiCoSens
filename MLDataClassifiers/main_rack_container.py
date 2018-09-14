@@ -13,13 +13,21 @@ from sklearn.metrics import precision_score, recall_score, f1_score, confusion_m
     classification_report
 from sklearn.preprocessing import StandardScaler
 
+from sklearn import datasets,neighbors,svm, tree
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression
+
 import colorSpaceUtil
+
+import time
 
 # Configuration related inputs
 color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 source_dir_path = "./data1/" + color_space.lower() + "/"
 config_save_load_dir_path = "./configs/container_20/" + color_space.lower() + "/"
-loadConfigurationsFromFiles = False
+loadConfigurationsFromFiles = True
 
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
@@ -136,11 +144,11 @@ def plot_confusion_matrix(cm, classes,
 def display_result(actual, predicted, type):
     mtx = confusion_matrix(actual, predicted)
     mtx = mtx[1:, 1:]  # remove class 0 - do nothing
-    print('Confusion matrix\n{}\n'.format(mtx))
+    #print('Confusion matrix\n{}\n'.format(mtx))
     print('Precision : ', precision_score(actual, predicted, average="weighted"))
     print('Recall : ', recall_score(actual, predicted, average="weighted"))
     print('F1 Score : ', f1_score(actual, predicted, average="weighted"))
-    print('Accuracy : {}\n'.format(accuracy_score(actual, predicted)))
+    print('Accuracy : {}'.format(accuracy_score(actual, predicted)))
     print('Classification Report :\n{}'.format(classification_report(actual, predicted, digits=5)))
 
     plt.figure(figsize=(12, 12))
@@ -170,7 +178,11 @@ if __name__ == "__main__":
                        batch_size=500)
 
         model_container = build_model(25)
+
+        start_time = time.time()
         model_container.fit(train_container_data, train_container_labels, epochs=20, validation_data=(test_container_data, test_container_labels), batch_size=500)
+        elapsed_time = time.time() - start_time
+        print('Deep Learning Training time: {}'.format(elapsed_time))
 
         save_configurations()
 
@@ -178,12 +190,29 @@ if __name__ == "__main__":
 
     test_predicted_rack_res = model_rack.predict(test_rack_data, batch_size=1).argmax(axis=-1)
 
-    print('Color Space: '.format(color_space))
-    print('Classification result for rack')
+    print('Color Space: {}'.format(color_space))
+    print('\n****************Classification result for rack************************')
     display_result(test_rack_labels_raw, test_predicted_rack_res, 'rack')  #Print the classification result
 
-    print('Classification result for container')
+    print('\n****************Classification result for container************************')
     display_result(test_container_labels_raw, test_predicted_container_res, 'container')  #Print the classification result
+
+    # we create an instance of Neighbours Classifier and fit the data.
+    # clf = neighbors.KNeighborsClassifier(n_neighbors, weights='distance', n_jobs=-1) #Accuracy = 83.33%
+    # clf = svm.SVC(kernel='linear') #Accuracy = 86.66%
+    # clf = svm.LinearSVC() #Accuracy = 76.66%
+    # clf = LogisticRegression(n_jobs=-1, random_state=0) #Accuracy = 73.33%
+    # clf = tree.DecisionTreeClassifier() #Accuracy = 76.66%
+    # clf = MLPClassifier() #Accuracy = 76.66%
+    clf = RandomForestClassifier(n_jobs=-1)  # Accuracy = 86.66%
+
+    clf.fit(train_container_data, train_container_labels_raw)
+    start_time = time.time()
+    test_predicted_container_res = clf.predict(test_container_data)
+    elapsed_time = time.time() - start_time
+    print('\n****************RandomForestClassifier Classification result for container************************')
+    print('RandomForestClassifier Training time: {}'.format(elapsed_time))
+    display_result(test_container_labels_raw, test_predicted_container_res, 'RandomForestClassifier_container')
 
 
     '''
