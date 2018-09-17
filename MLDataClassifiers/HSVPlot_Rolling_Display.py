@@ -51,7 +51,7 @@ v = []
 def animate(i):
     values = serialfeeder()
 
-    h_n, s_n, v_n = rgb2hsv(float(values[6]), float(values[7]), float(values[8]), float(values[9]))
+    h_n, s_n, v_n = rgb2hsv(float(values[4]), float(values[5]), float(values[6]), float(values[7]))
 
     t.append(str(datetime.now().time()))
     h.append(h_n)
