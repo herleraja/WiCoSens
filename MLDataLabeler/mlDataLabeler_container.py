@@ -381,7 +381,7 @@ class Ui_MainWindow(object):
         self.randomNumberLowerLimitLabel.setText(_translate("MainWindow", "Lower Limit"))
         self.randomNumberLowerLimitLineEdit.setText(_translate("MainWindow", "0"))
         self.randomNumberUpperLimitLabel.setText(_translate("MainWindow", "Upper Limit"))
-        self.randomNumberUpperLimitLineEdit.setText(_translate("MainWindow", "10"))
+        self.randomNumberUpperLimitLineEdit.setText(_translate("MainWindow", "24"))
         self.resetBtn.setText(_translate("MainWindow", "Reset"))
         self.closeBtn.setText(_translate("MainWindow", "Close"))
         self.fileNameLabel.setText(_translate("MainWindow", "FileName"))
@@ -693,7 +693,7 @@ class Ui_MainWindow(object):
             self.colorSpaceXYZButton.setChecked(False)
             self.colorSpaceRGBButton.setChecked(True)
             self.randomNumberLowerLimitLineEdit.setText('0')
-            self.randomNumberUpperLimitLineEdit.setText('2')
+            self.randomNumberUpperLimitLineEdit.setText('24')
 
         else:
             self.displayWarningPopUp("Please stop capturing data before the reset")

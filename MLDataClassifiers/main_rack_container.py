@@ -24,10 +24,10 @@ import colorSpaceUtil
 import time
 
 # Configuration related inputs
-color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
-source_dir_path = "./data1/" + color_space.lower() + "/"
-config_save_load_dir_path = "./configs/container_20/" + color_space.lower() + "/"
-loadConfigurationsFromFiles = True
+color_space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+source_dir_path = "./datarecording_discrete/" + color_space.lower() + "/"
+config_save_load_dir_path = "./configs/container_24/" + color_space.lower() + "/"
+loadConfigurationsFromFiles = False
 
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
@@ -36,19 +36,22 @@ scalar_container = StandardScaler()
 def build_model(number_class):
     model = tf.keras.Sequential()
     # Must define the input shape in the first layer of the neural network
-    model.add(tf.keras.layers.Dense(10, input_shape=(36,), activation='relu'))
-    # model.add(tf.keras.layers.Dropout(0.1))
-    model.add(tf.keras.layers.Dense(1024, activation='relu'))
-    # model.add(tf.keras.layers.Dropout(0.1))
-    model.add(tf.keras.layers.Dense(612, activation='relu'))
+    model.add(tf.keras.layers.Dense(1024, input_shape=(36,), activation=tf.nn.relu))
+    #model.add(tf.keras.layers.Dropout(0.3))
+    model.add(tf.keras.layers.Dense(1024, activation=tf.nn.relu))
+    #model.add(tf.keras.layers.Dropout(0.3))
+    model.add(tf.keras.layers.Dense(612, activation=tf.nn.relu))
     # model.add(tf.keras.layers.Flatten())
-    model.add(tf.keras.layers.Dense(256, activation='relu'))
-    # model.add(tf.keras.layers.Dropout(0.5))
+    #model.add(tf.keras.layers.Dropout(0.5))
+    model.add(tf.keras.layers.Dense(256, activation=tf.nn.relu))
+    #model.add(tf.keras.layers.Dropout(0.5))
+    model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu))
+    #model.add(tf.keras.layers.Dropout(0.3))
     model.add(tf.keras.layers.Dense(number_class, activation='softmax'))
     # Take a look at the model summary
     model.summary()
     model.compile(loss='categorical_crossentropy',
-                  optimizer='rmsprop',  # rmsprop, adam
+                  optimizer='adam',  # rmsprop, adam
                   metrics=['accuracy'])
     return model
 
@@ -64,7 +67,7 @@ def parse_file(csv_path):
 def save_configurations():
     os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
 
-    model_rack.save(config_save_load_dir_path + 'model_rack.h5')
+    #model_rack.save(config_save_load_dir_path + 'model_rack.h5')
     model_container.save(config_save_load_dir_path + 'model_container.h5')
     pickle.dump(scalar_rack, open(config_save_load_dir_path + "scalar_rack.p", "wb"))
     pickle.dump(scalar_container, open(config_save_load_dir_path + "scalar_container.p", "wb"))
@@ -78,7 +81,7 @@ def get_trainig_data():
     train_rack_data = scalar_rack.transform(train_rack_data)
     train_rack_labels = keras.utils.to_categorical(train_rack_labels_raw)
 
-    train_container_data, train_container_labels_raw = parse_file(source_dir_path + 'rack2_container_train.csv')
+    train_container_data, train_container_labels_raw = parse_file(source_dir_path + 'container_train.csv')
     scalar_container.fit(train_container_data)
     train_container_data = scalar_container.transform(train_container_data)
     train_container_labels = keras.utils.to_categorical(train_container_labels_raw)
@@ -92,7 +95,7 @@ def get_testing_data():
     test_rack_data = scalar_rack.transform(test_rack_data)
     test_rack_labels = keras.utils.to_categorical(test_rack_labels_raw)
 
-    test_container_data, test_container_labels_raw = parse_file(source_dir_path + 'rack2_container_test.csv')
+    test_container_data, test_container_labels_raw = parse_file(source_dir_path + 'container_test.csv')
     test_container_data = scalar_container.transform(test_container_data)
     test_container_labels = keras.utils.to_categorical(test_container_labels_raw)
 
@@ -152,9 +155,32 @@ def display_result(actual, predicted, type):
     print('Classification Report :\n{}'.format(classification_report(actual, predicted, digits=5)))
 
     plt.figure(figsize=(12, 12))
-    plot_confusion_matrix(mtx, classes=[2, 3, 4, 5, 7, 8, 9, 10, 12, 14, 18, 19, 20, 21, 22, 23, 24], normalize=False, title='Box Identification (non normalized)')
+    plot_confusion_matrix(mtx, classes=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], normalize=False, title='Box Identification (non normalized)')
     #plt.show()
     plt.savefig(config_save_load_dir_path + type + '_confusion_matrix.png')
+    plt.clf()
+
+
+def plot_history(history, type):
+    # summarize history for accuracy
+    plt.plot(history.history['acc'])
+    plt.plot(history.history['val_acc'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.savefig(config_save_load_dir_path + type + '_accuracy.png')
+    plt.clf()
+
+    # summarize history for loss
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.savefig(config_save_load_dir_path + type + '_loss.png')
+    plt.clf()
 
 if __name__ == "__main__":
     (train_container_data, train_container_labels, train_container_labels_raw), (
@@ -173,29 +199,28 @@ if __name__ == "__main__":
 
     else:
 
-        model_rack = build_model(2)
-        model_rack.fit(train_rack_data, train_rack_labels, epochs=20, validation_data=(test_rack_data, test_rack_labels),
-                       batch_size=500)
+        #model_rack = build_model(2)
+        #model_rack.fit(train_rack_data, train_rack_labels, epochs=10, validation_data=(test_rack_data, test_rack_labels),  batch_size=500)
 
         model_container = build_model(25)
 
         start_time = time.time()
-        model_container.fit(train_container_data, train_container_labels, epochs=20, validation_data=(test_container_data, test_container_labels), batch_size=500)
+        history_container = model_container.fit(train_container_data, train_container_labels, epochs=5, validation_data=(test_container_data, test_container_labels), batch_size=1000)
         elapsed_time = time.time() - start_time
         print('Deep Learning Training time: {}'.format(elapsed_time))
-
-        save_configurations()
+        #save_configurations()
 
     test_predicted_container_res = model_container.predict(test_container_data, batch_size=1).argmax(axis=-1)
 
-    test_predicted_rack_res = model_rack.predict(test_rack_data, batch_size=1).argmax(axis=-1)
+    #test_predicted_rack_res = model_rack.predict(test_rack_data, batch_size=1).argmax(axis=-1)
 
     print('Color Space: {}'.format(color_space))
-    print('\n****************Classification result for rack************************')
-    display_result(test_rack_labels_raw, test_predicted_rack_res, 'rack')  #Print the classification result
+    #print('\n****************Classification result for rack************************')
+    #display_result(test_rack_labels_raw, test_predicted_rack_res, 'rack')  #Print the classification result
 
     print('\n****************Classification result for container************************')
     display_result(test_container_labels_raw, test_predicted_container_res, 'container')  #Print the classification result
+    plot_history(history_container, 'container')
 
     # we create an instance of Neighbours Classifier and fit the data.
     # clf = neighbors.KNeighborsClassifier(n_neighbors, weights='distance', n_jobs=-1) #Accuracy = 83.33%
