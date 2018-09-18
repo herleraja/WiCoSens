@@ -5,7 +5,6 @@
 # Created by: PyQt5 UI code generator 5.9
 #
 # WARNING! All changes made in this file will be lost!
-
 import atexit
 import os
 import pickle
@@ -22,6 +21,7 @@ import colorSpaceUtil
 class Ui_MainWindow(object):
     ser = file = None
     container_dict = {}
+    start_time = 100
     maxSamplesPerKeyCount = 2
     # skip_container_numbers = [1, 6, 11, 16]
     skip_container_numbers = []
@@ -53,14 +53,14 @@ class Ui_MainWindow(object):
         self.dataLabelingTabGridLayout.setObjectName("dataLabelingTabGridLayout")
         self.fileNameLabel = QtWidgets.QLabel(self.formLayoutWidget)
         self.fileNameLabel.setObjectName("fileNameLabel")
-        self.dataLabelingTabGridLayout.addWidget(self.fileNameLabel, 7, 0, 1, 1)
+        self.dataLabelingTabGridLayout.addWidget(self.fileNameLabel, 8, 0, 1, 1)
         self.captureLabel = QtWidgets.QLabel(self.formLayoutWidget)
         self.captureLabel.setObjectName("captureLabel")
         self.dataLabelingTabGridLayout.addWidget(self.captureLabel, 4, 0, 1, 1)
         self.fileNameLineEdit = QtWidgets.QLineEdit(self.formLayoutWidget)
         self.fileNameLineEdit.setClearButtonEnabled(True)
         self.fileNameLineEdit.setObjectName("fileNameLineEdit")
-        self.dataLabelingTabGridLayout.addWidget(self.fileNameLineEdit, 7, 1, 1, 1)
+        self.dataLabelingTabGridLayout.addWidget(self.fileNameLineEdit, 8, 1, 1, 1)
         self.closeResetHLayout = QtWidgets.QHBoxLayout()
         self.closeResetHLayout.setObjectName("closeResetHLayout")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -97,39 +97,6 @@ class Ui_MainWindow(object):
         self.sensorTextLabel = QtWidgets.QLabel(self.formLayoutWidget)
         self.sensorTextLabel.setObjectName("sensorTextLabel")
         self.dataLabelingTabGridLayout.addWidget(self.sensorTextLabel, 9, 0, 1, 1)
-        self.randomNumberHorizontalLayout = QtWidgets.QHBoxLayout()
-        self.randomNumberHorizontalLayout.setObjectName("randomNumberHorizontalLayout")
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.randomNumberHorizontalLayout.addItem(spacerItem3)
-        self.ranodmNumberEnableLabel = QtWidgets.QLabel(self.formLayoutWidget)
-        self.ranodmNumberEnableLabel.setObjectName("ranodmNumberEnableLabel")
-        self.randomNumberHorizontalLayout.addWidget(self.ranodmNumberEnableLabel)
-        self.randomNumberCheckBox = QtWidgets.QCheckBox(self.formLayoutWidget)
-        self.randomNumberCheckBox.setText("")
-        self.randomNumberCheckBox.setChecked(True)
-        self.randomNumberCheckBox.setObjectName("randomNumberCheckBox")
-        self.randomNumberHorizontalLayout.addWidget(self.randomNumberCheckBox)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.randomNumberHorizontalLayout.addItem(spacerItem4)
-        self.randomNumberLowerLimitLabel = QtWidgets.QLabel(self.formLayoutWidget)
-        self.randomNumberLowerLimitLabel.setObjectName("randomNumberLowerLimitLabel")
-        self.randomNumberHorizontalLayout.addWidget(self.randomNumberLowerLimitLabel)
-        self.randomNumberLowerLimitLineEdit = QtWidgets.QLineEdit(self.formLayoutWidget)
-        self.randomNumberLowerLimitLineEdit.setClearButtonEnabled(True)
-        self.randomNumberLowerLimitLineEdit.setObjectName("randomNumberLowerLimitLineEdit")
-        self.randomNumberHorizontalLayout.addWidget(self.randomNumberLowerLimitLineEdit)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.randomNumberHorizontalLayout.addItem(spacerItem5)
-        self.randomNumberUpperLimitLabel = QtWidgets.QLabel(self.formLayoutWidget)
-        self.randomNumberUpperLimitLabel.setObjectName("randomNumberUpperLimitLabel")
-        self.randomNumberHorizontalLayout.addWidget(self.randomNumberUpperLimitLabel)
-        self.randomNumberUpperLimitLineEdit = QtWidgets.QLineEdit(self.formLayoutWidget)
-        self.randomNumberUpperLimitLineEdit.setClearButtonEnabled(True)
-        self.randomNumberUpperLimitLineEdit.setObjectName("randomNumberUpperLimitLineEdit")
-        self.randomNumberHorizontalLayout.addWidget(self.randomNumberUpperLimitLineEdit)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.randomNumberHorizontalLayout.addItem(spacerItem6)
-        self.dataLabelingTabGridLayout.addLayout(self.randomNumberHorizontalLayout, 8, 1, 1, 1)
         self.containerNumberLabel = QtWidgets.QLabel(self.formLayoutWidget)
         self.containerNumberLabel.setObjectName("containerNumberLabel")
         self.dataLabelingTabGridLayout.addWidget(self.containerNumberLabel, 1, 0, 1, 1)
@@ -162,20 +129,31 @@ class Ui_MainWindow(object):
         self.containerNumberLabelValueDisplay.setAlignment(QtCore.Qt.AlignCenter)
         self.containerNumberLabelValueDisplay.setObjectName("containerNumberLabelValueDisplay")
         self.dataLabelingTabGridLayout.addWidget(self.containerNumberLabelValueDisplay, 1, 1, 1, 1)
-        self.randomNumberLabel = QtWidgets.QLabel(self.formLayoutWidget)
-        self.randomNumberLabel.setObjectName("randomNumberLabel")
-        self.dataLabelingTabGridLayout.addWidget(self.randomNumberLabel, 8, 0, 1, 1)
-        spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.dataLabelingTabGridLayout.addItem(spacerItem7, 5, 1, 1, 1)
-        self.progressBar = QtWidgets.QProgressBar(self.formLayoutWidget)
-        self.progressBar.setProperty("value", 0)
-        self.progressBar.setObjectName("progressBar")
-        self.dataLabelingTabGridLayout.addWidget(self.progressBar, 6, 1, 1, 1)
-        self.lcdNumber = QtWidgets.QLCDNumber(self.formLayoutWidget)
-        self.lcdNumber.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.lcdNumber.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.lcdNumber.setObjectName("lcdNumber")
-        self.dataLabelingTabGridLayout.addWidget(self.lcdNumber, 6, 0, 1, 1)
+        self.captureTimeProgressBar = QtWidgets.QProgressBar(self.formLayoutWidget)
+        self.captureTimeProgressBar.setProperty("value", 0)
+        self.captureTimeProgressBar.setObjectName("captureTimeProgressBar")
+        self.dataLabelingTabGridLayout.addWidget(self.captureTimeProgressBar, 7, 1, 1, 1)
+        self.remainingSamplesToCaptureLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.remainingSamplesToCaptureLabel.setObjectName("remainingSamplesToCaptureLabel")
+        self.dataLabelingTabGridLayout.addWidget(self.remainingSamplesToCaptureLabel, 6, 0, 1, 1)
+        self.captureTimeLabel = QtWidgets.QLabel(self.formLayoutWidget)
+        self.captureTimeLabel.setObjectName("captureTimeLabel")
+        self.dataLabelingTabGridLayout.addWidget(self.captureTimeLabel, 7, 0, 1, 1)
+        self.remainingSamplesToCaptureLCDNumber = QtWidgets.QLCDNumber(self.formLayoutWidget)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        font.setKerning(True)
+        self.remainingSamplesToCaptureLCDNumber.setFont(font)
+        self.remainingSamplesToCaptureLCDNumber.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.remainingSamplesToCaptureLCDNumber.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.remainingSamplesToCaptureLCDNumber.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.remainingSamplesToCaptureLCDNumber.setDigitCount(6)
+        self.remainingSamplesToCaptureLCDNumber.setMode(QtWidgets.QLCDNumber.Dec)
+        self.remainingSamplesToCaptureLCDNumber.setObjectName("remainingSamplesToCaptureLCDNumber")
+        self.dataLabelingTabGridLayout.addWidget(self.remainingSamplesToCaptureLCDNumber, 6, 1, 1, 1)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.dataLabelingTabGridLayout.addItem(spacerItem3, 5, 1, 1, 1)
         self.mainTabObj.addTab(self.dataLabelingTab, "")
         self.settingTab = QtWidgets.QWidget()
         self.settingTab.setObjectName("settingTab")
@@ -194,8 +172,8 @@ class Ui_MainWindow(object):
         self.settingTabMainGridLayout.addWidget(self.serialPortSettingsLabel, 0, 0, 1, 1)
         self.recordingFolderLocationhorizontalLayout = QtWidgets.QHBoxLayout()
         self.recordingFolderLocationhorizontalLayout.setObjectName("recordingFolderLocationhorizontalLayout")
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.recordingFolderLocationhorizontalLayout.addItem(spacerItem8)
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.recordingFolderLocationhorizontalLayout.addItem(spacerItem4)
         self.recordingFolderLocationLineEdit = QtWidgets.QLineEdit(self.gridLayoutWidget_2)
         self.recordingFolderLocationLineEdit.setClearButtonEnabled(True)
         self.recordingFolderLocationLineEdit.setObjectName("recordingFolderLocationLineEdit")
@@ -233,8 +211,8 @@ class Ui_MainWindow(object):
         self.portLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
         self.portLabel.setObjectName("portLabel")
         self.portHorizontalLayout.addWidget(self.portLabel)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.portHorizontalLayout.addItem(spacerItem9)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.portHorizontalLayout.addItem(spacerItem5)
         self.portlineEdit = QtWidgets.QLineEdit(self.gridLayoutWidget_2)
         self.portlineEdit.setClearButtonEnabled(True)
         self.portlineEdit.setObjectName("portlineEdit")
@@ -244,6 +222,9 @@ class Ui_MainWindow(object):
         self.recordingTimerLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
         self.recordingTimerLabel.setObjectName("recordingTimerLabel")
         self.settingTabMainGridLayout.addWidget(self.recordingTimerLabel, 1, 0, 1, 1)
+        self.colorSpaceLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
+        self.colorSpaceLabel.setObjectName("colorSpaceLabel")
+        self.settingTabMainGridLayout.addWidget(self.colorSpaceLabel, 4, 0, 1, 1)
         self.sensorEnableDisableLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
         self.sensorEnableDisableLabel.setObjectName("sensorEnableDisableLabel")
         self.settingTabMainGridLayout.addWidget(self.sensorEnableDisableLabel, 3, 0, 1, 1)
@@ -253,8 +234,8 @@ class Ui_MainWindow(object):
         self.enableTimerCheckBox.setChecked(True)
         self.enableTimerCheckBox.setObjectName("enableTimerCheckBox")
         self.recordingTimerHorizontalLayout.addWidget(self.enableTimerCheckBox)
-        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.recordingTimerHorizontalLayout.addItem(spacerItem10)
+        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.recordingTimerHorizontalLayout.addItem(spacerItem6)
         self.timerInSecondsLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
         self.timerInSecondsLabel.setObjectName("timerInSecondsLabel")
         self.recordingTimerHorizontalLayout.addWidget(self.timerInSecondsLabel)
@@ -328,9 +309,6 @@ class Ui_MainWindow(object):
         self.colSensorButton12.setObjectName("colSensorButton12")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton12)
         self.settingTabMainGridLayout.addLayout(self.sensorButtonHorizontalLayout, 3, 1, 1, 1)
-        self.colorSpaceLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
-        self.colorSpaceLabel.setObjectName("colorSpaceLabel")
-        self.settingTabMainGridLayout.addWidget(self.colorSpaceLabel, 4, 0, 1, 1)
         self.colorSpaceButtonsHorizontalLayout = QtWidgets.QHBoxLayout()
         self.colorSpaceButtonsHorizontalLayout.setObjectName("colorSpaceButtonsHorizontalLayout")
         self.colorSpaceXYZButton = QtWidgets.QPushButton(self.gridLayoutWidget_2)
@@ -361,6 +339,51 @@ class Ui_MainWindow(object):
         self.colorSpaceHSVButton.setObjectName("colorSpaceHSVButton")
         self.colorSpaceButtonsHorizontalLayout.addWidget(self.colorSpaceHSVButton)
         self.settingTabMainGridLayout.addLayout(self.colorSpaceButtonsHorizontalLayout, 4, 1, 1, 1)
+        self.randomNumberLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
+        self.randomNumberLabel.setObjectName("randomNumberLabel")
+        self.settingTabMainGridLayout.addWidget(self.randomNumberLabel, 5, 0, 1, 1)
+        self.randomNumberHorizontalLayout = QtWidgets.QHBoxLayout()
+        self.randomNumberHorizontalLayout.setObjectName("randomNumberHorizontalLayout")
+        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.randomNumberHorizontalLayout.addItem(spacerItem7)
+        self.ranodmNumberEnableLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
+        self.ranodmNumberEnableLabel.setObjectName("ranodmNumberEnableLabel")
+        self.randomNumberHorizontalLayout.addWidget(self.ranodmNumberEnableLabel)
+        self.randomNumberCheckBox = QtWidgets.QCheckBox(self.gridLayoutWidget_2)
+        self.randomNumberCheckBox.setText("")
+        self.randomNumberCheckBox.setChecked(True)
+        self.randomNumberCheckBox.setObjectName("randomNumberCheckBox")
+        self.randomNumberHorizontalLayout.addWidget(self.randomNumberCheckBox)
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.randomNumberHorizontalLayout.addItem(spacerItem8)
+        self.label = QtWidgets.QLabel(self.gridLayoutWidget_2)
+        self.label.setObjectName("label")
+        self.randomNumberHorizontalLayout.addWidget(self.label)
+        self.samplesPerKeyCountLineEdit = QtWidgets.QLineEdit(self.gridLayoutWidget_2)
+        self.samplesPerKeyCountLineEdit.setClearButtonEnabled(True)
+        self.samplesPerKeyCountLineEdit.setObjectName("samplesPerKeyCountLineEdit")
+        self.randomNumberHorizontalLayout.addWidget(self.samplesPerKeyCountLineEdit)
+        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.randomNumberHorizontalLayout.addItem(spacerItem9)
+        self.randomNumberLowerLimitLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
+        self.randomNumberLowerLimitLabel.setObjectName("randomNumberLowerLimitLabel")
+        self.randomNumberHorizontalLayout.addWidget(self.randomNumberLowerLimitLabel)
+        self.randomNumberLowerLimitLineEdit = QtWidgets.QLineEdit(self.gridLayoutWidget_2)
+        self.randomNumberLowerLimitLineEdit.setClearButtonEnabled(True)
+        self.randomNumberLowerLimitLineEdit.setObjectName("randomNumberLowerLimitLineEdit")
+        self.randomNumberHorizontalLayout.addWidget(self.randomNumberLowerLimitLineEdit)
+        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.randomNumberHorizontalLayout.addItem(spacerItem10)
+        self.randomNumberUpperLimitLabel = QtWidgets.QLabel(self.gridLayoutWidget_2)
+        self.randomNumberUpperLimitLabel.setObjectName("randomNumberUpperLimitLabel")
+        self.randomNumberHorizontalLayout.addWidget(self.randomNumberUpperLimitLabel)
+        self.randomNumberUpperLimitLineEdit = QtWidgets.QLineEdit(self.gridLayoutWidget_2)
+        self.randomNumberUpperLimitLineEdit.setClearButtonEnabled(True)
+        self.randomNumberUpperLimitLineEdit.setObjectName("randomNumberUpperLimitLineEdit")
+        self.randomNumberHorizontalLayout.addWidget(self.randomNumberUpperLimitLineEdit)
+        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.randomNumberHorizontalLayout.addItem(spacerItem11)
+        self.settingTabMainGridLayout.addLayout(self.randomNumberHorizontalLayout, 5, 1, 1, 1)
         self.mainTabObj.addTab(self.settingTab, "")
         self.classifierTab = QtWidgets.QWidget()
         self.classifierTab.setObjectName("classifierTab")
@@ -382,6 +405,7 @@ class Ui_MainWindow(object):
         self.mainTabObj.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.timer = QtCore.QTimer()
         self.load_dictionary('container_dict.txt')
 
         if self.randomNumberCheckBox.isChecked():
@@ -406,16 +430,13 @@ class Ui_MainWindow(object):
         self.stopCaptureBtn.setText(_translate("MainWindow", "Stop"))
         self.classLabelLabel.setText(_translate("MainWindow", "ClassLabel"))
         self.sensorTextLabel.setText(_translate("MainWindow", "Captured Sensor Data"))
-        self.ranodmNumberEnableLabel.setText(_translate("MainWindow", "Enable Randomness"))
-        self.randomNumberLowerLimitLabel.setText(_translate("MainWindow", "Lower Limit"))
-        self.randomNumberLowerLimitLineEdit.setText(_translate("MainWindow", "0"))
-        self.randomNumberUpperLimitLabel.setText(_translate("MainWindow", "Upper Limit"))
-        self.randomNumberUpperLimitLineEdit.setText(_translate("MainWindow", "24"))
         self.containerNumberLabel.setText(_translate("MainWindow", "Container Number"))
         self.containerNumberLabelValueDisplay.setText(_translate("MainWindow", "999"))
-        self.randomNumberLabel.setText(_translate("MainWindow", "Random number setting"))
-        self.progressBar.setFormat(_translate("MainWindow", "%p"))
-        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab), _translate("MainWindow", "Data labeling"))
+        self.captureTimeProgressBar.setFormat(_translate("MainWindow", "%p"))
+        self.remainingSamplesToCaptureLabel.setText(_translate("MainWindow", "Remaining # Samples"))
+        self.captureTimeLabel.setText(_translate("MainWindow", "Capture Time"))
+        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab),
+                                   _translate("MainWindow", "Data labeling"))
         self.recordingFolderLocationLabel.setText(_translate("MainWindow", "Recording Folder Location"))
         self.serialPortSettingsLabel.setText(_translate("MainWindow", "Serial Port Settings"))
         self.recordingFolderLocationLineEdit.setText(_translate("MainWindow", "datarecording_discrete/rgb/"))
@@ -437,6 +458,7 @@ class Ui_MainWindow(object):
         self.portLabel.setText(_translate("MainWindow", "Port"))
         self.portlineEdit.setText(_translate("MainWindow", "COM3"))
         self.recordingTimerLabel.setText(_translate("MainWindow", "Recording Timer"))
+        self.colorSpaceLabel.setText(_translate("MainWindow", "Color Space"))
         self.sensorEnableDisableLabel.setText(_translate("MainWindow", "Enable / Disable Color Sensor"))
         self.enableTimerCheckBox.setText(_translate("MainWindow", "Enable Timer"))
         self.timerInSecondsLabel.setText(_translate("MainWindow", "Time(in seconds)"))
@@ -453,16 +475,21 @@ class Ui_MainWindow(object):
         self.colSensorButton10.setText(_translate("MainWindow", "L3"))
         self.colSensorButton11.setText(_translate("MainWindow", "L4"))
         self.colSensorButton12.setText(_translate("MainWindow", "L5"))
-        self.colorSpaceLabel.setText(_translate("MainWindow", "Color Space"))
         self.colorSpaceXYZButton.setText(_translate("MainWindow", "XYZ"))
         self.colorSpaceLabButton.setText(_translate("MainWindow", "L*a*b*"))
         self.colorSpaceYCbCrButton.setText(_translate("MainWindow", "YCbCr"))
         self.colorSpaceRGBButton.setText(_translate("MainWindow", "RGB"))
         self.colorSpaceHSVButton.setText(_translate("MainWindow", "HSV"))
+        self.randomNumberLabel.setText(_translate("MainWindow", "Random number setting"))
+        self.ranodmNumberEnableLabel.setText(_translate("MainWindow", "Enable Randomness"))
+        self.label.setText(_translate("MainWindow", "#Samples / Key"))
+        self.samplesPerKeyCountLineEdit.setText(_translate("MainWindow", "2"))
+        self.randomNumberLowerLimitLabel.setText(_translate("MainWindow", "Lower Limit"))
+        self.randomNumberLowerLimitLineEdit.setText(_translate("MainWindow", "0"))
+        self.randomNumberUpperLimitLabel.setText(_translate("MainWindow", "Upper Limit"))
+        self.randomNumberUpperLimitLineEdit.setText(_translate("MainWindow", "24"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.settingTab), _translate("MainWindow", "Settings"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.classifierTab), _translate("MainWindow", "Classify"))
-
-
 
     def setUpSerialPort(self):
         baudrate = self.baudrateComboBox.currentText()
@@ -482,9 +509,9 @@ class Ui_MainWindow(object):
         self.randomNumberLowerLimitLineEdit.textChanged.connect(self.randomNumberUpperLowerLimitLineEditTextChangeEvent)
         self.startCaptureBtn.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Space))
         self.stopCaptureBtn.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Escape))
+        self.timer.timeout.connect(self.updateProgressBar)
 
     def addFiledsValidators(self):
-
         regexp = QtCore.QRegExp('[a-zA-Z0-9_ -]+')
         validator = QtGui.QRegExpValidator(regexp)
         intValidator = QtGui.QIntValidator()
@@ -493,6 +520,12 @@ class Ui_MainWindow(object):
         self.classLabelLineEdit.setValidator(validator)
         self.randomNumberLowerLimitLineEdit.setValidator(intValidator)
         self.randomNumberUpperLimitLineEdit.setValidator(intValidator)
+        intValidator = QtGui.QIntValidator()
+        intValidator.setRange(0, 10)
+        self.samplesPerKeyCountLineEdit.setValidator(intValidator)
+        intValidator = QtGui.QIntValidator()
+        intValidator.setRange(0, 100)
+        self.timerInSecondsLineEdit.setValidator(intValidator)
 
     def captureSensorData(self):
         try:
@@ -612,10 +645,8 @@ class Ui_MainWindow(object):
                     else:
                         self.container_dict[classLabel] = 1
 
-
-
-
                     self.displayRemainingSamplesCount()
+                    self.addTimerFunctionality()
 
                     QtCore.QTimer.singleShot(1, self.captureSensorData)
 
@@ -640,6 +671,10 @@ class Ui_MainWindow(object):
         if self.randomNumberCheckBox.isChecked():
             self.displayRandomContainerNumber()
             # self.classLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())  # last record update issue
+
+        if self.timer.isActive():
+            self.timer.stop()
+            self.captureTimeProgressBar.reset()
 
     def randomNumberCheckBoxPressedEvent(self):
         if self.randomNumberCheckBox.isChecked():
@@ -757,10 +792,32 @@ class Ui_MainWindow(object):
         dictionarySumOfValues = sum(self.container_dict.values())
         randomNumberLowerLimit = int(self.randomNumberLowerLimitLineEdit.text())
         randomNumberUpperLimit = int(self.randomNumberUpperLimitLineEdit.text())
-        maxNumberOfSamples = (randomNumberUpperLimit - randomNumberLowerLimit - self.skip_container_numbers.__len__() + 1) * self.maxSamplesPerKeyCount
+        maxNumberOfSamples = (
+                                     randomNumberUpperLimit - randomNumberLowerLimit - self.skip_container_numbers.__len__() + 1) * self.maxSamplesPerKeyCount
         remainingNumberOfContainers = maxNumberOfSamples - dictionarySumOfValues
-        self.lcdNumber.display(str(remainingNumberOfContainers))
+        self.remainingSamplesToCaptureLCDNumber.display(str(remainingNumberOfContainers))
 
+    def addTimerFunctionality(self):
+        if self.enableTimerCheckBox.isChecked():
+            timerUpperLimit = int(self.timerInSecondsLineEdit.text())
+            self.captureTimeProgressBar.setMaximum(timerUpperLimit)
+            self.captureTimeProgressBar.repaint()
+            self.start_time = 0
+            self.timer.start(1000)
+        elif self.timer.isActive():
+            self.timer.stop()
+
+    def updateProgressBar(self):
+        self.start_time += 1
+        timerUpperLimit = int(self.timerInSecondsLineEdit.text())
+
+        if self.start_time <= timerUpperLimit:
+            print(self.start_time)
+            self.captureTimeProgressBar.setValue(self.start_time)
+        elif self.timer.isActive():
+            self.timer.stop()
+            self.captureTimeProgressBar.reset()
+            self.stopCaptureBtnPressedEvent()
 
     def closeWindow(self):
         QtCore.QCoreApplication.instance().quit()
