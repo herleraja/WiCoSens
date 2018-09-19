@@ -64,17 +64,6 @@ def parse_file(csv_path):
     return dt_all_colors, labels
 
 
-def save_configurations():
-    os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
-
-    #model_rack.save(config_save_load_dir_path + 'model_rack.h5')
-    model_container.save(config_save_load_dir_path + 'model_container.h5')
-    pickle.dump(scalar_rack, open(config_save_load_dir_path + "scalar_rack.p", "wb"))
-    pickle.dump(scalar_container, open(config_save_load_dir_path + "scalar_container.p", "wb"))
-
-    print("Saved machine learning models and scalar configuration into files !!")
-
-
 def get_trainig_data():
     train_rack_data, train_rack_labels_raw = parse_file(source_dir_path + 'rack_train.csv')
     scalar_rack.fit(train_rack_data)
@@ -101,6 +90,17 @@ def get_testing_data():
 
     return (test_rack_data, test_rack_labels, test_rack_labels_raw), (
         test_container_data, test_container_labels, test_container_labels_raw)
+
+
+def save_configurations():
+    os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
+
+    #model_rack.save(config_save_load_dir_path + 'model_rack.h5')
+    model_container.save(config_save_load_dir_path + 'model_container.h5')
+    pickle.dump(scalar_rack, open(config_save_load_dir_path + "scalar_rack.p", "wb"))
+    pickle.dump(scalar_container, open(config_save_load_dir_path + "scalar_container.p", "wb"))
+
+    print("Saved machine learning models and scalar configuration into files !!")
 
 
 def plot_confusion_matrix(cm, classes,

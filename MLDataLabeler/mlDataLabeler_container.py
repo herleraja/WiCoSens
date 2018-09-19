@@ -22,7 +22,7 @@ class Ui_MainWindow(object):
     ser = file = None
     container_dict = {}
     start_time = 100
-    maxSamplesPerKeyCount = 2
+    # maxSamplesPerKeyCount = 2
     # skip_container_numbers = [1, 6, 11, 16]
     skip_container_numbers = []
 
@@ -410,7 +410,7 @@ class Ui_MainWindow(object):
 
         if self.randomNumberCheckBox.isChecked():
             self.displayRandomContainerNumber()
-            self.displayRemainingSamplesCount()
+            # self.displayRemainingSamplesCount()
             self.classLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
 
         self.addButtonOperations()
@@ -507,9 +507,10 @@ class Ui_MainWindow(object):
         self.randomNumberCheckBox.clicked.connect(self.randomNumberCheckBoxPressedEvent)
         self.randomNumberUpperLimitLineEdit.textChanged.connect(self.randomNumberUpperLowerLimitLineEditTextChangeEvent)
         self.randomNumberLowerLimitLineEdit.textChanged.connect(self.randomNumberUpperLowerLimitLineEditTextChangeEvent)
+        self.samplesPerKeyCountLineEdit.textChanged.connect(self.randomNumberUpperLowerLimitLineEditTextChangeEvent)
+        self.timer.timeout.connect(self.updateProgressBar)
         self.startCaptureBtn.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Space))
         self.stopCaptureBtn.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Escape))
-        self.timer.timeout.connect(self.updateProgressBar)
 
     def addFiledsValidators(self):
         regexp = QtCore.QRegExp('[a-zA-Z0-9_ -]+')
@@ -671,7 +672,6 @@ class Ui_MainWindow(object):
         if self.randomNumberCheckBox.isChecked():
             self.displayRandomContainerNumber()
             # self.classLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())  # last record update issue
-
         if self.timer.isActive():
             self.timer.stop()
             self.captureTimeProgressBar.reset()
@@ -689,7 +689,7 @@ class Ui_MainWindow(object):
 
     def randomNumberUpperLowerLimitLineEditTextChangeEvent(self):
         try:
-            if self.randomNumberLowerLimitLineEdit.text().__len__() > 0 and self.randomNumberUpperLimitLineEdit.text().__len__() > 0:
+            if self.randomNumberLowerLimitLineEdit.text().__len__() > 0 and self.randomNumberUpperLimitLineEdit.text().__len__() > 0 and self.samplesPerKeyCountLineEdit.text().__len__() > 0:
                 randomNumberLowerLimit = int(self.randomNumberLowerLimitLineEdit.text())
                 randomNumberUpperLimit = int(self.randomNumberUpperLimitLineEdit.text())
 
@@ -700,7 +700,6 @@ class Ui_MainWindow(object):
                     return
             else:
                 return
-
         except:
             traceback.print_exc()
             self.displayWarningPopUp(traceback.format_exc())
@@ -715,9 +714,10 @@ class Ui_MainWindow(object):
     def displayRandomContainerNumber(self):
         randomNumberLowerLimit = int(self.randomNumberLowerLimitLineEdit.text())
         randomNumberUpperLimit = int(self.randomNumberUpperLimitLineEdit.text())
+        maxSamplesPerKeyCount = int(self.samplesPerKeyCountLineEdit.text())
 
         if sum(self.container_dict.values()) == (
-                randomNumberUpperLimit - randomNumberLowerLimit - self.skip_container_numbers.__len__() + 1) * self.maxSamplesPerKeyCount:
+                randomNumberUpperLimit - randomNumberLowerLimit - self.skip_container_numbers.__len__() + 1) * maxSamplesPerKeyCount:
             print(
                 "\n\nThe sample reached maximum size limit / all the container samples taken. "
                 "To take more samples please change **maxSamplesPerKeyCount** variable.\n\n")
@@ -731,7 +731,7 @@ class Ui_MainWindow(object):
                 continue
 
             if random_box_number in self.container_dict:
-                if self.container_dict[random_box_number] < self.maxSamplesPerKeyCount:
+                if self.container_dict[random_box_number] < maxSamplesPerKeyCount:
                     break
                 else:
                     continue  # Try other value
@@ -741,16 +741,14 @@ class Ui_MainWindow(object):
         self.containerNumberLabelValueDisplay.setText(str(random_box_number))
         self.containerNumberLabelValueDisplay.repaint()
 
-    def isValidFields(self):
+        self.displayRemainingSamplesCount()  # To reset the remaining sample count value
 
+    def isValidFields(self):
         return_value = self.fileNameLineEdit.text().__len__() > 0 and self.classLabelLineEdit.text().__len__() > 0 \
                        and self.recordingFolderLocationLineEdit.text().__len__() > 0
         if not return_value:
             self.displayWarningPopUp("Please fill the required fields !!")
             return return_value
-        # if self.randomNumberCheckBox.isChecked() and self.classLabelLineEdit.text() != self.containerNumberLabelValueDisplay.text():
-        # self.displayWarningPopUp("Class Label is not same as generated container number.")
-        # return False
         return return_value
 
     def resetFields(self):
@@ -792,8 +790,9 @@ class Ui_MainWindow(object):
         dictionarySumOfValues = sum(self.container_dict.values())
         randomNumberLowerLimit = int(self.randomNumberLowerLimitLineEdit.text())
         randomNumberUpperLimit = int(self.randomNumberUpperLimitLineEdit.text())
+        maxSamplesPerKeyCount = int(self.samplesPerKeyCountLineEdit.text())
         maxNumberOfSamples = (
-                                     randomNumberUpperLimit - randomNumberLowerLimit - self.skip_container_numbers.__len__() + 1) * self.maxSamplesPerKeyCount
+                                         randomNumberUpperLimit - randomNumberLowerLimit - self.skip_container_numbers.__len__() + 1) * maxSamplesPerKeyCount
         remainingNumberOfContainers = maxNumberOfSamples - dictionarySumOfValues
         self.remainingSamplesToCaptureLCDNumber.display(str(remainingNumberOfContainers))
 
@@ -810,9 +809,7 @@ class Ui_MainWindow(object):
     def updateProgressBar(self):
         self.start_time += 1
         timerUpperLimit = int(self.timerInSecondsLineEdit.text())
-
         if self.start_time <= timerUpperLimit:
-            print(self.start_time)
             self.captureTimeProgressBar.setValue(self.start_time)
         elif self.timer.isActive():
             self.timer.stop()
