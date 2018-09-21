@@ -174,11 +174,11 @@ if __name__ == "__main__":
 
         #fileColorSpaceConversionFunction(source_dir_path + 'rack_test.csv', destination_dir_path + 'rack_test.csv', color_Space=color_Space)
         #fileColorSpaceConversionFunction(source_dir_path + 'rack_train.csv', destination_dir_path + 'rack_train.csv', color_Space=color_Space)
-        fileColorSpaceConversionFunction(source_dir_path + 'container_test.csv',
-                                         destination_dir_path + 'container_test.csv',
+        fileColorSpaceConversionFunction(source_dir_path + 'container_test_2I.csv',
+                                         destination_dir_path + 'container_test_2I.csv',
                                          color_Space=color_Space)
-        fileColorSpaceConversionFunction(source_dir_path + 'container_train.csv',
-                                         destination_dir_path + 'container_train.csv',
+        fileColorSpaceConversionFunction(source_dir_path + 'container_train_2I.csv',
+                                         destination_dir_path + 'container_train_2I.csv',
                                          color_Space=color_Space)
 
         print("The files are converted to ***", color_Space, "*** color space")
