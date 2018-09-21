@@ -1,21 +1,11 @@
-#!/usr/bin/env python
-"""
-Modified the animation example code, "strip_chart_demo.py" to plot
-data collected from serial port.
-"""
-
-# matplotlib.use('TkAgg')
-
-import colorsys
-
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import serial
 from matplotlib.lines import Line2D
+
 import colorSpaceUtil
 
 
-# -- Scope() ------------------------------------------------------------
 class Scope(object):
     def __init__(self, ax, maxt=2, dt=0.02):
         self.ax = ax
@@ -62,7 +52,7 @@ class Scope(object):
             ydata_v = [ydata_v[-1]]
             # self.ydata_mg = [self.ydata_mg[-1]]
             ax.set_xlim(tdata[0], tdata[0] + self.maxt)
-            #ax.set_ylim([0, 1])
+            # ax.set_ylim([0, 1])
             ax.figure.canvas.draw()
 
         t = tdata[-1] + self.dt
@@ -137,7 +127,7 @@ class Scope(object):
         self.line_sR4.set_data(self.tdata_R4, self.ydata_sR4)
         self.line_vR4.set_data(self.tdata_R4, self.ydata_vR4)
 
-        #Axis
+        # Axis
         lastt = self.tdata_axis[-1]
 
         if lastt > self.tdata_axis[0] + self.maxt:  # reset the arrays
@@ -155,7 +145,7 @@ class Scope(object):
 
         x, y, z = float(values[1]), float(values[2]), float(values[3])
 
-        #print('{},{},{}, mean: {}'.format(x, y, z, (abs(x)+abs(y)+abs(z))/3))
+        # print('{},{},{}, mean: {}'.format(x, y, z, (abs(x)+abs(y)+abs(z))/3))
 
         self.tdata_axis.append(t)
         self.ydata_x.append(x)
@@ -166,14 +156,13 @@ class Scope(object):
         self.line_y.set_data(self.tdata_axis, self.ydata_y)
         self.line_z.set_data(self.tdata_axis, self.ydata_z)
 
-
         return self.line_hR5, self.line_sR5, self.line_vR5, self.line_hR4, self.line_sR4, self.line_vR4, self.line_x, self.line_y, self.line_z  # , self.line_mg
 
 
 # -- initSerialPort() ---------------------------------------------------
 def initSerialPort():
     sh = serial.Serial("COM3", 115200, timeout=None)
-    sh.isOpen()
+    # sh.isOpen()
 
     for i in range(5):  # -- discard the first 5 lines
         aline = sh.readline().decode('utf-8').rstrip()
@@ -198,7 +187,7 @@ scope = Scope(ax)
 try:
     ani = animation.FuncAnimation(fig, scope.update, serialfeeder, interval=10, blit=True)
 except KeyboardInterrupt:
-    print('nnKeyboard exception received. Exiting.')
+    print('Keyboard exception received. Exiting.')
     plt.close()
     sh.close()
     exit()

@@ -9,12 +9,12 @@ To convert qt.ui file to python.py file please follow these below instructions.
 
 * Step 1: Go to \Scripts folder in C:\ProgramData\Anaconda3
 
-    example: cd C:\ProgramData\Anaconda3\Scripts
+        example: cd C:\ProgramData\Anaconda3\Scripts
 
-* Step 2: if you not find the pyuic5.exe file then please install PyQT5 using pip.
+* Step 2: If you not find the pyuic5.exe file then please install PyQT5 using pip.
 
-    example : pip install PyQT5==5.9
+        example: pip install PyQT5==5.9
 
-* Step 3: Execute the following instruction --> pyuic5.exe -x filename.ui -o ouputfilename.py
+* Step 3: Execute: pyuic5.exe -x <<filename.ui>> -o <<ouputfilename.py>>
 
-    example: pyuic5 "C:\Users\NUCER\Documents\git\WiCoSens\MLDataLabeler\mlDataLabeler_rack_container_box.ui" -o "C:\Users\NUCER\Documents\git\WiCoSens\MLDataLabeler\mlDataLabeler_rack_container_box.py"
+        example: pyuic5 "C:\Users\NUCER\Documents\git\WiCoSens\MLDataLabeler\mlDataLabeler_rack_container_box.ui" -o "C:\Users\NUCER\Documents\git\WiCoSens\MLDataLabeler\mlDataLabeler_rack_container_box.py"

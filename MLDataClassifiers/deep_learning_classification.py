@@ -3,7 +3,7 @@ import pickle
 import time
 
 import keras
-import machine_learning_utils as machine_learning_utils
+import machine_learning_utils as ml_utils
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 
@@ -54,10 +54,10 @@ def save_configurations():
 
 if __name__ == "__main__":
     (train_container_data, train_container_labels, train_container_labels_raw), (
-        train_rack_data, train_rack_labels, train_rack_labels_raw) = machine_learning_utils.get_trainig_data()
+        train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data()
     (test_rack_data, test_rack_labels, test_rack_labels_raw), (
         test_container_data, test_container_labels,
-        test_container_labels_raw) = machine_learning_utils.get_testing_data()
+        test_container_labels_raw) = ml_utils.get_testing_data()
 
     if loadConfigurationsFromFiles:
         model_rack = keras.models.load_model(config_save_load_dir_path + 'model_rack.h5')
@@ -73,7 +73,7 @@ if __name__ == "__main__":
         model_rack = build_model(2)
         model_rack.fit(train_rack_data, train_rack_labels, epochs=10,
                        validation_data=(test_rack_data, test_rack_labels), batch_size=500)
-        machine_learning_utils.save_model(model_rack, 'model_rack.h5')
+        ml_utils.save_model(model_rack, 'model_rack.h5')
 
         model_container = build_model(25)
         start_time = time.time()
@@ -82,7 +82,7 @@ if __name__ == "__main__":
                                                 batch_size=1000)
         elapsed_time = time.time() - start_time
         print('Deep Learning Training time: {}'.format(elapsed_time))
-        machine_learning_utils.save_model(model_container, 'model_container.h5')
+        ml_utils.save_model(model_container, 'model_container.h5')
 
     test_predicted_container_res = model_container.predict(test_container_data, batch_size=1).argmax(axis=-1)
 
@@ -90,9 +90,9 @@ if __name__ == "__main__":
 
     print('Color Space: {}'.format(color_space))
     print('\n****************Classification result for rack************************')
-    machine_learning_utils.display_result(test_rack_labels_raw, test_predicted_rack_res, 'rack')  # Print the classification result
+    ml_utils.display_result(test_rack_labels_raw, test_predicted_rack_res, 'rack')  # Print the classification result
 
     print('\n****************Classification result for container************************')
-    machine_learning_utils.display_result(test_container_labels_raw, test_predicted_container_res,
-                                          'container')  # Print the classification result
-    machine_learning_utils.plot_history(history_container, 'container')
+    ml_utils.display_result(test_container_labels_raw, test_predicted_container_res,
+                            'container')  # Print the classification result
+    ml_utils.plot_history(history_container, 'container')
