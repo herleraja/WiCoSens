@@ -34,7 +34,7 @@ def get_trainig_data():
     train_rack_data = scalar_rack.transform(train_rack_data)
     train_rack_labels = keras.utils.to_categorical(train_rack_labels_raw)
 
-    train_container_data, train_container_labels_raw = parse_file(source_dir_path + 'container_train_4I.csv')
+    train_container_data, train_container_labels_raw = parse_file(source_dir_path + 'container_train_2I_4I.csv')
     scalar_container.fit(train_container_data)
     train_container_data = scalar_container.transform(train_container_data)
     train_container_labels = keras.utils.to_categorical(train_container_labels_raw)
@@ -52,7 +52,7 @@ def get_testing_data():
     test_rack_data = scalar_rack.transform(test_rack_data)
     test_rack_labels = keras.utils.to_categorical(test_rack_labels_raw)
 
-    test_container_data, test_container_labels_raw = parse_file(source_dir_path + 'container_test_4I.csv')
+    test_container_data, test_container_labels_raw = parse_file(source_dir_path + 'container_test_2I_4I.csv')
     test_container_data = scalar_container.transform(test_container_data)
     test_container_labels = keras.utils.to_categorical(test_container_labels_raw)
 
@@ -100,7 +100,7 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
+    plt.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.1)
 
 
 def display_result(actual, predicted, types,
@@ -109,18 +109,26 @@ def display_result(actual, predicted, types,
     mtx = confusion_matrix(actual, predicted)
     mtx = mtx[1:, 1:]  # remove class 0 - do nothing
     # print('Confusion matrix\n{}\n'.format(mtx))
-    print('Precision : ', precision_score(actual, predicted, average="weighted"))
-    print('Recall : ', recall_score(actual, predicted, average="weighted"))
-    print('F1 Score : ', f1_score(actual, predicted, average="weighted"))
-    print('Accuracy : {}'.format(accuracy_score(actual, predicted)))
+    precision = precision_score(actual, predicted, average="weighted")
+    recall = recall_score(actual, predicted, average="weighted")
+    f1score = f1_score(actual, predicted, average="weighted")
+    accuracy = accuracy_score(actual, predicted)
+
+    print('Result for : ', types)
+    print('Precision : ', precision)
+    print('Recall : ', recall)
+    print('F1 Score : ', f1score)
+    print('Accuracy : {}'.format(accuracy))
     print('Classification Report :\n{}'.format(classification_report(actual, predicted, digits=5)))
 
     plt.figure(figsize=(12, 12))
     plot_confusion_matrix(mtx,
-                          classes=classes, normalize=False, title=types + 'Identification (non normalized)')
+                          classes=classes, normalize=False, title=types + ' Identification (non normalized)')
     # plt.show()
     plt.savefig(config_save_load_dir_path + types + '_confusion_matrix.png')
     plt.clf()
+
+    return precision, recall, f1score, accuracy
 
 
 def plot_history(history, types):
@@ -147,6 +155,10 @@ def plot_history(history, types):
     plt.savefig(config_save_load_dir_path + types + '_loss.png')
     plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
     plt.clf()
+
+
+def get_dir_path():
+    return config_save_load_dir_path
 
 
 if __name__ == "__main__":
