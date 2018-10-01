@@ -17,18 +17,18 @@ from sklearn.tree import DecisionTreeClassifier
 n_neighbors = 7
 
 (train_container_data, train_container_labels, train_container_labels_raw), (
-    train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data()
+    train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data(False, 'raw')
 (test_rack_data, test_rack_labels, test_rack_labels_raw), (
-    test_container_data, test_container_labels, test_container_labels_raw) = ml_utils.get_testing_data()
+    test_container_data, test_container_labels, test_container_labels_raw) = ml_utils.get_testing_data(False, 'raw')
 
 names = ["Nearest Neighbors", "Linear SVM",
          "RBF SVM",
          "Decision Tree", "Random Forest", "Neural Net",
-         "Naive Bayes", "QDA", "LinearSVC", "Logistic Regression"]
+         "Naive Bayes", "QDA", "Logistic Regression"]
 
 classifiers = [
     KNeighborsClassifier(n_neighbors, weights='distance', n_jobs=-1),
-    SVC(kernel="linear", C=0.025),
+    LinearSVC(),
     SVC(gamma=2, C=1),
     DecisionTreeClassifier(),
     RandomForestClassifier(n_jobs=-1),
@@ -36,15 +36,15 @@ classifiers = [
     AdaBoostClassifier(),
     GaussianNB(),
     QuadraticDiscriminantAnalysis(),
-    LinearSVC(),
-    LogisticRegression(random_state=0)
+    LogisticRegression(random_state=0, n_jobs=-1)
 ]
 '''
-names = ["Nearest Neighbors", "Linear SVM"]
+names = ["Nearest Neighbors", "Linear SVM", 'LinearSVC']
 
 classifiers = [
     KNeighborsClassifier(n_neighbors, weights='distance', n_jobs=-1),
     SVC(kernel="linear", C=0.025),
+    LinearSVC(C=0.025)
 ]
 '''
 precisions = {}
@@ -82,7 +82,7 @@ model_container = dl_clf.build_model(25)
 start_time = time.time()
 history_container = model_container.fit(train_container_data, train_container_labels, epochs=20,
                                         validation_data=(test_container_data, test_container_labels),
-                                        batch_size=1000)
+                                        batch_size=1000, verbose=2)
 elapsed_time = time.time() - start_time
 training_time['Deep Learning'] = elapsed_time
 
@@ -139,7 +139,7 @@ def draw_bar_chart(dictionary, title, xlabel, ylabel):
     plt.tick_params(top=False, bottom=False, left=False, right=False, labelleft=True, labelbottom=True)
     plt.xticks(range(len(dictionary)), list(dictionary.keys()), rotation=90)
     plt.tight_layout()
-    plt.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.1)
+    plt.subplots_adjust(left=0.1, right=0.95, top=0.9, bottom=0.25)
     auto_label(bar_chart)
     plt.savefig(ml_utils.get_dir_path() + title + '.png')
     plt.clf()

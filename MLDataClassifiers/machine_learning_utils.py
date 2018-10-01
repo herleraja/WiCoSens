@@ -6,12 +6,14 @@ import keras
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy import genfromtxt
+from sklearn import decomposition
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix, accuracy_score, \
     classification_report
 from sklearn.preprocessing import StandardScaler
 
 # Configuration related inputs
-color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+color_space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 source_dir_path = "./datarecording_discrete/" + color_space.lower() + "/"
 config_save_load_dir_path = "./configs/container_24/" + color_space.lower() + "/"
 loadConfigurationsFromFiles = False
@@ -19,52 +21,83 @@ loadConfigurationsFromFiles = False
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
 
+pca = decomposition.PCA(n_components=10)
+lda = LinearDiscriminantAnalysis(n_components=10)
+ica = decomposition.FastICA(n_components=10)
 
-def parse_file(csv_path):
+
+def parse_file(csv_path, sensor_fusion=False):
     dt = genfromtxt(csv_path, delimiter=',')
     labels = dt[:, -1]
-    # For now, ignore accelerometer.
-    dt_all_colors = dt[:, range(4, len(dt[0]) - 1)]
-    return dt_all_colors, labels
+
+    if sensor_fusion:
+        # All sensor data, accelerometer and color sensor.
+        data = dt[:, range(1, len(dt[0]) - 1)]
+    else:
+        # Ignore accelerometer.
+        data = dt[:, range(4, len(dt[0]) - 1)]
+
+    return data, labels
 
 
-def get_trainig_data():
-    train_rack_data, train_rack_labels_raw = parse_file(source_dir_path + 'rack_train.csv')
-    scalar_rack.fit(train_rack_data)
-    train_rack_data = scalar_rack.transform(train_rack_data)
+def get_trainig_data(sensor_fusion=False, feature_type='PREPROCESSED'):
+    train_rack_data, train_rack_labels_raw = parse_file(source_dir_path + 'rack_train.csv', sensor_fusion)
+    train_container_data, train_container_labels_raw = parse_file(source_dir_path + 'container_train_2I_4I.csv',
+                                                                  sensor_fusion)
+
     train_rack_labels = keras.utils.to_categorical(train_rack_labels_raw)
-
-    train_container_data, train_container_labels_raw = parse_file(source_dir_path + 'container_train_2I_4I.csv')
-    scalar_container.fit(train_container_data)
-    train_container_data = scalar_container.transform(train_container_data)
     train_container_labels = keras.utils.to_categorical(train_container_labels_raw)
 
-    os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
-    pickle.dump(scalar_rack, open(config_save_load_dir_path + "scalar_rack.p", "wb"))
-    pickle.dump(scalar_container, open(config_save_load_dir_path + "scalar_container.p", "wb"))
+    if feature_type == 'PREPROCESSED':
+        scalar_rack.fit(train_rack_data)
+        train_rack_data = scalar_rack.transform(train_rack_data)
+        scalar_container.fit(train_container_data)
+        train_container_data = scalar_container.transform(train_container_data)
+        os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
+        pickle.dump(scalar_rack, open(config_save_load_dir_path + "scalar_rack.p", "wb"))
+        pickle.dump(scalar_container, open(config_save_load_dir_path + "scalar_container.p", "wb"))
+    elif feature_type == 'PCA':
+        pca.fit(train_container_data)
+        train_container_data = pca.transform(train_container_data)
+
+        print(pca.explained_variance_ratio_)
+        print(pca.n_components_)
+
+    elif feature_type == 'LDA':
+        train_container_data = lda.fit(train_container_data, train_container_labels_raw).transform(train_container_data)
+
+    elif feature_type == 'ICA':
+        train_container_data = ica.fit(train_container_data).transform(train_container_data)
 
     return (train_container_data, train_container_labels, train_container_labels_raw), (
         train_rack_data, train_rack_labels, train_rack_labels_raw)
 
 
-def get_testing_data():
-    test_rack_data, test_rack_labels_raw = parse_file(source_dir_path + 'rack_test.csv')
-    test_rack_data = scalar_rack.transform(test_rack_data)
-    test_rack_labels = keras.utils.to_categorical(test_rack_labels_raw)
+def get_testing_data(sensor_fusion, feature_type='PREPROCESSED'):
+    test_rack_data, test_rack_labels_raw = parse_file(source_dir_path + 'rack_test.csv', sensor_fusion)
+    test_container_data, test_container_labels_raw = parse_file(source_dir_path + 'container_test_2I_4I.csv',
+                                                                sensor_fusion)
 
-    test_container_data, test_container_labels_raw = parse_file(source_dir_path + 'container_test_2I_4I.csv')
-    test_container_data = scalar_container.transform(test_container_data)
+    test_rack_labels = keras.utils.to_categorical(test_rack_labels_raw)
     test_container_labels = keras.utils.to_categorical(test_container_labels_raw)
+
+    if feature_type == 'PREPROCESSED':
+        test_container_data = scalar_container.transform(test_container_data)
+        test_rack_data = scalar_rack.transform(test_rack_data)
+    elif feature_type == 'PCA':
+        test_container_data = pca.transform(test_container_data)
+    elif feature_type == 'LDA':
+        test_container_data = lda.transform(test_container_data)
+    elif feature_type == 'ICA':
+        test_container_data = ica.transform(test_container_data)
 
     return (test_rack_data, test_rack_labels, test_rack_labels_raw), (
         test_container_data, test_container_labels, test_container_labels_raw)
 
 
 def save_model(model, model_name):
-    os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
-    model.save(config_save_load_dir_path + model_name)
-    # model_rack.save(config_save_load_dir_path + 'model_rack.h5')
-    # model_container.save(config_save_load_dir_path + 'model_container.h5')
+    os.makedirs(os.path.dirname(get_dir_path()), exist_ok=True)
+    model.save(get_dir_path() + model_name)
 
 
 def plot_confusion_matrix(cm, classes,
@@ -125,6 +158,7 @@ def display_result(actual, predicted, types,
     plot_confusion_matrix(mtx,
                           classes=classes, normalize=False, title=types + ' Identification (non normalized)')
     # plt.show()
+    os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
     plt.savefig(config_save_load_dir_path + types + '_confusion_matrix.png')
     plt.clf()
 
@@ -140,6 +174,7 @@ def plot_history(history, types):
     plt.xlabel('epoch')
     plt.xlim([0, max(history.epoch)])
     plt.legend(['train', 'test'], loc='upper left')
+    os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
     plt.savefig(config_save_load_dir_path + types + '_accuracy.png')
     plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
     plt.clf()
@@ -152,6 +187,7 @@ def plot_history(history, types):
     plt.xlabel('epoch')
     plt.xlim([0, max(history.epoch)])
     plt.legend(['train', 'test'], loc='upper left')
+    os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
     plt.savefig(config_save_load_dir_path + types + '_loss.png')
     plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
     plt.clf()
@@ -159,6 +195,13 @@ def plot_history(history, types):
 
 def get_dir_path():
     return config_save_load_dir_path
+
+
+def display_confidence(array, N=3):
+    top_n_element_index = np.argsort(array)[::-1][:N]
+    print('\n')
+    for index in range(N):
+        print('{} : {}%'.format(top_n_element_index[index], "%.3f" % (array[top_n_element_index[index]] * 100)))
 
 
 if __name__ == "__main__":
