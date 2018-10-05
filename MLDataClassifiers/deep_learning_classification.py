@@ -1,4 +1,3 @@
-import os
 import pickle
 import time
 
@@ -6,9 +5,6 @@ import keras
 import machine_learning_utils as ml_utils
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
-
-# Configuration related inputs
-loadConfigurationsFromFiles = False
 
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
@@ -22,7 +18,7 @@ def build_model(number_class):
     # model.add(tf.keras.layers.Dense(1024, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
     # model.add(tf.keras.layers.Dropout(0.3))
     model.add(tf.keras.layers.Dense(612, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
-    model.add(tf.keras.layers.Flatten())
+    # model.add(tf.keras.layers.Flatten())
     # model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(256, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
     model.add(tf.keras.layers.Dropout(0.3))
@@ -32,24 +28,28 @@ def build_model(number_class):
     # Take a look at the model summary
     # model.summary()
     model.compile(loss='categorical_crossentropy',
-                  optimizer='adam',  # rmsprop, adam
+                  optimizer='Adamax',  # rmsprop, adam, Adamax
                   metrics=['accuracy'])
     return model
 
 
 if __name__ == "__main__":
     (train_container_data, train_container_labels, train_container_labels_raw), (
-        train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data(False, 'raw')
+        train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data(
+        ml_utils.get_sensor_fusion(), ml_utils.get_feature_type())
     (test_rack_data, test_rack_labels, test_rack_labels_raw), (
         test_container_data, test_container_labels,
-        test_container_labels_raw) = ml_utils.get_testing_data(False, 'raw')
+        test_container_labels_raw) = ml_utils.get_testing_data(ml_utils.get_sensor_fusion(),
+                                                               ml_utils.get_feature_type())
 
-    if loadConfigurationsFromFiles:
+    #if ml_utils.load_configurations_from_files():
+    if False:  # remove the default fault operation and enable above statement
         model_rack = keras.models.load_model(ml_utils.get_dir_path() + 'model_rack.h5')
         model_container = keras.models.load_model(ml_utils.get_dir_path() + 'model_container.h5')
 
-        scalar_rack = pickle.load(open(ml_utils.get_dir_path() + "scalar_rack.p", "rb"))
-        scalar_container = pickle.load(open(ml_utils.get_dir_path() + "scalar_container.p", "rb"))
+        if ml_utils.get_feature_type() == 'PREPROCESSED':
+            scalar_rack = pickle.load(open(ml_utils.get_dir_path() + "scalar_rack.p", "rb"))
+            scalar_container = pickle.load(open(ml_utils.get_dir_path() + "scalar_container.p", "rb"))
 
         print("Loaded configurations from files !! ")
 
@@ -73,13 +73,15 @@ if __name__ == "__main__":
 
     test_predicted_rack_res = model_rack.predict(test_rack_data, batch_size=1).argmax(axis=-1)
 
-    #print('Color Space: {}'.format(color_space))
+    # print('Color Space: {}'.format(color_space))
     print('\n****************Classification result for rack************************')
     ml_utils.display_result(test_rack_labels_raw, test_predicted_rack_res, 'rack')  # Print the classification result
 
     print('\n****************Classification result for container************************')
     ml_utils.display_result(test_container_labels_raw, test_predicted_container_res.argmax(axis=1),
                             'container')  # Print the classification result
-    ml_utils.plot_history(history_container, 'container')
     for result in test_predicted_container_res:
         ml_utils.display_confidence(result)
+
+    if not ml_utils.load_configurations_from_files():  # If parameters are loaded from file then we can not get history.
+        ml_utils.plot_history(history_container, 'container')

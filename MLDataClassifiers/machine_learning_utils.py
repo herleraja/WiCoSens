@@ -13,9 +13,11 @@ from sklearn.metrics import precision_score, recall_score, f1_score, confusion_m
 from sklearn.preprocessing import StandardScaler
 
 # Configuration related inputs
-color_space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 source_dir_path = "./datarecording_discrete/" + color_space.lower() + "/"
 config_save_load_dir_path = "./configs/container_24/" + color_space.lower() + "/"
+feature_type = 'raw'
+sensor_fusion = False
 loadConfigurationsFromFiles = False
 
 scalar_rack = StandardScaler()
@@ -59,9 +61,6 @@ def get_trainig_data(sensor_fusion=False, feature_type='PREPROCESSED'):
     elif feature_type == 'PCA':
         pca.fit(train_container_data)
         train_container_data = pca.transform(train_container_data)
-
-        print(pca.explained_variance_ratio_)
-        print(pca.n_components_)
 
     elif feature_type == 'LDA':
         train_container_data = lda.fit(train_container_data, train_container_labels_raw).transform(train_container_data)
@@ -193,15 +192,36 @@ def plot_history(history, types):
     plt.clf()
 
 
+def display_confidence(array, n=3):
+    if array.size < n:
+        n = array.size
+
+    top_n_element_index = (-array).argsort()[:n]
+
+    print('\n')
+    for index in range(n):
+        print(
+            '{} : {}%'.format(top_n_element_index[index], "%.3f" % (array[top_n_element_index[index]] * 100)))
+
+
 def get_dir_path():
     return config_save_load_dir_path
 
 
-def display_confidence(array, N=3):
-    top_n_element_index = np.argsort(array)[::-1][:N]
-    print('\n')
-    for index in range(N):
-        print('{} : {}%'.format(top_n_element_index[index], "%.3f" % (array[top_n_element_index[index]] * 100)))
+def get_color_space():
+    return color_space
+
+
+def get_feature_type():
+    return feature_type
+
+
+def get_sensor_fusion():
+    return sensor_fusion
+
+
+def load_configurations_from_files():
+    return loadConfigurationsFromFiles
 
 
 if __name__ == "__main__":

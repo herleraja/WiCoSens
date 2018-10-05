@@ -10,28 +10,25 @@ from sklearn.preprocessing import StandardScaler
 
 import colorSpaceUtil
 
-# Configuration related inputs
-color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
-source_dir_path = "./datarecording_discrete/" + color_space.lower() + "/"
-config_save_load_dir_path = "./configs/container_24/" + color_space.lower() + "/"
-loadConfigurationsFromFiles = False
-
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
 
 if __name__ == "__main__":
     (train_container_data, train_container_labels, train_container_labels_raw), (
-        train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data(False, 'raw')
+        train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data(
+        ml_utils.get_sensor_fusion(), ml_utils.get_feature_type())
     (test_rack_data, test_rack_labels, test_rack_labels_raw), (
         test_container_data, test_container_labels,
-        test_container_labels_raw) = ml_utils.get_testing_data(False, 'raw')
+        test_container_labels_raw) = ml_utils.get_testing_data(ml_utils.get_sensor_fusion(),
+                                                               ml_utils.get_feature_type())
 
-    if loadConfigurationsFromFiles:
+    if ml_utils.load_configurations_from_files():
         model_rack = keras.models.load_model(ml_utils.get_dir_path() + 'model_rack.h5')
         model_container = keras.models.load_model(ml_utils.get_dir_path() + 'model_container.h5')
 
-        scalar_rack = pickle.load(open(ml_utils.get_dir_path() + "scalar_rack.p", "rb"))
-        scalar_container = pickle.load(open(ml_utils.get_dir_path() + "scalar_container.p", "rb"))
+        if ml_utils.get_feature_type() == 'PREPROCESSED':
+            scalar_rack = pickle.load(open(ml_utils.get_dir_path() + "scalar_rack.p", "rb"))
+            scalar_container = pickle.load(open(ml_utils.get_dir_path() + "scalar_container.p", "rb"))
 
         print("Loaded configurations from files !! ")
 
@@ -69,7 +66,7 @@ if __name__ == "__main__":
             if dt.__len__() != 52:
                 continue
 
-            colorSpaceConversionFunction = colorSpaceUtil.switcher.get(color_space)
+            colorSpaceConversionFunction = colorSpaceUtil.switcher.get(ml_utils.get_color_space())
 
             frame = np.asarray([])
             for i in np.arange(4, 52, 4):
@@ -78,26 +75,43 @@ if __name__ == "__main__":
 
             frame = frame.reshape(1, 36)
 
+            if ml_utils.get_feature_type() == 'PREPROCESSED':
+                frame = scalar_container.transform(frame)
+
+            result = model_container.predict(frame, batch_size=1)
+            ml_utils.display_confidence(
+                result[0])  # predicted result is nd array of predictions. for single input it is result[0]
+            container_predicted = result.argmax(axis=-1)
+            print("Container Number", container_predicted)
+
+            '''
             if not isRackPredicted:
                 frame = scalar_rack.transform(frame)
-                rack_predicted = model_rack.predict(frame, batch_size=1).argmax(axis=-1)
+                result = model_rack.predict(frame, batch_size=1)
+                ml_utils.display_confidence(result)
+                rack_predicted = result.argmax(axis=-1)
                 if rack_predicted != 0:
                     isRackPredicted = True
                     continue
             elif not isContainerPredicted:
                 frame = scalar_container.transform(frame)
-                container_predicted = model_container.predict(frame, batch_size=1).argmax(axis=-1)
+                result = model_container.predict(frame, batch_size=1)
+                ml_utils.display_confidence(result)
+                container_predicted = result.argmax(axis=-1)
                 if container_predicted != 0:
                     isContainerPredicted = True
                     continue
             elif isContainerPredicted:
                 frame = scalar_rack.transform(frame)
-                rack_predicted_new = model_rack.predict(frame, batch_size=1).argmax(axis=-1)
+                result = model_rack.predict(frame, batch_size=1)
+                ml_utils.display_confidence(result)
+                rack_predicted_new = result.argmax(axis=-1)
                 if rack_predicted == rack_predicted_new:
                     isRackPredicted = False
                     isContainerPredicted = False
                     print("Rack Number", rack_predicted, "Container Number", container_predicted)
                     continue
+            '''
     except:
         traceback.print_exc()
         ser.close()
