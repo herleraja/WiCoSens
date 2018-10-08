@@ -13,12 +13,12 @@ from sklearn.metrics import precision_score, recall_score, f1_score, confusion_m
 from sklearn.preprocessing import StandardScaler
 
 # Configuration related inputs
-color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+color_space = 'YCbCr'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 source_dir_path = "./datarecording_discrete/" + color_space.lower() + "/"
 config_save_load_dir_path = "./configs/container_24/" + color_space.lower() + "/"
-feature_type = 'raw'
-sensor_fusion = False
-loadConfigurationsFromFiles = False
+feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, LCA
+sensor_fusion = False  # True, False
+loadConfigurationsFromFiles = False  # True, False
 
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
@@ -202,6 +202,8 @@ def display_confidence(array, n=3):
     for index in range(n):
         print(
             '{} : {}%'.format(top_n_element_index[index], "%.3f" % (array[top_n_element_index[index]] * 100)))
+
+    return top_n_element_index
 
 
 def get_dir_path():

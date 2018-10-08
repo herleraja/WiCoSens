@@ -34,9 +34,9 @@ if __name__ == "__main__":
 
     else:
 
-        model_rack = dl_clf.build_model(2)
-        model_rack.fit(train_rack_data, train_rack_labels, epochs=10,
-                       validation_data=(test_rack_data, test_rack_labels), batch_size=500, verbose=2)
+        model_rack = dl_clf.build_model(3)
+        model_rack.fit(train_rack_data, train_rack_labels, epochs=20,
+                       validation_data=(test_rack_data, test_rack_labels), batch_size=1000, verbose=2)
         ml_utils.save_model(model_rack, 'model_rack.h5')
 
         model_container = dl_clf.build_model(25)
@@ -74,44 +74,51 @@ if __name__ == "__main__":
                                                                       float(dt[i + 3])))
 
             frame = frame.reshape(1, 36)
-
+            '''
             if ml_utils.get_feature_type() == 'PREPROCESSED':
                 frame = scalar_container.transform(frame)
-
+            
             result = model_container.predict(frame, batch_size=1)
             ml_utils.display_confidence(
                 result[0])  # predicted result is nd array of predictions. for single input it is result[0]
             container_predicted = result.argmax(axis=-1)
             print("Container Number", container_predicted)
-
             '''
+
             if not isRackPredicted:
-                frame = scalar_rack.transform(frame)
+                if ml_utils.get_feature_type() == 'PREPROCESSED':
+                    frame = scalar_rack.transform(frame)
                 result = model_rack.predict(frame, batch_size=1)
-                ml_utils.display_confidence(result)
+                ml_utils.display_confidence(result[0])
                 rack_predicted = result.argmax(axis=-1)
                 if rack_predicted != 0:
                     isRackPredicted = True
                     continue
             elif not isContainerPredicted:
-                frame = scalar_container.transform(frame)
+                if ml_utils.get_feature_type() == 'PREPROCESSED':
+                    frame = scalar_container.transform(frame)
                 result = model_container.predict(frame, batch_size=1)
-                ml_utils.display_confidence(result)
+                top_n_element_index = ml_utils.display_confidence(result[0])
                 container_predicted = result.argmax(axis=-1)
-                if container_predicted != 0:
+                # print(result[0][top_n_element_index[0]]*100)
+
+                # if container is predicted and confidence is more than 90%
+                if container_predicted != 0 and (result[0][container_predicted] * 100) > 90:
                     isContainerPredicted = True
                     continue
+
             elif isContainerPredicted:
-                frame = scalar_rack.transform(frame)
+                if ml_utils.get_feature_type() == 'PREPROCESSED':
+                    frame = scalar_rack.transform(frame)
                 result = model_rack.predict(frame, batch_size=1)
-                ml_utils.display_confidence(result)
+                ml_utils.display_confidence(result[0])
                 rack_predicted_new = result.argmax(axis=-1)
                 if rack_predicted == rack_predicted_new:
                     isRackPredicted = False
                     isContainerPredicted = False
                     print("Rack Number", rack_predicted, "Container Number", container_predicted)
                     continue
-            '''
+
     except:
         traceback.print_exc()
         ser.close()

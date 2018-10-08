@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     else:
 
-        model_rack = build_model(2)
+        model_rack = build_model(3)
         model_rack.fit(train_rack_data, train_rack_labels, epochs=10,
                        validation_data=(test_rack_data, test_rack_labels), batch_size=500, verbose=2)
         ml_utils.save_model(model_rack, 'model_rack.h5')
