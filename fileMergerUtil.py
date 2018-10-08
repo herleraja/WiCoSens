@@ -6,10 +6,11 @@ import os
 ext = '.csv'
 
 # set to your working directory
-dir_path = 'C:\\Users\\NUCER\\Documents\\git\\WiCoSens\\MLDataLabeler\\datarecording\\'
+dir_path = 'C:\\Users\\NUCER\\Documents\\git\\WiCoSens\\MLDataClassifiers\\datarecording_discrete\\ycbcr\\'
+#dir_path = 'C:\\Users\\NUCER\\Documents\\git\\WiCoSens\\MLDataLabeler\\datarecording\\'
 
 # set to the name of your output file
-outfilename = dir_path + 'final.csv'
+outfilename = dir_path + 'container_test_2I_4I.csv'
 
 '''
 with open(outfilename, 'w') as outfile:
@@ -30,7 +31,7 @@ with open(dir_path + outfilename, 'w') as outfile:
 '''
 
 with open(outfilename, 'a') as singleFile:
-    for csv in glob.glob(dir_path +'*.csv'):
+    for csv in glob.glob(dir_path +'container_test_*.csv'):
         if csv == outfilename:
             pass
         else:

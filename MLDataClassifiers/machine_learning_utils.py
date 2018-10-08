@@ -1,19 +1,18 @@
-import itertools
 import os
 import pickle
 
 import keras
-import matplotlib.pyplot as plt
-import numpy as np
+
 from numpy import genfromtxt
 from sklearn import decomposition
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix, accuracy_score, \
     classification_report
 from sklearn.preprocessing import StandardScaler
+import machine_learning_plot_utils as ml_plot_utils
 
 # Configuration related inputs
-color_space = 'YCbCr'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+color_space = 'HSVDegree'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 source_dir_path = "./datarecording_discrete/" + color_space.lower() + "/"
 config_save_load_dir_path = "./configs/container_24/" + color_space.lower() + "/"
 feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, LCA
@@ -99,41 +98,6 @@ def save_model(model, model_name):
     model.save(get_dir_path() + model_name)
 
 
-def plot_confusion_matrix(cm, classes,
-                          normalize=False,
-                          title='Confusion matrix',
-                          cmap=plt.cm.OrRd):  # Blues,OrRd, YlOrRd
-    """
-    This function prints and plots the confusion matrix.
-    Normalization can be applied by setting `normalize=True`.
-    """
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.title(title)
-    plt.colorbar()
-    tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes, rotation=45)
-    plt.yticks(tick_marks, classes)
-
-    if normalize:
-        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis] * 100.0
-        for x in range(0, len(cm[0, :])):
-            xv = cm[x, :]
-            for y in range(0, len(xv)):
-                vv = xv[y]
-
-                cm[x, y] = int(np.round(vv * 10.0)) / 10.0
-
-    thresh = cm.max() / 2.
-    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        plt.text(j, i, cm[i, j],
-                 horizontalalignment="center",
-                 color="white" if cm[i, j] > thresh else "black")
-
-    plt.tight_layout()
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
-    plt.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.1)
-
 
 def display_result(actual, predicted, types,
                    classes=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
@@ -153,43 +117,10 @@ def display_result(actual, predicted, types,
     print('Accuracy : {}'.format(accuracy))
     print('Classification Report :\n{}'.format(classification_report(actual, predicted, digits=5)))
 
-    plt.figure(figsize=(12, 12))
-    plot_confusion_matrix(mtx,
-                          classes=classes, normalize=False, title=types + ' Identification (non normalized)')
-    # plt.show()
-    os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
-    plt.savefig(config_save_load_dir_path + types + '_confusion_matrix.png')
-    plt.clf()
+    ml_plot_utils.plot_confusion_matrix(mtx, classes=classes, normalize=False, title=types)
 
     return precision, recall, f1score, accuracy
 
-
-def plot_history(history, types):
-    # summarize history for accuracy
-    plt.plot(history.history['acc'])
-    plt.plot(history.history['val_acc'])
-    plt.title('model accuracy')
-    plt.ylabel('accuracy')
-    plt.xlabel('epoch')
-    plt.xlim([0, max(history.epoch)])
-    plt.legend(['train', 'test'], loc='upper left')
-    os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
-    plt.savefig(config_save_load_dir_path + types + '_accuracy.png')
-    plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
-    plt.clf()
-
-    # summarize history for loss
-    plt.plot(history.history['loss'])
-    plt.plot(history.history['val_loss'])
-    plt.title('model loss')
-    plt.ylabel('loss')
-    plt.xlabel('epoch')
-    plt.xlim([0, max(history.epoch)])
-    plt.legend(['train', 'test'], loc='upper left')
-    os.makedirs(os.path.dirname(config_save_load_dir_path), exist_ok=True)
-    plt.savefig(config_save_load_dir_path + types + '_loss.png')
-    plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
-    plt.clf()
 
 
 def display_confidence(array, n=3):

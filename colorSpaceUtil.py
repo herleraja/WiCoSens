@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
         # To test the file conversion method.
 
-        color_Space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+        color_Space = 'HSVDegree'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
         source_dir_path = "./MLDataClassifiers/datarecording_discrete/rgb/"
         destination_dir_path = "./MLDataClassifiers/datarecording_discrete/" + color_Space.lower() + "/"
         os.makedirs(os.path.dirname(destination_dir_path), exist_ok=True)

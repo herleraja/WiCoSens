@@ -3,6 +3,7 @@ import time
 
 import keras
 import machine_learning_utils as ml_utils
+import machine_learning_plot_utils as ml_plot_utils
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 
@@ -84,4 +85,4 @@ if __name__ == "__main__":
         ml_utils.display_confidence(result)
 
     if not ml_utils.load_configurations_from_files():  # If parameters are loaded from file then we can not get history.
-        ml_utils.plot_history(history_container, 'container')
+        ml_plot_utils.plot_history(history_container, 'container')
