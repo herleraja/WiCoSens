@@ -9,7 +9,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from numpy import genfromtxt
 
 
-def plot_confusion_matrix(con_matx, classes,
+def plot_confusion_matrix(con_matx,
                           normalize=False,
                           title='Confusion matrix',
                           cmap=plt.cm.OrRd):  # Blues,OrRd, YlOrRd
@@ -23,13 +23,14 @@ def plot_confusion_matrix(con_matx, classes,
     plt.imshow(con_matx, interpolation='nearest', cmap=cmap)
 
     if normalize:
-        title = title + ' Identification (normalized)'
+        updated_title = title + ' Identification (normalized)'
     else:
-        title = title + ' Identification (non normalized)'
+        updated_title = title + ' Identification (non normalized)'
 
-    plt.title(title)
+    plt.title(updated_title)
     plt.colorbar()
-    tick_marks = np.arange(len(classes))
+    classes = np.arange(1, len(con_matx[0])+1)
+    tick_marks = np.arange(len(con_matx[0]))
     plt.xticks(tick_marks, classes, rotation=45)
     plt.yticks(tick_marks, classes)
 
@@ -127,7 +128,7 @@ def draw_bar_chart(dictionary, title, x_label, y_label):
 def plot_color_separation(data_x, data_y, data_z, color, title, x_label='X', y_label='Y', z_label='Z'):
     fig = plt.figure()
     ax = Axes3D(fig)
-    ax.scatter(data_x, data_y, data_z, c=color, s=50, edgecolors='black', alpha=0.8, linestyle='dotted')
+    ax.scatter(data_x, data_y, data_z, c=color, s=50, edgecolors='black', alpha=0.8,  marker='s')  # linestyle='dotted',
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
     ax.set_zlabel(z_label)
@@ -142,7 +143,7 @@ def plot_color_separation(data_x, data_y, data_z, color, title, x_label='X', y_l
 
 if __name__ == "__main__":
     data = genfromtxt('./resources/color_separation.csv', delimiter=',', skip_header=1, dtype=None,
-                      names=['Color','H', 'S', 'V', 'X', 'Y', 'Z', 'R', 'G', 'B'], encoding="utf-8")
+                      names=['Color', 'H', 'S', 'V', 'X', 'Y', 'Z', 'R', 'G', 'B'], encoding="utf-8")
     plot_color_separation(data['H'], data['S'], data['V'], data['Color'], 'HSV Color Space', 'H', 'S', 'V')
     plot_color_separation(data['X'], data['Y'], data['Z'], data['Color'], 'XYZ Color Space', 'X', 'Y', 'Z')
     plot_color_separation(data['R'], data['G'], data['B'], data['Color'], 'RGB Color Space', 'R', 'G', 'B')

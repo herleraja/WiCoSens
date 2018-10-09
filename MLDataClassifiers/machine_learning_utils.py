@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 import machine_learning_plot_utils as ml_plot_utils
 
 # Configuration related inputs
-color_space = 'HSVDegree'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+color_space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 source_dir_path = "./datarecording_discrete/" + color_space.lower() + "/"
 config_save_load_dir_path = "./configs/container_24/" + color_space.lower() + "/"
 feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, LCA
@@ -42,7 +42,7 @@ def parse_file(csv_path, sensor_fusion=False):
 
 
 def get_trainig_data(sensor_fusion=False, feature_type='PREPROCESSED'):
-    train_rack_data, train_rack_labels_raw = parse_file(source_dir_path + 'rack_train.csv', sensor_fusion)
+    train_rack_data, train_rack_labels_raw = parse_file(source_dir_path + 'rack_train_2I_4I.csv', sensor_fusion)
     train_container_data, train_container_labels_raw = parse_file(source_dir_path + 'container_train_2I_4I.csv',
                                                                   sensor_fusion)
 
@@ -72,7 +72,7 @@ def get_trainig_data(sensor_fusion=False, feature_type='PREPROCESSED'):
 
 
 def get_testing_data(sensor_fusion, feature_type='PREPROCESSED'):
-    test_rack_data, test_rack_labels_raw = parse_file(source_dir_path + 'rack_test.csv', sensor_fusion)
+    test_rack_data, test_rack_labels_raw = parse_file(source_dir_path + 'rack_test_2I_4I.csv', sensor_fusion)
     test_container_data, test_container_labels_raw = parse_file(source_dir_path + 'container_test_2I_4I.csv',
                                                                 sensor_fusion)
 
@@ -99,7 +99,7 @@ def save_model(model, model_name):
 
 
 
-def display_result(actual, predicted, types,
+def display_result(actual, predicted, title,
                    classes=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
                             24]):
     mtx = confusion_matrix(actual, predicted)
@@ -110,14 +110,14 @@ def display_result(actual, predicted, types,
     f1score = f1_score(actual, predicted, average="weighted")
     accuracy = accuracy_score(actual, predicted)
 
-    print('Result for : ', types)
+    print('Result for : ', title)
     print('Precision : ', precision)
     print('Recall : ', recall)
     print('F1 Score : ', f1score)
     print('Accuracy : {}'.format(accuracy))
     print('Classification Report :\n{}'.format(classification_report(actual, predicted, digits=5)))
 
-    ml_plot_utils.plot_confusion_matrix(mtx, classes=classes, normalize=False, title=types)
+    ml_plot_utils.plot_confusion_matrix(mtx, normalize=False, title=title)
 
     return precision, recall, f1score, accuracy
 
