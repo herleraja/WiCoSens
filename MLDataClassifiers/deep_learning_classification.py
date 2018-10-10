@@ -55,16 +55,19 @@ if __name__ == "__main__":
 
     else:
 
+        earlyStopping = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, verbose=1, mode='auto')
+
         model_rack = build_model(5)
         history_rack = model_rack.fit(train_rack_data, train_rack_labels, epochs=10,
-                                      validation_data=(test_rack_data, test_rack_labels), batch_size=500, verbose=2)
+                                      validation_data=(test_rack_data, test_rack_labels), batch_size=500, verbose=2,
+                                      callbacks=[earlyStopping])
         ml_utils.save_model(model_rack, 'model_rack.h5')
 
         model_container = build_model(25)
         start_time = time.time()
-        history_container = model_container.fit(train_container_data, train_container_labels, epochs=20,
+        history_container = model_container.fit(train_container_data, train_container_labels, epochs=50,
                                                 validation_data=(test_container_data, test_container_labels),
-                                                batch_size=1000, verbose=2)
+                                                batch_size=1000, verbose=2, callbacks=[earlyStopping])
         elapsed_time = time.time() - start_time
         print('Deep Learning Training time: {}'.format(elapsed_time))
         ml_utils.save_model(model_container, 'model_container.h5')

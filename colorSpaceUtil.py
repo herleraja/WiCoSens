@@ -117,7 +117,7 @@ def rgbc2CieXYZ(r, g, b, c=0):
     # RGB values lie between 0 to 1.0
     rgb = [r, g, b]  # RGB
 
-    cie = np.dot(matrix, rgb);
+    cie = np.dot(matrix, rgb)
 
     return cie[0], cie[1], cie[2]
 
@@ -132,10 +132,11 @@ switcher = {
 }
 
 
-def fileColorSpaceConversionFunction(current_csv_file_path, new_converted_csv_file_path=None, color_Space='HSV'):
+def fileColorSpaceConversionFunction(current_csv_file_path, new_converted_csv_file_path=None, color_Space='HSV',
+                                     skip_header=0):
     colorSpaceConversionFunction = switcher.get(color_Space)
 
-    dt = genfromtxt(current_csv_file_path, delimiter=',')
+    dt = genfromtxt(current_csv_file_path, delimiter=',', skip_header=skip_header)
     labels = dt[:, -1]
 
     # For now, ignore accelerometer.
@@ -167,18 +168,20 @@ if __name__ == "__main__":
 
         # To test the file conversion method.
 
-        color_Space = 'HSVDegree'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+        color_Space = 'Lab'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
         source_dir_path = "./MLDataClassifiers/datarecording_discrete/rgb/"
         destination_dir_path = "./MLDataClassifiers/datarecording_discrete/" + color_Space.lower() + "/"
         os.makedirs(os.path.dirname(destination_dir_path), exist_ok=True)
 
-        #fileColorSpaceConversionFunction(source_dir_path + 'rack_test.csv', destination_dir_path + 'rack_test.csv', color_Space=color_Space)
-        #fileColorSpaceConversionFunction(source_dir_path + 'rack_train.csv', destination_dir_path + 'rack_train.csv', color_Space=color_Space)
-        fileColorSpaceConversionFunction(source_dir_path + 'container_test_2I.csv',
-                                         destination_dir_path + 'container_test_2I.csv',
+        fileColorSpaceConversionFunction(source_dir_path + 'rack_test_2I_4I.csv',
+                                         destination_dir_path + 'rack_test_2I_4I.csv', color_Space=color_Space)
+        fileColorSpaceConversionFunction(source_dir_path + 'rack_train_2I_4I.csv',
+                                         destination_dir_path + 'rack_train_2I_4I.csv', color_Space=color_Space)
+        fileColorSpaceConversionFunction(source_dir_path + 'container_test_2I_4I.csv',
+                                         destination_dir_path + 'container_test_2I_4I.csv',
                                          color_Space=color_Space)
-        fileColorSpaceConversionFunction(source_dir_path + 'container_train_2I.csv',
-                                         destination_dir_path + 'container_train_2I.csv',
+        fileColorSpaceConversionFunction(source_dir_path + 'container_train_2I_4I.csv',
+                                         destination_dir_path + 'container_train_2I_4I.csv',
                                          color_Space=color_Space)
 
         print("The files are converted to ***", color_Space, "*** color space")

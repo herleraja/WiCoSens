@@ -6,7 +6,7 @@ import os
 ext = '.csv'
 
 # set to your working directory
-dir_path = 'C:\\Users\\NUCER\\Documents\\git\\WiCoSens\\MLDataClassifiers\\datarecording_discrete\\ycbcr\\'
+dir_path = 'C:\\Users\\NUCER\\Documents\\git\\WiCoSens\\MLDataClassifiers\\datarecording_discrete\\rgb\\'
 #dir_path = 'C:\\Users\\NUCER\\Documents\\git\\WiCoSens\\MLDataLabeler\\datarecording\\'
 
 # set to the name of your output file
