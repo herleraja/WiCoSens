@@ -1,9 +1,9 @@
 import pickle
 import traceback
 
-import deep_learning_classification as dl_clf
+import dl_classification as dl_clf
 import keras
-import machine_learning_utils as ml_utils
+import ml_utils
 import numpy as np
 import serial as serial
 from sklearn.preprocessing import StandardScaler
@@ -74,15 +74,15 @@ if __name__ == "__main__":
                                                                       float(dt[i + 3])))
 
             frame = frame.reshape(1, 36)
-            '''
+
             if ml_utils.get_feature_type() == 'PREPROCESSED':
                 frame = scalar_container.transform(frame)
-            
             result = model_container.predict(frame, batch_size=1)
             ml_utils.display_confidence(
                 result[0])  # predicted result is nd array of predictions. for single input it is result[0]
             container_predicted = result.argmax(axis=-1)
             print("Container Number", container_predicted)
+
             '''
 
             if not isRackPredicted:
@@ -118,7 +118,7 @@ if __name__ == "__main__":
                     isContainerPredicted = False
                     print("Rack Number", rack_predicted, "Container Number", container_predicted)
                     continue
-
+            '''
     except:
         traceback.print_exc()
         ser.close()

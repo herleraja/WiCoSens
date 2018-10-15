@@ -1,5 +1,5 @@
 import autosklearn.classification
-import machine_learning_utils as ml_utils
+import ml_utils
 from sklearn.metrics import accuracy_score
 
 (train_container_data, train_container_labels, train_container_labels_raw), (

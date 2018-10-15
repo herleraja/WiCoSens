@@ -2,7 +2,7 @@ import os
 import pickle
 
 import keras
-import machine_learning_plot_utils as ml_plot_utils
+import ml_plots_utils
 from numpy import genfromtxt
 from sklearn import decomposition
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
@@ -113,7 +113,7 @@ def display_result(actual, predicted, title,
     print('Accuracy : {}'.format(accuracy))
     print('Classification Report :\n{}'.format(classification_report(actual, predicted, digits=5)))
 
-    ml_plot_utils.plot_confusion_matrix(mtx, normalize=False, title=title)
+    ml_plots_utils.plot_confusion_matrix(mtx, normalize=False, title=title)
 
     return precision, recall, f1score, accuracy
 

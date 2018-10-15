@@ -1,7 +1,7 @@
 import time
 
 import keras
-import machine_learning_utils as ml_utils
+import ml_utils
 import tensorflow as tf
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import GridSearchCV

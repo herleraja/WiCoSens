@@ -1,8 +1,8 @@
 import time
 
-import deep_learning_classification as dl_clf
-import machine_learning_plot_utils as ml_plot_utils
-import machine_learning_utils as ml_utils
+import dl_classification as dl_clf
+import ml_plots_utils
+import ml_utils
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.linear_model import LogisticRegression
@@ -104,10 +104,10 @@ print(accuracy_scores)
 # print(prediction_time)
 # plt.show()
 
-ml_plot_utils.draw_bar_chart(precisions, 'Precision', 'Classification Algorithms', 'Precision % ')
-ml_plot_utils.draw_bar_chart(recalls, 'Recall', 'Classification Algorithms', 'Recall %')
-ml_plot_utils.draw_bar_chart(f1scores, 'F1 Score', 'Classification Algorithms', 'F1 Score %')
-ml_plot_utils.draw_bar_chart(accuracy_scores, 'Accuracy', 'Classification Algorithms', 'Accuracy %')
-ml_plot_utils.draw_bar_chart(training_time, 'Training time', 'Classification Algorithms', 'Training time (seconds)')
-ml_plot_utils.draw_bar_chart(prediction_time, 'Prediction time', 'Classification Algorithms',
+ml_plots_utils.draw_bar_chart(precisions, 'Precision', 'Classification Algorithms', 'Precision % ')
+ml_plots_utils.draw_bar_chart(recalls, 'Recall', 'Classification Algorithms', 'Recall %')
+ml_plots_utils.draw_bar_chart(f1scores, 'F1 Score', 'Classification Algorithms', 'F1 Score %')
+ml_plots_utils.draw_bar_chart(accuracy_scores, 'Accuracy', 'Classification Algorithms', 'Accuracy %')
+ml_plots_utils.draw_bar_chart(training_time, 'Training time', 'Classification Algorithms', 'Training time (seconds)')
+ml_plots_utils.draw_bar_chart(prediction_time, 'Prediction time', 'Classification Algorithms',
                              'Prediction time (seconds)')

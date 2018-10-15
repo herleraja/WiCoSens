@@ -1,7 +1,7 @@
 import itertools
 import os
 
-import machine_learning_utils as ml_utils
+import ml_utils
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import cm
