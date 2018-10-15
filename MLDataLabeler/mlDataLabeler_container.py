@@ -432,7 +432,7 @@ class Ui_MainWindow(object):
         self.sensorTextLabel.setText(_translate("MainWindow", "Captured Sensor Data"))
         self.containerNumberLabel.setText(_translate("MainWindow", "Container Number"))
         self.containerNumberLabelValueDisplay.setText(_translate("MainWindow", "999"))
-        self.captureTimeProgressBar.setFormat(_translate("MainWindow", "%p"))
+        self.captureTimeProgressBar.setFormat(_translate("MainWindow", "%p %"))
         self.remainingSamplesToCaptureLabel.setText(_translate("MainWindow", "Remaining # Samples"))
         self.captureTimeLabel.setText(_translate("MainWindow", "Capture Time"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab),

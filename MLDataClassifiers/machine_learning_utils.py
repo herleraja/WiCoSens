@@ -2,22 +2,21 @@ import os
 import pickle
 
 import keras
-
+import machine_learning_plot_utils as ml_plot_utils
 from numpy import genfromtxt
 from sklearn import decomposition
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix, accuracy_score, \
     classification_report
 from sklearn.preprocessing import StandardScaler
-import machine_learning_plot_utils as ml_plot_utils
 
 # Configuration related inputs
-color_space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
-source_dir_path = "./datarecording_discrete/" + color_space.lower() + "/"
-config_save_load_dir_path = "./configs/container_24/" + color_space.lower() + "/"
-feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, LCA
+color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+feature_type = 'LCA'  # RAW, PREPROCESSED, PCA, LDA, LCA
 sensor_fusion = False  # True, False
 loadConfigurationsFromFiles = False  # True, False
+source_dir_path = "./datarecording_discrete/" + color_space.lower() + "/"
+config_save_load_dir_path = "./configs/container_24/" + feature_type + "/" + color_space.lower() + "/"
 
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
@@ -29,25 +28,25 @@ ica = decomposition.FastICA(n_components=10)
 
 def parse_file(csv_path, sensor_fusion=False):
     dt = genfromtxt(csv_path, delimiter=',')
-    labels = dt[:, -1]
+    labels_raw = dt[:, -1]
 
     if sensor_fusion:
         # All sensor data, accelerometer and color sensor.
         data = dt[:, range(1, len(dt[0]) - 1)]
     else:
-        # Ignore accelerometer.
+        # Ignore accelerometer data.
         data = dt[:, range(4, len(dt[0]) - 1)]
 
-    return data, labels
+    labels_one_hot = keras.utils.to_categorical(labels_raw)
+
+    return data, labels_raw, labels_one_hot
 
 
 def get_trainig_data(sensor_fusion=False, feature_type='PREPROCESSED'):
-    train_rack_data, train_rack_labels_raw = parse_file(source_dir_path + 'rack_train_2I_4I.csv', sensor_fusion)
-    train_container_data, train_container_labels_raw = parse_file(source_dir_path + 'container_train_2I_4I.csv',
-                                                                  sensor_fusion)
-
-    train_rack_labels = keras.utils.to_categorical(train_rack_labels_raw)
-    train_container_labels = keras.utils.to_categorical(train_container_labels_raw)
+    train_rack_data, train_rack_labels_raw, train_rack_labels = parse_file(source_dir_path + 'rack_train_2I_4I.csv',
+                                                                           sensor_fusion)
+    train_container_data, train_container_labels_raw, train_container_labels = parse_file(
+        source_dir_path + 'container_train_2I_4I.csv', sensor_fusion)
 
     if feature_type == 'PREPROCESSED':
         scalar_rack.fit(train_rack_data)
@@ -72,12 +71,10 @@ def get_trainig_data(sensor_fusion=False, feature_type='PREPROCESSED'):
 
 
 def get_testing_data(sensor_fusion, feature_type='PREPROCESSED'):
-    test_rack_data, test_rack_labels_raw = parse_file(source_dir_path + 'rack_test_2I_4I.csv', sensor_fusion)
-    test_container_data, test_container_labels_raw = parse_file(source_dir_path + 'container_test_2I_4I.csv',
-                                                                sensor_fusion)
-
-    test_rack_labels = keras.utils.to_categorical(test_rack_labels_raw)
-    test_container_labels = keras.utils.to_categorical(test_container_labels_raw)
+    test_rack_data, test_rack_labels_raw, test_rack_labels = parse_file(source_dir_path + 'rack_test_2I_4I.csv',
+                                                                        sensor_fusion)
+    test_container_data, test_container_labels_raw, test_container_labels = parse_file(
+        source_dir_path + 'container_test_2I_4I.csv', sensor_fusion)
 
     if feature_type == 'PREPROCESSED':
         test_container_data = scalar_container.transform(test_container_data)
@@ -96,7 +93,6 @@ def get_testing_data(sensor_fusion, feature_type='PREPROCESSED'):
 def save_model(model, model_name):
     os.makedirs(os.path.dirname(get_dir_path()), exist_ok=True)
     model.save(get_dir_path() + model_name)
-
 
 
 def display_result(actual, predicted, title,
@@ -122,7 +118,6 @@ def display_result(actual, predicted, title,
     return precision, recall, f1score, accuracy
 
 
-
 def display_confidence(array, n=3):
     if array.size < n:
         n = array.size
@@ -135,6 +130,10 @@ def display_confidence(array, n=3):
             '{} : {}%'.format(top_n_element_index[index], "%.3f" % (array[top_n_element_index[index]] * 100)))
 
     return top_n_element_index
+
+
+def get_source_dir_path():
+    return source_dir_path
 
 
 def get_dir_path():

@@ -18,7 +18,7 @@ def rgbc2YCbCr(r, g, b, c=0):
     # RGB values lie between 0 to 1.0
     rgb = [r, g, b]  # RGB
 
-    cie = np.dot(matrix, rgb);
+    cie = np.dot(matrix, rgb)
 
     cie = cie * 1 / 255
 
@@ -39,28 +39,28 @@ def rgbc2lab(r, g, b, c=0):
     # RGB values lie between 0 to 1.0
     rgb = [r, g, b]  # RGB
 
-    cie = np.dot(matrix, rgb);
+    cie = np.dot(matrix, rgb)
 
-    cie[0] = cie[0] / 0.950456;
-    cie[2] = cie[2] / 1.088754;
+    cie[0] = cie[0] / 0.950456
+    cie[2] = cie[2] / 1.088754
 
     # Calculate the L
-    L = 116 * np.power(cie[1], 1 / 3.0) - 16.0 if cie[1] > 0.008856 else 903.3 * cie[1];
+    L = 116 * np.power(cie[1], 1 / 3.0) - 16.0 if cie[1] > 0.008856 else 903.3 * cie[1]
 
     # Calculate the a
-    a = 500 * (lab_func(cie[0]) - lab_func(cie[1]));
+    a = 500 * (lab_func(cie[0]) - lab_func(cie[1]))
 
     # Calculate the b
-    b = 200 * (lab_func(cie[1]) - lab_func(cie[2]));
+    b = 200 * (lab_func(cie[1]) - lab_func(cie[2]))
 
     return L, a, b
 
 
 def lab_func(t):
     if t > 0.008856:
-        return np.power(t, 1 / 3.0);
+        return np.power(t, 1 / 3.0)
     else:
-        return 7.787 * t + 16 / 116.0;
+        return 7.787 * t + 16 / 116.0
 
 
 def rgbc2hsvDegree(r, g, b, c=0):
