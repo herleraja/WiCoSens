@@ -6,10 +6,6 @@ import ml_utils
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 
-scalar_rack = StandardScaler()
-scalar_container = StandardScaler()
-
-
 def build_model(number_class):
     model = tf.keras.Sequential()
     # Must define the input shape in the first layer of the neural network
@@ -17,7 +13,7 @@ def build_model(number_class):
     # model.add(tf.keras.layers.Dropout(0.3))
     # model.add(tf.keras.layers.Dense(1024, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
     # model.add(tf.keras.layers.Dropout(0.3))
-    model.add(tf.keras.layers.Dense(612, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
+    model.add(tf.keras.layers.Dense(612, input_shape=(36,), activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
     # model.add(tf.keras.layers.Flatten())
     # model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(256, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
@@ -26,7 +22,7 @@ def build_model(number_class):
     # model.add(tf.keras.layers.Dropout(0.3))
     model.add(tf.keras.layers.Dense(number_class, activation='softmax'))
     # Take a look at the model summary
-    # model.summary()
+    model.summary()
     model.compile(loss='categorical_crossentropy',
                   optimizer='Adamax',  # rmsprop, adam, Adamax
                   metrics=['accuracy'])
@@ -36,21 +32,16 @@ def build_model(number_class):
 if __name__ == "__main__":
     (train_container_data, train_container_labels, train_container_labels_raw), (
         train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data(
-        ml_utils.get_sensor_fusion(), ml_utils.get_feature_type())
+        ml_utils.get_start_column(), ml_utils.get_feature_type())
     (test_rack_data, test_rack_labels, test_rack_labels_raw), (
         test_container_data, test_container_labels,
-        test_container_labels_raw) = ml_utils.get_testing_data(ml_utils.get_sensor_fusion(),
+        test_container_labels_raw) = ml_utils.get_testing_data(ml_utils.get_start_column(),
                                                                ml_utils.get_feature_type())
 
     # if ml_utils.load_configurations_from_files():
     if False:  # remove the default fault operation and enable above statement
         model_rack = keras.models.load_model(ml_utils.get_dir_path() + 'model_rack.h5')
         model_container = keras.models.load_model(ml_utils.get_dir_path() + 'model_container.h5')
-
-        if ml_utils.get_feature_type() == 'PREPROCESSED':
-            scalar_rack = pickle.load(open(ml_utils.get_dir_path() + "scalar_rack.p", "rb"))
-            scalar_container = pickle.load(open(ml_utils.get_dir_path() + "scalar_container.p", "rb"))
-
         print("Loaded configurations from files !! ")
 
     else:

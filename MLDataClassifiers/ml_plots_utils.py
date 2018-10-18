@@ -18,7 +18,7 @@ def plot_confusion_matrix(con_matx,
     Normalization can be applied by setting `normalize=True`.
     """
 
-    plt.figure(figsize=(12, 12))
+    #plt.figure(figsize=(12, 12))
 
     plt.imshow(con_matx, interpolation='nearest', cmap=cmap)
 

@@ -1,6 +1,7 @@
 import keras
 import ml_utils
 import tensorflow as tf
+from keras.utils.vis_utils import plot_model
 from sklearn.preprocessing import StandardScaler
 
 scalar_rack = StandardScaler()
@@ -16,7 +17,7 @@ def build_model(number_class):
     # model.add(tf.keras.layers.Dropout(0.3))
     # model.add(tf.keras.layers.Dense(1024, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
     # model.add(tf.keras.layers.Dropout(0.3))
-    model.add(tf.keras.layers.Dense(612, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
+    model.add(tf.keras.layers.Dense(612, input_shape=(12,), activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
     # model.add(tf.keras.layers.Flatten())
     # model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(256, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
@@ -25,7 +26,8 @@ def build_model(number_class):
     # model.add(tf.keras.layers.Dropout(0.3))
     model.add(tf.keras.layers.Dense(number_class, activation='softmax'))
     # Take a look at the model summary
-    # model.summary()
+    model.summary()
+    plot_model(model, show_shapes=True, to_file=source_dir_path+'color_model.png')
     model.compile(loss='categorical_crossentropy',
                   optimizer='Adamax',  # rmsprop, adam, Adamax
                   metrics=['accuracy'])

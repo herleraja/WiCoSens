@@ -15,9 +15,9 @@ from sklearn.tree import DecisionTreeClassifier
 n_neighbors = 7
 
 (train_container_data, train_container_labels, train_container_labels_raw), (
-    train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data(False, 'raw')
+    train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data(start_column=4, feature_type='raw')
 (test_rack_data, test_rack_labels, test_rack_labels_raw), (
-    test_container_data, test_container_labels, test_container_labels_raw) = ml_utils.get_testing_data(False, 'raw')
+    test_container_data, test_container_labels, test_container_labels_raw) = ml_utils.get_testing_data(start_column=4, feature_type='raw')
 
 names = ["Nearest Neighbors", "Linear SVM",
          "RBF SVM",

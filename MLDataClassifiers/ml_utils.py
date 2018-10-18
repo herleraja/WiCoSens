@@ -11,9 +11,9 @@ from sklearn.metrics import precision_score, recall_score, f1_score, confusion_m
 from sklearn.preprocessing import StandardScaler
 
 # Configuration related inputs
-color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
-feature_type = 'LCA'  # RAW, PREPROCESSED, PCA, LDA, LCA
-sensor_fusion = False  # True, False
+color_space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, LCA
+start_column = 4  # starting column is 4 then we get only color sensor data data, 1 - which include accelerometer
 loadConfigurationsFromFiles = False  # True, False
 source_dir_path = "./datarecording_discrete/" + color_space.lower() + "/"
 config_save_load_dir_path = "./configs/container_24/" + feature_type + "/" + color_space.lower() + "/"
@@ -26,27 +26,23 @@ lda = LinearDiscriminantAnalysis(n_components=10)
 ica = decomposition.FastICA(n_components=10)
 
 
-def parse_file(csv_path, sensor_fusion=False):
-    dt = genfromtxt(csv_path, delimiter=',')
+def parse_file(csv_path, start_column=4, skip_header=0):
+    dt = genfromtxt(csv_path, skip_header=skip_header, delimiter=',')
     labels_raw = dt[:, -1]
 
-    if sensor_fusion:
-        # All sensor data, accelerometer and color sensor.
-        data = dt[:, range(1, len(dt[0]) - 1)]
-    else:
-        # Ignore accelerometer data.
-        data = dt[:, range(4, len(dt[0]) - 1)]
+    # Ignore accelerometer data if start_column = 4.
+    data = dt[:, range(start_column, len(dt[0]) - 1)]
 
     labels_one_hot = keras.utils.to_categorical(labels_raw)
 
     return data, labels_raw, labels_one_hot
 
 
-def get_trainig_data(sensor_fusion=False, feature_type='PREPROCESSED'):
+def get_trainig_data(start_column, feature_type='PREPROCESSED'):
     train_rack_data, train_rack_labels_raw, train_rack_labels = parse_file(source_dir_path + 'rack_train_2I_4I.csv',
-                                                                           sensor_fusion)
+                                                                           start_column)
     train_container_data, train_container_labels_raw, train_container_labels = parse_file(
-        source_dir_path + 'container_train_2I_4I.csv', sensor_fusion)
+        source_dir_path + 'container_train_2I_4I.csv', start_column)
 
     if feature_type == 'PREPROCESSED':
         scalar_rack.fit(train_rack_data)
@@ -70,11 +66,11 @@ def get_trainig_data(sensor_fusion=False, feature_type='PREPROCESSED'):
         train_rack_data, train_rack_labels, train_rack_labels_raw)
 
 
-def get_testing_data(sensor_fusion, feature_type='PREPROCESSED'):
+def get_testing_data(start_column, feature_type='PREPROCESSED'):
     test_rack_data, test_rack_labels_raw, test_rack_labels = parse_file(source_dir_path + 'rack_test_2I_4I.csv',
-                                                                        sensor_fusion)
+                                                                        start_column)
     test_container_data, test_container_labels_raw, test_container_labels = parse_file(
-        source_dir_path + 'container_test_2I_4I.csv', sensor_fusion)
+        source_dir_path + 'container_test_2I_4I.csv', start_column)
 
     if feature_type == 'PREPROCESSED':
         test_container_data = scalar_container.transform(test_container_data)
@@ -148,8 +144,8 @@ def get_feature_type():
     return feature_type
 
 
-def get_sensor_fusion():
-    return sensor_fusion
+def get_start_column():
+    return start_column
 
 
 def load_configurations_from_files():

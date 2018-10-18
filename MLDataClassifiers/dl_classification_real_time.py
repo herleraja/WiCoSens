@@ -16,10 +16,10 @@ scalar_container = StandardScaler()
 if __name__ == "__main__":
     (train_container_data, train_container_labels, train_container_labels_raw), (
         train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data(
-        ml_utils.get_sensor_fusion(), ml_utils.get_feature_type())
+        ml_utils.get_start_column(), ml_utils.get_feature_type())
     (test_rack_data, test_rack_labels, test_rack_labels_raw), (
         test_container_data, test_container_labels,
-        test_container_labels_raw) = ml_utils.get_testing_data(ml_utils.get_sensor_fusion(),
+        test_container_labels_raw) = ml_utils.get_testing_data(ml_utils.get_start_column(),
                                                                ml_utils.get_feature_type())
 
     if ml_utils.load_configurations_from_files():
