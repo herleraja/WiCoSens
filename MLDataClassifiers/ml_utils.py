@@ -11,7 +11,7 @@ from sklearn.metrics import precision_score, recall_score, f1_score, confusion_m
 from sklearn.preprocessing import StandardScaler
 
 # Configuration related inputs
-color_space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+color_space = 'RGB'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, LCA
 start_column = 4  # starting column is 4 then we get only color sensor data data, 1 - which include accelerometer
 loadConfigurationsFromFiles = False  # True, False
@@ -86,9 +86,9 @@ def get_testing_data(start_column, feature_type='PREPROCESSED'):
         test_container_data, test_container_labels, test_container_labels_raw)
 
 
-def save_model(model, model_name):
-    os.makedirs(os.path.dirname(get_dir_path()), exist_ok=True)
-    model.save(get_dir_path() + model_name)
+def save_model(model, model_name, dir_path=config_save_load_dir_path):
+    os.makedirs(os.path.dirname(dir_path), exist_ok=True)
+    model.save(dir_path + model_name)
 
 
 def display_result(actual, predicted, title,

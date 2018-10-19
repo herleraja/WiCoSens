@@ -26,8 +26,8 @@ def build_model(number_class):
     # model.add(tf.keras.layers.Dropout(0.3))
     model.add(tf.keras.layers.Dense(number_class, activation='softmax'))
     # Take a look at the model summary
-    model.summary()
-    plot_model(model, show_shapes=True, to_file=source_dir_path+'color_model.png')
+    #model.summary()
+    #plot_model(model, show_shapes=True, to_file=source_dir_path+'color_model.png')
     model.compile(loss='categorical_crossentropy',
                   optimizer='Adamax',  # rmsprop, adam, Adamax
                   metrics=['accuracy'])
@@ -63,24 +63,28 @@ if __name__ == "__main__":
     history_right = model_right.fit(train_right_data, train_right_labels, epochs=10,
                                     validation_data=(test_right_data, test_right_labels), batch_size=500, verbose=2)
 
+    ml_utils.save_model(model_bottom, 'model_bottom.h5', source_dir_path)
+    ml_utils.save_model(model_left, 'model_left.h5', source_dir_path)
+    ml_utils.save_model(model_right, 'model_right.h5', source_dir_path)
+
 test_predicted_bottom_res = model_bottom.predict(test_bottom_data, batch_size=1)
 print('\n****************Classification result for Bottom************************')
 ml_utils.display_result(test_bottom_labels_raw, test_predicted_bottom_res.argmax(axis=1),
                         'Bottom')  # Print the classification result
 
-for result in test_predicted_bottom_res:
-    ml_utils.display_confidence(result)
+#for result in test_predicted_bottom_res:
+#    ml_utils.display_confidence(result)
 
 test_predicted_left_res = model_left.predict(test_left_data, batch_size=1)
 print('\n****************Classification result for Left************************')
 ml_utils.display_result(test_left_labels_raw, test_predicted_left_res.argmax(axis=1),
                         'Left')  # Print the classification result
-for result in test_predicted_left_res:
-    ml_utils.display_confidence(result)
+#for result in test_predicted_left_res:
+#    ml_utils.display_confidence(result)
 
 test_predicted_right_res = model_right.predict(test_right_data, batch_size=1)
 print('\n****************Classification result for Right************************')
 ml_utils.display_result(test_right_labels_raw, test_predicted_right_res.argmax(axis=1),
                         'Right')  # Print the classification result
-for result in test_predicted_right_res:
-    ml_utils.display_confidence(result)
+#for result in test_predicted_right_res:
+#    ml_utils.display_confidence(result)

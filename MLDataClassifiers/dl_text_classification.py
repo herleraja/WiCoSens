@@ -3,13 +3,13 @@ import ml_utils
 import tensorflow as tf
 from keras.utils.vis_utils import plot_model
 
-source_dir_path = "./datarecording_discrete/textclassification/"
+source_dir_path = "./datarecording_discrete/color/"
 
 train_data, train_labels_raw, train_labels = ml_utils.parse_file(
-    source_dir_path + 'train.csv', start_column=0, skip_header=1)
+    source_dir_path + 'text_train.csv', start_column=0, skip_header=1)
 
 test_data, test_labels_raw, test_labels = ml_utils.parse_file(
-    source_dir_path + 'test.csv', start_column=0, skip_header=1)
+    source_dir_path + 'text_test.csv', start_column=0, skip_header=1)
 
 
 def build_model(number_class=169):
@@ -31,6 +31,8 @@ text_class_model = build_model(169)
 earlyStopping = keras.callbacks.EarlyStopping(monitor='loss', patience=10, verbose=1, mode='auto')
 
 text_class_model.fit(train_data, train_labels, epochs=50, batch_size=5, callbacks=[earlyStopping])
+
+ml_utils.save_model(text_class_model, 'text_class_model.h5', source_dir_path)
 
 test_predicted_res = text_class_model.predict(test_data, batch_size=1)
 
