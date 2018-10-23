@@ -1,4 +1,5 @@
 import atexit
+import csv
 import os
 import pickle
 import random
@@ -12,12 +13,13 @@ import colorSpaceUtil
 
 
 class Ui_MainWindow(object):
-    ser = file = None
-    container_dict = {}
+    ser = bottom_file = left_file = right_file = None
+    container_dict = color_concept_dict = {}
     start_time = 100
     # maxSamplesPerKeyCount = 2
     # skip_container_numbers = [1, 6, 11, 16]
     skip_container_numbers = []
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1338, 538)
@@ -252,62 +254,74 @@ class Ui_MainWindow(object):
         self.sensorButtonHorizontalLayout = QtWidgets.QHBoxLayout()
         self.sensorButtonHorizontalLayout.setObjectName("sensorButtonHorizontalLayout")
         self.colSensorButton1 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton1.setEnabled(False)
         self.colSensorButton1.setAcceptDrops(False)
         self.colSensorButton1.setCheckable(True)
         self.colSensorButton1.setChecked(True)
         self.colSensorButton1.setObjectName("colSensorButton1")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton1)
         self.colSensorButton2 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton2.setEnabled(False)
         self.colSensorButton2.setCheckable(True)
         self.colSensorButton2.setChecked(True)
         self.colSensorButton2.setObjectName("colSensorButton2")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton2)
         self.colSensorButton3 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton3.setEnabled(False)
         self.colSensorButton3.setCheckable(True)
         self.colSensorButton3.setChecked(True)
         self.colSensorButton3.setObjectName("colSensorButton3")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton3)
         self.colSensorButton4 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton4.setEnabled(False)
         self.colSensorButton4.setCheckable(True)
         self.colSensorButton4.setChecked(True)
         self.colSensorButton4.setObjectName("colSensorButton4")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton4)
         self.colSensorButton5 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton5.setEnabled(False)
         self.colSensorButton5.setCheckable(True)
         self.colSensorButton5.setChecked(True)
         self.colSensorButton5.setObjectName("colSensorButton5")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton5)
         self.colSensorButton6 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton6.setEnabled(False)
         self.colSensorButton6.setCheckable(True)
         self.colSensorButton6.setChecked(True)
         self.colSensorButton6.setObjectName("colSensorButton6")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton6)
         self.colSensorButton7 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton7.setEnabled(False)
         self.colSensorButton7.setCheckable(True)
         self.colSensorButton7.setChecked(True)
         self.colSensorButton7.setObjectName("colSensorButton7")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton7)
         self.colSensorButton8 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton8.setEnabled(False)
         self.colSensorButton8.setCheckable(True)
         self.colSensorButton8.setChecked(True)
         self.colSensorButton8.setObjectName("colSensorButton8")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton8)
         self.colSensorButton9 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton9.setEnabled(False)
         self.colSensorButton9.setCheckable(True)
         self.colSensorButton9.setChecked(True)
         self.colSensorButton9.setObjectName("colSensorButton9")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton9)
         self.colSensorButton10 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton10.setEnabled(False)
         self.colSensorButton10.setCheckable(True)
         self.colSensorButton10.setChecked(True)
         self.colSensorButton10.setObjectName("colSensorButton10")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton10)
         self.colSensorButton11 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton11.setEnabled(False)
         self.colSensorButton11.setCheckable(True)
         self.colSensorButton11.setChecked(True)
         self.colSensorButton11.setObjectName("colSensorButton11")
         self.sensorButtonHorizontalLayout.addWidget(self.colSensorButton11)
         self.colSensorButton12 = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colSensorButton12.setEnabled(False)
         self.colSensorButton12.setCheckable(True)
         self.colSensorButton12.setChecked(True)
         self.colSensorButton12.setObjectName("colSensorButton12")
@@ -316,16 +330,19 @@ class Ui_MainWindow(object):
         self.colorSpaceButtonsHorizontalLayout = QtWidgets.QHBoxLayout()
         self.colorSpaceButtonsHorizontalLayout.setObjectName("colorSpaceButtonsHorizontalLayout")
         self.colorSpaceXYZButton = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colorSpaceXYZButton.setEnabled(False)
         self.colorSpaceXYZButton.setCheckable(True)
         self.colorSpaceXYZButton.setAutoExclusive(True)
         self.colorSpaceXYZButton.setObjectName("colorSpaceXYZButton")
         self.colorSpaceButtonsHorizontalLayout.addWidget(self.colorSpaceXYZButton)
         self.colorSpaceLabButton = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colorSpaceLabButton.setEnabled(False)
         self.colorSpaceLabButton.setCheckable(True)
         self.colorSpaceLabButton.setAutoExclusive(True)
         self.colorSpaceLabButton.setObjectName("colorSpaceLabButton")
         self.colorSpaceButtonsHorizontalLayout.addWidget(self.colorSpaceLabButton)
         self.colorSpaceYCbCrButton = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colorSpaceYCbCrButton.setEnabled(False)
         self.colorSpaceYCbCrButton.setCheckable(True)
         self.colorSpaceYCbCrButton.setAutoExclusive(True)
         self.colorSpaceYCbCrButton.setObjectName("colorSpaceYCbCrButton")
@@ -337,6 +354,7 @@ class Ui_MainWindow(object):
         self.colorSpaceRGBButton.setObjectName("colorSpaceRGBButton")
         self.colorSpaceButtonsHorizontalLayout.addWidget(self.colorSpaceRGBButton)
         self.colorSpaceHSVButton = QtWidgets.QPushButton(self.gridLayoutWidget_2)
+        self.colorSpaceHSVButton.setEnabled(False)
         self.colorSpaceHSVButton.setCheckable(True)
         self.colorSpaceHSVButton.setChecked(False)
         self.colorSpaceHSVButton.setAutoExclusive(True)
@@ -408,18 +426,28 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.mainTabObj.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        
+
         self.timer = QtCore.QTimer()
         self.load_dictionary('container_dict.txt')
 
         if self.randomNumberCheckBox.isChecked():
             self.displayRandomContainerNumber()
+
+            color_concept_values = self.color_concept_dict[self.containerNumberLabelValueDisplay.text()].split(',')
+
+            self.bottomClassLabelLineEdit.setText(color_concept_values[0])
+            self.leftClassLabelLineEdit.setText(color_concept_values[1])
+            self.rightClassLabelLineEdit.setText(color_concept_values[2])
+
+            self.bottomClassLabelLineEdit.repaint()
+            self.leftClassLabelLineEdit.repaint()
+            self.rightClassLabelLineEdit.repaint()
+
             # self.displayRemainingSamplesCount()
-            self.leftClassLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
+            #self.leftClassLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
 
         self.addButtonOperations()
         self.addFiledsValidators()
-        
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -442,10 +470,12 @@ class Ui_MainWindow(object):
         self.stopCaptureBtn.setText(_translate("MainWindow", "Stop"))
         self.sensorTextLabel.setText(_translate("MainWindow", "Captured Sensor Data"))
         self.captureTimeProgressBar.setFormat(_translate("MainWindow", "%p %"))
-        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab), _translate("MainWindow", "Data labeling"))
+        self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.dataLabelingTab),
+                                   _translate("MainWindow", "Data labeling"))
         self.recordingFolderLocationLabel.setText(_translate("MainWindow", "Recording Folder Location"))
         self.serialPortSettingsLabel.setText(_translate("MainWindow", "Serial Port Settings"))
-        self.recordingFolderLocationLineEdit.setText(_translate("MainWindow", "datarecording_discrete/rgb/"))
+        self.recordingFolderLocationLineEdit.setText(
+            _translate("MainWindow", "datarecording_discrete/color_concept/rgb/"))
         self.baudrateLabel.setText(_translate("MainWindow", "Baudrate"))
         self.baudrateComboBox.setCurrentText(_translate("MainWindow", "115200"))
         self.baudrateComboBox.setItemText(0, _translate("MainWindow", "115200"))
@@ -497,7 +527,6 @@ class Ui_MainWindow(object):
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.settingTab), _translate("MainWindow", "Settings"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.classifierTab), _translate("MainWindow", "Classify"))
 
-
     def setUpSerialPort(self):
         baudrate = self.baudrateComboBox.currentText()
         port = self.portlineEdit.text()
@@ -538,68 +567,79 @@ class Ui_MainWindow(object):
     def captureSensorData(self):
         try:
 
-            current_label = self.leftClassLabelLineEdit.text()
+            bottom_label = self.bottomClassLabelLineEdit.text()
+            left_label = self.leftClassLabelLineEdit.text()
+            right_label = self.rightClassLabelLineEdit.text()
 
             new_line = self.ser.readline().decode('utf-8').rstrip()
 
             line_array = new_line.split(',')
 
             if line_array.__len__() == 52:
+                new_line_accelerometer = line_array[0] + ',' + line_array[1] + ',' + line_array[2] + ',' + line_array[3]
 
-                new_line = line_array[0] + ',' + line_array[1] + ',' + line_array[2] + ',' + line_array[3]
+                bottom_color = new_line_accelerometer
+                left_color = new_line_accelerometer
+                right_color = new_line_accelerometer
 
-                if self.colSensorButton1.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[4]), float(line_array[5]),
+                bottom_color += self.colorSpaceCoverstion(float(line_array[4]), float(line_array[5]),
                                                           float(line_array[6]),
                                                           float(line_array[7]))  # Right side(R5) sensor
-                if self.colSensorButton2.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[8]), float(line_array[9]),
+
+                bottom_color += self.colorSpaceCoverstion(float(line_array[8]), float(line_array[9]),
                                                           float(line_array[10]),
                                                           float(line_array[11]))  # Right side(R4) sensor
-                if self.colSensorButton3.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[12]), float(line_array[13]),
-                                                          float(line_array[14]),
-                                                          float(line_array[15]))  # Right side(R3) sensor
-                if self.colSensorButton4.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[16]), float(line_array[17]),
-                                                          float(line_array[18]),
-                                                          float(line_array[19]))  # Right side(R2) sensor
-                if self.colSensorButton5.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[20]), float(line_array[21]),
-                                                          float(line_array[22]),
-                                                          float(line_array[23]))  # Right side(R1) sensor
-                if self.colSensorButton6.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[24]), float(line_array[25]),
-                                                          float(line_array[26]),
-                                                          float(line_array[27]))  # Right side(R0) sensor
-                if self.colSensorButton7.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[28]), float(line_array[29]),
-                                                          float(line_array[30]), float(line_array[31]))  # middle sensor
-                if self.colSensorButton8.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[32]), float(line_array[33]),
-                                                          float(line_array[34]),
-                                                          float(line_array[35]))  # Left side(L1) sensor
-                if self.colSensorButton9.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[36]), float(line_array[37]),
-                                                          float(line_array[38]),
-                                                          float(line_array[39]))  # Left side(L2) sensor
-                if self.colSensorButton10.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[40]), float(line_array[41]),
-                                                          float(line_array[42]),
-                                                          float(line_array[43]))  # Left side(L3) sensor
-                if self.colSensorButton11.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[44]), float(line_array[45]),
+
+                right_color += self.colorSpaceCoverstion(float(line_array[12]), float(line_array[13]),
+                                                         float(line_array[14]),
+                                                         float(line_array[15]))  # Right side(R3) sensor
+
+                right_color += self.colorSpaceCoverstion(float(line_array[16]), float(line_array[17]),
+                                                         float(line_array[18]),
+                                                         float(line_array[19]))  # Right side(R2) sensor
+
+                right_color += self.colorSpaceCoverstion(float(line_array[20]), float(line_array[21]),
+                                                         float(line_array[22]),
+                                                         float(line_array[23]))  # Right side(R1) sensor
+
+                right_color += self.colorSpaceCoverstion(float(line_array[24]), float(line_array[25]),
+                                                         float(line_array[26]),
+                                                         float(line_array[27]))  # Right side(R0) sensor
+
+                left_color += self.colorSpaceCoverstion(float(line_array[28]), float(line_array[29]),
+                                                        float(line_array[30]), float(line_array[31]))  # middle sensor
+
+                left_color += self.colorSpaceCoverstion(float(line_array[32]), float(line_array[33]),
+                                                        float(line_array[34]),
+                                                        float(line_array[35]))  # Left side(L1) sensor
+
+                left_color += self.colorSpaceCoverstion(float(line_array[36]), float(line_array[37]),
+                                                        float(line_array[38]),
+                                                        float(line_array[39]))  # Left side(L2) sensor
+
+                left_color += self.colorSpaceCoverstion(float(line_array[40]), float(line_array[41]),
+                                                        float(line_array[42]),
+                                                        float(line_array[43]))  # Left side(L3) sensor
+
+                bottom_color += self.colorSpaceCoverstion(float(line_array[44]), float(line_array[45]),
                                                           float(line_array[46]),
                                                           float(line_array[47]))  # Left side(L4) sensor
-                if self.colSensorButton12.isChecked():
-                    new_line += self.colorSpaceCoverstion(float(line_array[48]), float(line_array[49]),
+
+                bottom_color += self.colorSpaceCoverstion(float(line_array[48]), float(line_array[49]),
                                                           float(line_array[50]),
                                                           float(line_array[51]))  # Left side(L5) sensor
 
-                new_line = new_line + ',' + current_label + '\n'
+                bottom_color = bottom_color + ',' + bottom_label + '\n'
+                left_color = left_color + ',' + left_label + '\n'
+                right_color = right_color + ',' + right_label + '\n'
 
-                self.file.write(new_line)
-                self.file.flush()
+                self.bottom_file.write(bottom_color)
+                self.left_file.write(left_color)
+                self.right_file.write(right_color)
+
+                self.bottom_file.flush()
+                self.left_file.flush()
+                self.right_file.flush()
 
                 self.sensorTextEdit.append(new_line)
                 self.sensorTextEdit.repaint()
@@ -607,7 +647,9 @@ class Ui_MainWindow(object):
             if not self.startCaptureBtn.isEnabled():
                 QtCore.QTimer.singleShot(1, self.captureSensorData)
             else:
-                self.file.close()
+                self.bottom_file.close()
+                self.left_file.close()
+                self.right_file.close()
         except:
             traceback.print_exc()
             self.displayWarningPopUp(traceback.format_exc())
@@ -641,10 +683,19 @@ class Ui_MainWindow(object):
                 self.openFileForWriting()  # Create/Open file for saving sensor data
 
                 if self.randomNumberCheckBox.isChecked():
-                    self.leftClassLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
-                    self.leftClassLabelLineEdit.repaint()
 
-                classLabel = int(self.leftClassLabelLineEdit.text())  # To add class label to dictionary
+                    color_concept_values = self.color_concept_dict[self.containerNumberLabelValueDisplay.text()].split(',')
+
+                    self.bottomClassLabelLineEdit.setText(color_concept_values[0])
+                    self.leftClassLabelLineEdit.setText(color_concept_values[1])
+                    self.rightClassLabelLineEdit.setText(color_concept_values[2])
+
+                    self.bottomClassLabelLineEdit.repaint()
+                    self.leftClassLabelLineEdit.repaint()
+                    self.rightClassLabelLineEdit.repaint()
+
+
+                classLabel = int(self.containerNumberLabelValueDisplay.text())  # To add class label to dictionary
 
                 if not self.startCaptureBtn.isEnabled():
 
@@ -685,14 +736,21 @@ class Ui_MainWindow(object):
 
     def randomNumberCheckBoxPressedEvent(self):
         if self.randomNumberCheckBox.isChecked():
-            self.leftClassLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
+            #self.leftClassLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
+            self.displayRandomContainerNumber()
+            self.bottomClassLabelLineEdit.setEnabled(False)
             self.leftClassLabelLineEdit.setEnabled(False)
+            self.rightClassLabelLineEdit.setEnabled(False)
             self.randomNumberLowerLimitLineEdit.setEnabled(True)
             self.randomNumberUpperLimitLineEdit.setEnabled(True)
         else:
+            self.bottomClassLabelLineEdit.setEnabled(True)
             self.leftClassLabelLineEdit.setEnabled(True)
+            self.rightClassLabelLineEdit.setEnabled(True)
             self.randomNumberLowerLimitLineEdit.setEnabled(False)
             self.randomNumberUpperLimitLineEdit.setEnabled(False)
+
+
 
     def randomNumberUpperLowerLimitLineEditTextChangeEvent(self):
         try:
@@ -715,8 +773,14 @@ class Ui_MainWindow(object):
         write_path = self.recordingFolderLocationLineEdit.text()
         os.makedirs(os.path.dirname(write_path), exist_ok=True)
         file_name = self.fileNameLineEdit.text()
-        file_name = write_path + file_name + ".csv"
-        self.file = open(file_name, 'a')
+
+        bottom_file_name = write_path + file_name + "_bottom.csv"
+        left_file_name = write_path + file_name + "_left.csv"
+        right_file_name = write_path + file_name + "_right.csv"
+
+        self.bottom_file = open(bottom_file_name, 'a')
+        self.left_file = open(left_file_name, 'a')
+        self.right_file = open(right_file_name, 'a')
 
     def displayRandomContainerNumber(self):
         randomNumberLowerLimit = int(self.randomNumberLowerLimitLineEdit.text())
@@ -799,7 +863,7 @@ class Ui_MainWindow(object):
         randomNumberUpperLimit = int(self.randomNumberUpperLimitLineEdit.text())
         maxSamplesPerKeyCount = int(self.samplesPerKeyCountLineEdit.text())
         maxNumberOfSamples = (
-                                         randomNumberUpperLimit - randomNumberLowerLimit - self.skip_container_numbers.__len__() + 1) * maxSamplesPerKeyCount
+                                     randomNumberUpperLimit - randomNumberLowerLimit - self.skip_container_numbers.__len__() + 1) * maxSamplesPerKeyCount
         remainingNumberOfContainers = maxNumberOfSamples - dictionarySumOfValues
         self.remainingSamplesToCaptureLCDNumber.display(str(remainingNumberOfContainers))
 
@@ -830,8 +894,16 @@ class Ui_MainWindow(object):
         print("Releasing Resources.... ")
         if self.ser is not None and self.ser.isOpen():
             self.ser.close()
-        if self.file is not None and not self.file.closed:
-            self.file.close()
+
+        if self.bottom_file is not None and not self.bottom_file.closed:
+            self.bottom_file.close()
+
+        if self.left_file is not None and not self.left_file.closed:
+            self.left_file.close()
+
+        if self.right_file is not None and not self.right_file.closed:
+            self.right_file.close()
+
         self.save_dictionary('container_dict.txt')
 
     def save_dictionary(self, file_name):
@@ -842,11 +914,20 @@ class Ui_MainWindow(object):
 
     def load_dictionary(self, file_name):
         try:
+
+            with open('resources/color_concept_map_input.csv') as color_concept_dict_file:
+                reader = csv.reader(color_concept_dict_file)
+                headers = next(reader)
+                for row in reader:
+                    self.color_concept_dict[row[0]] = row[1] + ',' + row[2] + ',' + row[3]
+                color_concept_dict_file.close()
+
             with open(file_name, "rb") as myFile:
                 self.container_dict = pickle.load(myFile)
                 print('loaded dictionary. The dictionary contents are : \n{}'.format(self.container_dict.items()))
                 myFile.close()
         except FileNotFoundError:
+            self.container_dict = {}
             print('\nDictionary file not found ! This occurs only in initial load'
                   ' of the program when there is no dictionary file available.\n')
             return

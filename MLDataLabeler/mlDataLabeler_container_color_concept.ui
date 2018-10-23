@@ -396,7 +396,7 @@
            <item>
             <widget class="QLineEdit" name="recordingFolderLocationLineEdit">
              <property name="text">
-              <string>datarecording_discrete/rgb/</string>
+              <string>datarecording_discrete/color_concept/rgb/</string>
              </property>
              <property name="clearButtonEnabled">
               <bool>true</bool>
@@ -607,6 +607,9 @@
           <layout class="QHBoxLayout" name="sensorButtonHorizontalLayout">
            <item>
             <widget class="QPushButton" name="colSensorButton1">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="acceptDrops">
               <bool>false</bool>
              </property>
@@ -623,6 +626,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colSensorButton2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>R4</string>
              </property>
@@ -636,6 +642,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colSensorButton3">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>R3</string>
              </property>
@@ -649,6 +658,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colSensorButton4">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>R2</string>
              </property>
@@ -662,6 +674,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colSensorButton5">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>R1</string>
              </property>
@@ -675,6 +690,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colSensorButton6">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>R0</string>
              </property>
@@ -688,6 +706,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colSensorButton7">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>M</string>
              </property>
@@ -701,6 +722,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colSensorButton8">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>L1</string>
              </property>
@@ -714,6 +738,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colSensorButton9">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>L2</string>
              </property>
@@ -727,6 +754,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colSensorButton10">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>L3</string>
              </property>
@@ -740,6 +770,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colSensorButton11">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>L4</string>
              </property>
@@ -753,6 +786,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colSensorButton12">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>L5</string>
              </property>
@@ -770,6 +806,9 @@
           <layout class="QHBoxLayout" name="colorSpaceButtonsHorizontalLayout">
            <item>
             <widget class="QPushButton" name="colorSpaceXYZButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>XYZ</string>
              </property>
@@ -783,6 +822,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colorSpaceLabButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>L*a*b*</string>
              </property>
@@ -796,6 +838,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colorSpaceYCbCrButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>YCbCr</string>
              </property>
@@ -825,6 +870,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="colorSpaceHSVButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>HSV</string>
              </property>

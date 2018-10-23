@@ -858,7 +858,7 @@ class Ui_MainWindow(object):
 
     def load_dictionary(self):
 
-        with open('box_rac_container_label_map_input.csv') as rack_container_box_dict_file:
+        with open('resources/box_rac_container_label_map_input.csv') as rack_container_box_dict_file:
             reader = csv.reader(rack_container_box_dict_file)
             for row in reader:
                 self.rack_container_box_dict[row[0]] = row[1] + ',' + row[2]

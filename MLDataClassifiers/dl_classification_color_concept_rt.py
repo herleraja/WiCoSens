@@ -67,6 +67,7 @@ if __name__ == "__main__":
             result_left_predicted = result_left.argmax(axis=-1)[0]
             result_right_predicted = result_right.argmax(axis=-1)[0]
 
+            # confidence greater than 50% then only append the data
             if result_bottom_predicted != 0 and (result_bottom[0][result_bottom_predicted] * 100) > 50:
                 bottom_color_list.append(result_bottom_predicted)
 
@@ -97,15 +98,15 @@ if __name__ == "__main__":
                 left_color = float(left_color_list_vote.most_common(1)[0][0])
                 right_color = float(right_color_list_vote.most_common(1)[0][0])
 
-                print("Bottom Vote: ", bottom_color_list_vote)
+                print("\nBottom Vote: ", bottom_color_list_vote)
                 print("Left Vote: ", left_color_list_vote)
                 print("Right Vote: ", right_color_list_vote)
 
                 #  Text classification
                 test_data = np.asarray([bottom_color, left_color, right_color]).reshape(1, 3)
                 result_text_class = text_class_model.predict(test_data, batch_size=1)
-                print("\nBox Number: ", result_text_class.argmax(axis=-1))
-                ml_utils.display_confidence(result_text_class[0])
+                print("Box Number: ", result_text_class.argmax(axis=-1))
+                #ml_utils.display_confidence(result_text_class[0])
 
                 #  Reset the parameters
                 no_records = 100
