@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
 
-source_dir_path = "./datarecording_discrete/color/"
+source_dir_path = "./datarecording_discrete/color_concept/"
 
 
 def build_model(number_class):
@@ -33,33 +33,32 @@ def build_model(number_class):
                   metrics=['accuracy'])
     return model
 
-
 if __name__ == "__main__":
     train_bottom_data, train_bottom_labels_raw, train_bottom_labels = ml_utils.parse_file(
-        source_dir_path + 'color_bottom_train.csv')
+        source_dir_path + 'train_bottom.csv')
     train_left_data, train_left_labels_raw, train_left_labels = ml_utils.parse_file(
-        source_dir_path + 'color_left_train.csv')
+        source_dir_path + 'train_left.csv')
     train_right_data, train_right_labels_raw, train_right_labels = ml_utils.parse_file(
-        source_dir_path + 'color_right_train.csv')
+        source_dir_path + 'train_right.csv')
 
     test_bottom_data, test_bottom_labels_raw, test_bottom_labels = ml_utils.parse_file(
-        source_dir_path + 'color_bottom_test.csv')
+        source_dir_path + 'test_bottom.csv')
     test_left_data, test_left_labels_raw, test_left_labels = ml_utils.parse_file(
-        source_dir_path + 'color_left_test.csv')
+        source_dir_path + 'test_left.csv')
     test_right_data, test_right_labels_raw, test_right_labels = ml_utils.parse_file(
-        source_dir_path + 'color_right_test.csv')
+        source_dir_path + 'test_right.csv')
 
     # earlyStopping = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, verbose=1, mode='auto')
 
-    model_bottom = build_model(3)
+    model_bottom = build_model(5)
     history_bottom = model_bottom.fit(train_bottom_data, train_bottom_labels, epochs=10,
                                       validation_data=(test_bottom_data, test_bottom_labels), batch_size=500, verbose=2)
 
-    model_left = build_model(3)
+    model_left = build_model(7)
     history_left = model_left.fit(train_left_data, train_left_labels, epochs=10,
                                   validation_data=(test_left_data, test_left_labels), batch_size=500, verbose=2)
 
-    model_right = build_model(5)
+    model_right = build_model(8)
     history_right = model_right.fit(train_right_data, train_right_labels, epochs=10,
                                     validation_data=(test_right_data, test_right_labels), batch_size=500, verbose=2)
 

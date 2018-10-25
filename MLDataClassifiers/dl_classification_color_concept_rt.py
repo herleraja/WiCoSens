@@ -12,7 +12,7 @@ import colorSpaceUtil
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
 
-source_dir_path = "./datarecording_discrete/color/"
+source_dir_path = "./datarecording_discrete/color_concept/"
 
 if __name__ == "__main__":
     model_bottom = keras.models.load_model(source_dir_path + 'model_bottom.h5')
