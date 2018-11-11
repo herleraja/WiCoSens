@@ -9,8 +9,10 @@ ext = '.csv'
 dir_path = 'C:\\Users\\NUCER\\Documents\\git\\WiCoSens\\MLDataClassifiers\\datarecording_discrete\\rgb\\'
 #dir_path = 'C:\\Users\\NUCER\\Documents\\git\\WiCoSens\\MLDataLabeler\\datarecording\\'
 
+dir_path = "C:\\Users\\NUCER\\Documents\\git\\WiCoSens\\MLDataClassifiers\\datarecording_discrete\\color_concept\\"
+
 # set to the name of your output file
-outfilename = dir_path + 'container_test_2I_4I.csv'
+outfilename = dir_path + 'train.csv'
 
 '''
 with open(outfilename, 'w') as outfile:
@@ -31,7 +33,7 @@ with open(dir_path + outfilename, 'w') as outfile:
 '''
 
 with open(outfilename, 'a') as singleFile:
-    for csv in glob.glob(dir_path +'container_test_*.csv'):
+    for csv in glob.glob(dir_path +'train_*.csv'):
         if csv == outfilename:
             pass
         else:

@@ -14,10 +14,18 @@ from sklearn.tree import DecisionTreeClassifier
 
 n_neighbors = 7
 
+'''
 (train_container_data, train_container_labels, train_container_labels_raw), (
     train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data(start_column=4, feature_type='raw')
 (test_rack_data, test_rack_labels, test_rack_labels_raw), (
     test_container_data, test_container_labels, test_container_labels_raw) = ml_utils.get_testing_data(start_column=4, feature_type='raw')
+'''
+
+source_dir_path = ml_utils.get_source_dir_path()
+train_container_data, train_container_labels_raw, train_container_labels = ml_utils.parse_file(
+    source_dir_path + 'train_left.csv')
+test_container_data, test_container_labels_raw, test_container_labels = ml_utils.parse_file(
+    source_dir_path + 'test_left.csv')
 
 names = ["Nearest Neighbors", "Linear SVM",
          "RBF SVM",
@@ -36,6 +44,9 @@ classifiers = [
     QuadraticDiscriminantAnalysis(),
     LogisticRegression(random_state=0, n_jobs=-1)
 ]
+
+
+
 '''
 names = ["Nearest Neighbors", "Linear SVM", 'LinearSVC']
 
@@ -76,7 +87,7 @@ for name, clf in zip(names, classifiers):
 
 #  ------------------------------------------- Deep learning --------------------------------------------------
 
-model_container = dl_clf.build_model(25)
+model_container = dl_clf.build_model(7, 12)
 start_time = time.time()
 history_container = model_container.fit(train_container_data, train_container_labels, epochs=20,
                                         validation_data=(test_container_data, test_container_labels),

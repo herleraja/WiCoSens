@@ -94,7 +94,7 @@ def auto_label(rects):
         height = rect.get_height()
         xloc = rect.get_x() + width / 4.0
         yloc = 1.02 * height
-        plt.text(xloc, yloc, "%0.2f" % float(height), fontsize=16)
+        plt.text(xloc, yloc, "%0.2f" % float(height), fontsize=8)
 
 
 def draw_bar_chart(dictionary, title, x_label, y_label):
@@ -114,12 +114,12 @@ def draw_bar_chart(dictionary, title, x_label, y_label):
     # ax.spines['bottom'].set_visible(False)
     ax.spines['left'].set_visible(False)
     for tick in ax.xaxis.get_major_ticks() + ax.yaxis.get_major_ticks():
-        tick.label.set_fontsize(16)
+        tick.label.set_fontsize(8)
 
     plt.tick_params(top=False, bottom=False, left=False, right=False, labelleft=True, labelbottom=True)
     plt.xticks(range(len(dictionary)), list(dictionary.keys()), rotation=90)
     plt.tight_layout()
-    plt.subplots_adjust(left=0.1, right=0.95, top=0.9, bottom=0.25)
+    #plt.subplots_adjust(left=0.1, right=0.95, top=0.9, bottom=0.25)
     auto_label(bar_chart)
     plt.savefig(ml_utils.get_dir_path() + title + '.png')
     plt.clf()

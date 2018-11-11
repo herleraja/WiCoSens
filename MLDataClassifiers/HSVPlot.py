@@ -116,8 +116,8 @@ class Scope(object):
 
         t = self.tdata_R4[-1] + self.dt
 
-        h, s, v = colorSpaceUtil.rgbc2hsv(float(values[8]), float(values[9]), float(values[10]), float(values[11]))
-        #print('{},{},{}'.format(h, s, v))
+        h, s, v = colorSpaceUtil.rgbc2rgb(float(values[8]), float(values[9]), float(values[10]), float(values[11]))
+        print('{},{},{}'.format(h, s, v))
         self.tdata_R4.append(t)
         self.ydata_hR4.append(h)
         self.ydata_sR4.append(s)
@@ -145,7 +145,7 @@ class Scope(object):
 
         x, y, z = float(values[1]), float(values[2]), float(values[3])
 
-        # print('{},{},{}, mean: {}'.format(x, y, z, (abs(x)+abs(y)+abs(z))/3))
+        #print('x: {}, y: {}, z: {}, mean: {}'.format(x, y, z, (abs(x)+abs(y)+abs(z))/3))
 
         self.tdata_axis.append(t)
         self.ydata_x.append(x)

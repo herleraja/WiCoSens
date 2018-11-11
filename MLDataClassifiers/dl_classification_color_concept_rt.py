@@ -12,13 +12,11 @@ import colorSpaceUtil
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
 
-source_dir_path = "./datarecording_discrete/color_concept/"
-
 if __name__ == "__main__":
-    model_bottom = keras.models.load_model(source_dir_path + 'model_bottom.h5')
-    model_left = keras.models.load_model(source_dir_path + 'model_left.h5')
-    model_right = keras.models.load_model(source_dir_path + 'model_right.h5')
-    text_class_model = keras.models.load_model(source_dir_path + 'text_class_model.h5')
+    model_bottom = keras.models.load_model(ml_utils.get_dir_path() + 'model_bottom.h5')
+    model_left = keras.models.load_model(ml_utils.get_dir_path() + 'model_left.h5')
+    model_right = keras.models.load_model(ml_utils.get_dir_path() + 'model_right.h5')
+    text_class_model = keras.models.load_model(ml_utils.get_dir_path() + 'text_class_model.h5')
 
     # device="/dev/tty.usbmodem2853891"
     port = "COM3"  # COM for windows, it changes when we use unix system
@@ -106,7 +104,7 @@ if __name__ == "__main__":
                 test_data = np.asarray([bottom_color, left_color, right_color]).reshape(1, 3)
                 result_text_class = text_class_model.predict(test_data, batch_size=1)
                 print("Box Number: ", result_text_class.argmax(axis=-1))
-                #ml_utils.display_confidence(result_text_class[0])
+                # ml_utils.display_confidence(result_text_class[0])
 
                 #  Reset the parameters
                 no_records = 100

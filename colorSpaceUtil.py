@@ -168,11 +168,11 @@ if __name__ == "__main__":
 
         # To test the file conversion method.
 
-        color_Space = 'Lab'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
-        source_dir_path = "./MLDataClassifiers/datarecording_discrete/rgb/"
-        destination_dir_path = "./MLDataClassifiers/datarecording_discrete/" + color_Space.lower() + "/"
+        color_Space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+        source_dir_path = "./MLDataClassifiers/datarecording_discrete/color_concept/rgb/"
+        destination_dir_path = "./MLDataClassifiers/datarecording_discrete/color_concept/" + color_Space.lower() + "/"
         os.makedirs(os.path.dirname(destination_dir_path), exist_ok=True)
-
+        '''
         fileColorSpaceConversionFunction(source_dir_path + 'rack_test_2I_4I.csv',
                                          destination_dir_path + 'rack_test_2I_4I.csv', color_Space=color_Space)
         fileColorSpaceConversionFunction(source_dir_path + 'rack_train_2I_4I.csv',
@@ -183,6 +183,28 @@ if __name__ == "__main__":
         fileColorSpaceConversionFunction(source_dir_path + 'container_train_2I_4I.csv',
                                          destination_dir_path + 'container_train_2I_4I.csv',
                                          color_Space=color_Space)
+'''
+        fileColorSpaceConversionFunction(source_dir_path + 'test_bottom.csv',
+                                         destination_dir_path + 'test_bottom.csv',
+                                         color_Space=color_Space)
+        fileColorSpaceConversionFunction(source_dir_path + 'train_bottom.csv',
+                                         destination_dir_path + 'train_bottom.csv',
+                                         color_Space=color_Space)
+
+        fileColorSpaceConversionFunction(source_dir_path + 'test_left.csv',
+                                         destination_dir_path + 'test_left.csv',
+                                         color_Space=color_Space)
+        fileColorSpaceConversionFunction(source_dir_path + 'train_left.csv',
+                                         destination_dir_path + 'train_left.csv',
+                                         color_Space=color_Space)
+
+        fileColorSpaceConversionFunction(source_dir_path + 'test_right.csv',
+                                         destination_dir_path + 'test_right.csv',
+                                         color_Space=color_Space)
+        fileColorSpaceConversionFunction(source_dir_path + 'train_right.csv',
+                                         destination_dir_path + 'train_right.csv',
+                                         color_Space=color_Space)
+
 
         print("The files are converted to ***", color_Space, "*** color space")
 

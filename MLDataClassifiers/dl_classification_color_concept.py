@@ -1,37 +1,8 @@
 import keras
 import ml_utils
-import tensorflow as tf
-from keras.utils.vis_utils import plot_model
-from sklearn.preprocessing import StandardScaler
+import dl_classification as dl_clf
 
-scalar_rack = StandardScaler()
-scalar_container = StandardScaler()
-
-source_dir_path = "./datarecording_discrete/color_concept/"
-
-
-def build_model(number_class):
-    model = tf.keras.Sequential()
-    # Must define the input shape in the first layer of the neural network
-    # model.add(tf.keras.layers.Dense(1024, input_shape=(36,), activation=tf.nn.relu,kernel_regularizer=keras.regularizers.l2(0.001)))
-    # model.add(tf.keras.layers.Dropout(0.3))
-    # model.add(tf.keras.layers.Dense(1024, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
-    # model.add(tf.keras.layers.Dropout(0.3))
-    model.add(tf.keras.layers.Dense(612, input_shape=(12,), activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
-    # model.add(tf.keras.layers.Flatten())
-    # model.add(tf.keras.layers.Dropout(0.5))
-    model.add(tf.keras.layers.Dense(256, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
-    model.add(tf.keras.layers.Dropout(0.3))
-    model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
-    # model.add(tf.keras.layers.Dropout(0.3))
-    model.add(tf.keras.layers.Dense(number_class, activation='softmax'))
-    # Take a look at the model summary
-    #model.summary()
-    #plot_model(model, show_shapes=True, to_file=source_dir_path+'color_model.png')
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='Adamax',  # rmsprop, adam, Adamax
-                  metrics=['accuracy'])
-    return model
+source_dir_path = ml_utils.get_source_dir_path()
 
 if __name__ == "__main__":
     train_bottom_data, train_bottom_labels_raw, train_bottom_labels = ml_utils.parse_file(
@@ -50,21 +21,21 @@ if __name__ == "__main__":
 
     # earlyStopping = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, verbose=1, mode='auto')
 
-    model_bottom = build_model(5)
+    model_bottom = dl_clf.build_model(5, 12)
     history_bottom = model_bottom.fit(train_bottom_data, train_bottom_labels, epochs=10,
                                       validation_data=(test_bottom_data, test_bottom_labels), batch_size=500, verbose=2)
 
-    model_left = build_model(7)
+    model_left = dl_clf.build_model(7, 12)
     history_left = model_left.fit(train_left_data, train_left_labels, epochs=10,
                                   validation_data=(test_left_data, test_left_labels), batch_size=500, verbose=2)
 
-    model_right = build_model(8)
+    model_right = dl_clf.build_model(8, 12)
     history_right = model_right.fit(train_right_data, train_right_labels, epochs=10,
                                     validation_data=(test_right_data, test_right_labels), batch_size=500, verbose=2)
 
-    ml_utils.save_model(model_bottom, 'model_bottom.h5', source_dir_path)
-    ml_utils.save_model(model_left, 'model_left.h5', source_dir_path)
-    ml_utils.save_model(model_right, 'model_right.h5', source_dir_path)
+    ml_utils.save_model(model_bottom, 'model_bottom.h5')
+    ml_utils.save_model(model_left, 'model_left.h5')
+    ml_utils.save_model(model_right, 'model_right.h5')
 
 test_predicted_bottom_res = model_bottom.predict(test_bottom_data, batch_size=1)
 print('\n****************Classification result for Bottom************************')
