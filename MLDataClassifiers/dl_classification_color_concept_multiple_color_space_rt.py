@@ -40,11 +40,12 @@ if __name__ == "__main__":
             if dt.__len__() != 52:
                 continue
 
-            colorSpaceConversionFunction = colorSpaceUtil.switcher.get(ml_utils.get_color_space())
+            colorSpaceConversionFunction_HSV = colorSpaceUtil.switcher.get('HSV')
+            colorSpaceConversionFunction_XYZ = colorSpaceUtil.switcher.get('XYZ')
 
             frame = np.asarray([])
             for i in np.arange(4, 52, 4):
-                frame = np.append(frame, colorSpaceConversionFunction(float(dt[i]), float(dt[i + 1]), float(dt[i + 2]),
+                frame = np.append(frame, colorSpaceConversionFunction_HSV(float(dt[i]), float(dt[i + 1]), float(dt[i + 2]),
                                                                       float(dt[i + 3])))
 
             frame = frame.reshape(1, 36)
@@ -52,6 +53,18 @@ if __name__ == "__main__":
             frame_bottom = np.append(frame[:, 0:6], frame[:, 30:36]).reshape(1, 12)  # R4, R5 and L4, L5
             frame_left = frame[:, 18:30].reshape(1, 12)  # middle, L1, L2, L3
             frame_right = frame[:, 6:18].reshape(1, 12)  # R3, R2, R1, R0
+
+
+            frame = np.asarray([])
+            for i in np.arange(4, 52, 4):
+                frame = np.append(frame, colorSpaceConversionFunction_XYZ(float(dt[i]), float(dt[i + 1]), float(dt[i + 2]),
+                                                                      float(dt[i + 3])))
+
+            frame = frame.reshape(1, 36)
+
+            frame_bottom = np.concatenate((frame_bottom , np.append(frame[:, 0:6], frame[:, 30:36]).reshape(1, 12)), axis=1 )  # R4, R5 and L4, L5
+            frame_left = np.concatenate((frame_left , frame[:, 18:30].reshape(1, 12)), axis=1 )  # middle, L1, L2, L3
+            frame_right = np.concatenate((frame_right , frame[:, 6:18].reshape(1, 12) ), axis=1 ) # R3, R2, R1, R0
 
             result_bottom = model_bottom.predict(frame_bottom, batch_size=1)
             result_left = model_left.predict(frame_left, batch_size=1)

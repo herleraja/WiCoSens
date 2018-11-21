@@ -5,7 +5,10 @@ import pickle
 import random
 import sys
 import traceback
+from collections import Counter
 
+import keras
+import numpy as np
 import serial
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -13,12 +16,21 @@ import colorSpaceUtil
 
 
 class Ui_MainWindow(object):
-    ser = bottom_file = left_file = right_file = None
+    ser = bottom_file = left_file = right_file = model_bottom = model_left = model_right = text_class_model = None
     container_dict = color_concept_dict = {}
     start_time = 100
     # maxSamplesPerKeyCount = 2
     # skip_container_numbers = [1, 6, 11, 16]
     skip_container_numbers = []
+
+    bottom_color_list = [0]
+    left_color_list = [0]
+    right_color_list = [0]
+
+    no_records = 100
+
+    color_space = 'XYZ'
+    config_save_load_dir_path = "./resources/Classifier/RAW/" + color_space.lower() + "/"
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -128,7 +140,7 @@ class Ui_MainWindow(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
         self.containerNumberLabelValueDisplay.setPalette(palette)
         font = QtGui.QFont()
-        font.setPointSize(25)
+        font.setPointSize(24)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
@@ -409,22 +421,46 @@ class Ui_MainWindow(object):
         self.mainTabObj.addTab(self.settingTab, "")
         self.classifierTab = QtWidgets.QWidget()
         self.classifierTab.setObjectName("classifierTab")
-        self.gridLayoutWidget = QtWidgets.QWidget(self.classifierTab)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(9, 9, 1321, 801))
-        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
-        self.classifierTabGridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
-        self.classifierTabGridLayout.setSizeConstraint(QtWidgets.QLayout.SetNoConstraint)
-        self.classifierTabGridLayout.setContentsMargins(0, 0, 0, 0)
-        self.classifierTabGridLayout.setObjectName("classifierTabGridLayout")
+        self.classifierOutputDisplyLCDNumber = QtWidgets.QLCDNumber(self.classifierTab)
+        self.classifierOutputDisplyLCDNumber.setGeometry(QtCore.QRect(430, 220, 121, 91))
+        font = QtGui.QFont()
+        font.setPointSize(48)
+        font.setBold(True)
+        font.setWeight(75)
+        self.classifierOutputDisplyLCDNumber.setFont(font)
+        self.classifierOutputDisplyLCDNumber.setStyleSheet("")
+        self.classifierOutputDisplyLCDNumber.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.classifierOutputDisplyLCDNumber.setLineWidth(1)
+        self.classifierOutputDisplyLCDNumber.setProperty("value", 0.0)
+        self.classifierOutputDisplyLCDNumber.setProperty("intValue", 0)
+        self.classifierOutputDisplyLCDNumber.setObjectName("classifierOutputDisplyLCDNumber")
+        self.graphicsView = QtWidgets.QGraphicsView(self.classifierTab)
+        self.graphicsView.setGeometry(QtCore.QRect(270, 30, 401, 351))
+        self.graphicsView.setStyleSheet("background-image: url(Icon/container.jpg);")
+        self.graphicsView.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.graphicsView.setObjectName("graphicsView")
+        self.startPredictBtn = QtWidgets.QPushButton(self.classifierTab)
+        self.startPredictBtn.setGeometry(QtCore.QRect(1040, 420, 121, 41))
+        self.startPredictBtn.setMouseTracking(False)
+        self.startPredictBtn.setObjectName("startPredictBtn")
+        self.stopPredictBtn = QtWidgets.QPushButton(self.classifierTab)
+        self.stopPredictBtn.setEnabled(False)
+        self.stopPredictBtn.setGeometry(QtCore.QRect(1170, 420, 121, 41))
+        self.stopPredictBtn.setMouseTracking(False)
+        self.stopPredictBtn.setObjectName("stopPredictBtn")
+        self.graphicsView.raise_()
+        self.classifierOutputDisplyLCDNumber.raise_()
+        self.startPredictBtn.raise_()
+        self.stopPredictBtn.raise_()
         self.mainTabObj.addTab(self.classifierTab, "")
-        self.gridLayout.addWidget(self.mainTabObj, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.mainTabObj, 1, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.mainTabObj.setCurrentIndex(0)
+        self.mainTabObj.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         self.timer = QtCore.QTimer()
@@ -444,7 +480,7 @@ class Ui_MainWindow(object):
             self.rightClassLabelLineEdit.repaint()
 
             # self.displayRemainingSamplesCount()
-            #self.leftClassLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
+            # self.leftClassLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
 
         self.addButtonOperations()
         self.addFiledsValidators()
@@ -525,6 +561,12 @@ class Ui_MainWindow(object):
         self.randomNumberUpperLimitLabel.setText(_translate("MainWindow", "Upper Limit"))
         self.randomNumberUpperLimitLineEdit.setText(_translate("MainWindow", "24"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.settingTab), _translate("MainWindow", "Settings"))
+        self.startPredictBtn.setToolTip(_translate("MainWindow", "click to capture the sensor data"))
+        self.startPredictBtn.setWhatsThis(_translate("MainWindow", "click to capture the sensor data"))
+        self.startPredictBtn.setText(_translate("MainWindow", "Start Predict"))
+        self.stopPredictBtn.setToolTip(_translate("MainWindow", "click to capture the sensor data"))
+        self.stopPredictBtn.setWhatsThis(_translate("MainWindow", "click to capture the sensor data"))
+        self.stopPredictBtn.setText(_translate("MainWindow", "Stop Predict"))
         self.mainTabObj.setTabText(self.mainTabObj.indexOf(self.classifierTab), _translate("MainWindow", "Classify"))
 
     def setUpSerialPort(self):
@@ -545,6 +587,8 @@ class Ui_MainWindow(object):
         self.randomNumberLowerLimitLineEdit.textChanged.connect(self.randomNumberUpperLowerLimitLineEditTextChangeEvent)
         self.samplesPerKeyCountLineEdit.textChanged.connect(self.randomNumberUpperLowerLimitLineEditTextChangeEvent)
         self.timer.timeout.connect(self.updateProgressBar)
+        self.startPredictBtn.clicked.connect(self.startPredictBtnPressedEvent)
+        self.stopPredictBtn.clicked.connect(self.stopPredictBtnPressedEvent)
         self.startCaptureBtn.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Space))
         self.stopCaptureBtn.setShortcut(QtGui.QKeySequence(QtCore.Qt.Key_Escape))
 
@@ -670,6 +714,115 @@ class Ui_MainWindow(object):
         color1, color2, color3 = colorSpaceCoverstionFunction(r, g, b, c)
         return ',' + str(color1) + ',' + str(color2) + ',' + str(color3)
 
+    def startPredictBtnPressedEvent(self):
+
+        self.startPredictBtn.setEnabled(False)
+        self.stopPredictBtn.setEnabled(True)
+        self.startPredictBtn.repaint()
+        self.stopPredictBtn.repaint()
+
+        self.setUpSerialPort()
+
+        self.model_bottom = keras.models.load_model(self.config_save_load_dir_path + 'model_bottom.h5')
+        self.model_left = keras.models.load_model(self.config_save_load_dir_path + 'model_left.h5')
+        self.model_right = keras.models.load_model(self.config_save_load_dir_path + 'model_right.h5')
+        self.text_class_model = keras.models.load_model(self.config_save_load_dir_path + 'text_class_model.h5')
+
+        QtCore.QTimer.singleShot(1, self.predictContainerNumber)
+
+    def stopPredictBtnPressedEvent(self):
+        self.startPredictBtn.setEnabled(True)
+        self.stopPredictBtn.setEnabled(False)
+        self.classifierOutputDisplyLCDNumber.display(0)
+        self.startPredictBtn.repaint()
+        self.stopPredictBtn.repaint()
+
+    def predictContainerNumber(self):
+        try:
+            if self.no_records != 0:
+
+                frame_raw = self.ser.readline().decode('utf-8').rstrip()
+
+                ## frame contains accel+ color data
+                dt = frame_raw.split(',')
+                if dt.__len__() == 52:
+
+                    colorSpaceConversionFunction = colorSpaceUtil.switcher.get(self.color_space)
+
+                    frame = np.asarray([])
+                    for i in np.arange(4, 52, 4):
+                        frame = np.append(frame,
+                                          colorSpaceConversionFunction(float(dt[i]), float(dt[i + 1]), float(dt[i + 2]),
+                                                                       float(dt[i + 3])))
+
+                    frame = frame.reshape(1, 36)
+
+                    frame_bottom = np.append(frame[:, 0:6], frame[:, 30:36]).reshape(1, 12)  # R4, R5 and L4, L5
+                    frame_left = frame[:, 18:30].reshape(1, 12)  # middle, L1, L2, L3
+                    frame_right = frame[:, 6:18].reshape(1, 12)  # R3, R2, R1, R0
+
+                    result_bottom = self.model_bottom.predict(frame_bottom, batch_size=1)
+                    result_left = self.model_left.predict(frame_left, batch_size=1)
+                    result_right = self.model_right.predict(frame_right, batch_size=1)
+
+                    result_bottom_predicted = result_bottom.argmax(axis=-1)[0]
+                    result_left_predicted = result_left.argmax(axis=-1)[0]
+                    result_right_predicted = result_right.argmax(axis=-1)[0]
+
+                    # confidence greater than 50% then only append the data
+                    if result_bottom_predicted != 0 and (result_bottom[0][result_bottom_predicted] * 100) > 50:
+                        self.bottom_color_list.append(result_bottom_predicted)
+
+                    if result_left_predicted != 0 and (result_left[0][result_left_predicted] * 100) > 50:
+                        self.left_color_list.append(result_left_predicted)
+
+                    if result_right_predicted != 0 and (result_right[0][result_right_predicted] * 100) > 50:
+                        self.right_color_list.append(result_right_predicted)
+
+                    self.no_records -= 1
+
+            else:
+                #  Majority voting
+                bottom_color_list_vote = Counter(self.bottom_color_list)
+                left_color_list_vote = Counter(self.left_color_list)
+                right_color_list_vote = Counter(self.right_color_list)
+
+                bottom_color = float(bottom_color_list_vote.most_common(1)[0][0])
+                left_color = float(left_color_list_vote.most_common(1)[0][0])
+                right_color = float(right_color_list_vote.most_common(1)[0][0])
+
+                print("\nBottom Vote: ", bottom_color_list_vote)
+                print("Left Vote: ", left_color_list_vote)
+                print("Right Vote: ", right_color_list_vote)
+
+                #  Text classification
+                test_data = np.asarray([bottom_color, left_color, right_color]).reshape(1, 3)
+                result_text_class = self.text_class_model.predict(test_data, batch_size=1)
+                boxNumber = result_text_class.argmax(axis=-1)
+                self.classifierOutputDisplyLCDNumber.display(str(boxNumber))
+
+                print("Box Number: ", boxNumber)
+
+                #  Break the while loop and we repeat the step again.
+                #  Reset the parameters
+                self.no_records = 100
+                self.bottom_color_list = [0]
+                self.left_color_list = [0]
+                self.right_color_list = [0]
+
+            if not self.startPredictBtn.isEnabled():
+                QtCore.QTimer.singleShot(1, self.predictContainerNumber)
+
+        except:
+
+            self.startPredictBtn.setEnabled(False)
+            self.stopPredictBtn.setEnabled(True)
+            self.startPredictBtn.repaint()
+            self.stopPredictBtn.repaint()
+
+            traceback.print_exc()
+            self.displayWarningPopUp(traceback.format_exc())
+
     def startCaptureBtnPressedEvent(self):
         try:
             if self.isValidFields():
@@ -683,8 +836,8 @@ class Ui_MainWindow(object):
                 self.openFileForWriting()  # Create/Open file for saving sensor data
 
                 if self.randomNumberCheckBox.isChecked():
-
-                    color_concept_values = self.color_concept_dict[self.containerNumberLabelValueDisplay.text()].split(',')
+                    color_concept_values = self.color_concept_dict[self.containerNumberLabelValueDisplay.text()].split(
+                        ',')
 
                     self.bottomClassLabelLineEdit.setText(color_concept_values[0])
                     self.leftClassLabelLineEdit.setText(color_concept_values[1])
@@ -693,7 +846,6 @@ class Ui_MainWindow(object):
                     self.bottomClassLabelLineEdit.repaint()
                     self.leftClassLabelLineEdit.repaint()
                     self.rightClassLabelLineEdit.repaint()
-
 
                 classLabel = int(self.containerNumberLabelValueDisplay.text())  # To add class label to dictionary
 
@@ -736,7 +888,7 @@ class Ui_MainWindow(object):
 
     def randomNumberCheckBoxPressedEvent(self):
         if self.randomNumberCheckBox.isChecked():
-            #self.leftClassLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
+            # self.leftClassLabelLineEdit.setText(self.containerNumberLabelValueDisplay.text())
             self.displayRandomContainerNumber()
             self.bottomClassLabelLineEdit.setEnabled(False)
             self.leftClassLabelLineEdit.setEnabled(False)
@@ -749,8 +901,6 @@ class Ui_MainWindow(object):
             self.rightClassLabelLineEdit.setEnabled(True)
             self.randomNumberLowerLimitLineEdit.setEnabled(False)
             self.randomNumberUpperLimitLineEdit.setEnabled(False)
-
-
 
     def randomNumberUpperLowerLimitLineEditTextChangeEvent(self):
         try:
