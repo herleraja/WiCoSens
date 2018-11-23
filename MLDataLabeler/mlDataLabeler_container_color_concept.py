@@ -12,6 +12,8 @@ import numpy as np
 import serial
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
 import colorSpaceUtil
 
 
