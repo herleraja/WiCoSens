@@ -3,7 +3,7 @@ import ml_utils
 import tensorflow as tf
 from keras.utils.vis_utils import plot_model
 
-source_dir_path = "./datarecording_discrete/color/"
+source_dir_path = "./datarecording_discrete/color_concept/rgb/"
 
 train_data, train_labels_raw, train_labels = ml_utils.parse_file(
     source_dir_path + 'text_train.csv', start_column=0, skip_header=1)
@@ -32,7 +32,7 @@ earlyStopping = keras.callbacks.EarlyStopping(monitor='loss', patience=10, verbo
 
 text_class_model.fit(train_data, train_labels, epochs=50, batch_size=5, callbacks=[earlyStopping])
 
-ml_utils.save_model(text_class_model, 'text_class_model.h5', source_dir_path)
+ml_utils.save_model(text_class_model, 'text_class_model.h5')
 
 test_predicted_res = text_class_model.predict(test_data, batch_size=1)
 

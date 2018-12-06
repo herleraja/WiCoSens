@@ -4,7 +4,7 @@ This module classifies the data that been received from the color sensors.
 
 Please follow these below instructions.
 
-* Step 1: Install required libraries in the resource folder. 
+* Step 1: Install required libraries in the resource folder to your virtual environment (virtualenv -p <python3> <env_name>). 
         
      *  For a system with out GPU capability
      

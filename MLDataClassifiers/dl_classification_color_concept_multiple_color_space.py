@@ -48,15 +48,15 @@ if __name__ == "__main__":
     # earlyStopping = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, verbose=1, mode='auto')
 
     model_bottom = dl_clf.build_model(5, 24)
-    history_bottom = model_bottom.fit(train_bottom_data, train_bottom_labels, epochs=10,
+    history_bottom = model_bottom.fit(train_bottom_data, train_bottom_labels, epochs=20,
                                       validation_data=(test_bottom_data, test_bottom_labels), batch_size=500, verbose=2)
 
     model_left = dl_clf.build_model(7, 24)
-    history_left = model_left.fit(train_left_data, train_left_labels, epochs=10,
+    history_left = model_left.fit(train_left_data, train_left_labels, epochs=20,
                                   validation_data=(test_left_data, test_left_labels), batch_size=500, verbose=2)
 
     model_right = dl_clf.build_model(8, 24)
-    history_right = model_right.fit(train_right_data, train_right_labels, epochs=10,
+    history_right = model_right.fit(train_right_data, train_right_labels, epochs=20,
                                     validation_data=(test_right_data, test_right_labels), batch_size=500, verbose=2)
 
     ml_utils.save_model(model_bottom, 'model_bottom.h5')
