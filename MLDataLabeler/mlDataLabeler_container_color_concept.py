@@ -513,7 +513,7 @@ class Ui_MainWindow(object):
         self.recordingFolderLocationLabel.setText(_translate("MainWindow", "Recording Folder Location"))
         self.serialPortSettingsLabel.setText(_translate("MainWindow", "Serial Port Settings"))
         self.recordingFolderLocationLineEdit.setText(
-            _translate("MainWindow", "datarecording_discrete/color_concept/rgb/"))
+            _translate("MainWindow", "datarecording_discrete/color_concept_downward/rgb/"))
         self.baudrateLabel.setText(_translate("MainWindow", "Baudrate"))
         self.baudrateComboBox.setCurrentText(_translate("MainWindow", "115200"))
         self.baudrateComboBox.setItemText(0, _translate("MainWindow", "115200"))
@@ -536,7 +536,7 @@ class Ui_MainWindow(object):
         self.sensorEnableDisableLabel.setText(_translate("MainWindow", "Enable / Disable Color Sensor"))
         self.enableTimerCheckBox.setText(_translate("MainWindow", "Enable Timer"))
         self.timerInSecondsLabel.setText(_translate("MainWindow", "Time(in seconds)"))
-        self.timerInSecondsLineEdit.setText(_translate("MainWindow", "40"))
+        self.timerInSecondsLineEdit.setText(_translate("MainWindow", "20"))
         self.colSensorButton1.setText(_translate("MainWindow", "R5"))
         self.colSensorButton2.setText(_translate("MainWindow", "R4"))
         self.colSensorButton3.setText(_translate("MainWindow", "R3"))
@@ -759,9 +759,13 @@ class Ui_MainWindow(object):
 
                     frame = frame.reshape(1, 36)
 
-                    frame_bottom = np.append(frame[:, 0:6], frame[:, 30:36]).reshape(1, 12)  # R4, R5 and L4, L5
-                    frame_left = frame[:, 18:30].reshape(1, 12)  # middle, L1, L2, L3
-                    frame_right = frame[:, 6:18].reshape(1, 12)  # R3, R2, R1, R0
+                    # frame_bottom = np.append(frame[:, 0:6], frame[:, 30:36]).reshape(1, 12)  # R4, R5 and L4, L5
+                    # frame_left = frame[:, 18:30].reshape(1, 12)  # middle, L1, L2, L3
+                    # frame_right = frame[:, 6:18].reshape(1, 12)  # R3, R2, R1, R0
+
+                    frame_left = frame[:, 0:12].reshape(1, 12)  # R4, R5, R3, R2
+                    frame_bottom = frame[:, 12:24].reshape(1, 12)  # R1, R0, middle, L1
+                    frame_right = frame[:, 24:36].reshape(1, 12)  # L2, L3,L4, L5
 
                     result_bottom = self.model_bottom.predict(frame_bottom, batch_size=1)
                     result_left = self.model_left.predict(frame_left, batch_size=1)
