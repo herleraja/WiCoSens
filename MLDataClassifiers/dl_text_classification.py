@@ -3,7 +3,7 @@ import ml_utils
 import tensorflow as tf
 from keras.utils.vis_utils import plot_model
 
-source_dir_path = "./datarecording_discrete/color_concept/rgb/"
+source_dir_path = "./datarecording_discrete/text/"
 
 train_data, train_labels_raw, train_labels = ml_utils.parse_file(
     source_dir_path + 'text_train.csv', start_column=0, skip_header=1)
