@@ -31,7 +31,7 @@ class Ui_MainWindow(object):
 
     no_records = 100
 
-    color_space = 'XYZ'
+    color_space = 'HSV'
     config_save_load_dir_path = "./resources/Classifier/RAW/" + color_space.lower() + "/"
 
     def setupUi(self, MainWindow):
@@ -494,7 +494,7 @@ class Ui_MainWindow(object):
         self.rightClassLabelLabel.setText(_translate("MainWindow", "Right Class Label"))
         self.fileNameLabel.setText(_translate("MainWindow", "FileName"))
         self.captureLabel.setText(_translate("MainWindow", "Capture Sensor Data"))
-        self.fileNameLineEdit.setText(_translate("MainWindow", "container_train"))
+        self.fileNameLineEdit.setText(_translate("MainWindow", "train"))
         self.resetBtn.setText(_translate("MainWindow", "Reset"))
         self.closeBtn.setText(_translate("MainWindow", "Close"))
         self.containerNumberLabel.setText(_translate("MainWindow", "Container Number"))
@@ -513,7 +513,7 @@ class Ui_MainWindow(object):
         self.recordingFolderLocationLabel.setText(_translate("MainWindow", "Recording Folder Location"))
         self.serialPortSettingsLabel.setText(_translate("MainWindow", "Serial Port Settings"))
         self.recordingFolderLocationLineEdit.setText(
-            _translate("MainWindow", "datarecording_discrete/color_concept_downward/rgb/"))
+            _translate("MainWindow", "datarecording_discrete/color_concept_new/rgb/"))
         self.baudrateLabel.setText(_translate("MainWindow", "Baudrate"))
         self.baudrateComboBox.setCurrentText(_translate("MainWindow", "115200"))
         self.baudrateComboBox.setItemText(0, _translate("MainWindow", "115200"))
@@ -530,7 +530,7 @@ class Ui_MainWindow(object):
         self.baudrateComboBox.setItemText(11, _translate("MainWindow", "600"))
         self.baudrateComboBox.setItemText(12, _translate("MainWindow", "300"))
         self.portLabel.setText(_translate("MainWindow", "Port"))
-        self.portlineEdit.setText(_translate("MainWindow", "COM3"))
+        self.portlineEdit.setText(_translate("MainWindow", "COM6"))
         self.recordingTimerLabel.setText(_translate("MainWindow", "Recording Timer"))
         self.colorSpaceLabel.setText(_translate("MainWindow", "Color Space"))
         self.sensorEnableDisableLabel.setText(_translate("MainWindow", "Enable / Disable Color Sensor"))
@@ -557,7 +557,7 @@ class Ui_MainWindow(object):
         self.randomNumberLabel.setText(_translate("MainWindow", "Random number setting"))
         self.ranodmNumberEnableLabel.setText(_translate("MainWindow", "Enable Randomness"))
         self.label.setText(_translate("MainWindow", "#Samples / Key"))
-        self.samplesPerKeyCountLineEdit.setText(_translate("MainWindow", "2"))
+        self.samplesPerKeyCountLineEdit.setText(_translate("MainWindow", "1"))
         self.randomNumberLowerLimitLabel.setText(_translate("MainWindow", "Lower Limit"))
         self.randomNumberLowerLimitLineEdit.setText(_translate("MainWindow", "0"))
         self.randomNumberUpperLimitLabel.setText(_translate("MainWindow", "Upper Limit"))
@@ -628,52 +628,58 @@ class Ui_MainWindow(object):
                 left_color = new_line_accelerometer
                 right_color = new_line_accelerometer
 
-                bottom_color += self.colorSpaceCoverstion(float(line_array[4]), float(line_array[5]),
-                                                          float(line_array[6]),
-                                                          float(line_array[7]))  # Right side(R5) sensor
+                r5sensor = [float(line_array[4]), float(line_array[5]), float(line_array[6]),
+                                                          float(line_array[7])] # Right side(R5) sensor
 
-                bottom_color += self.colorSpaceCoverstion(float(line_array[8]), float(line_array[9]),
+                r4sensor =  [float(line_array[8]), float(line_array[9]),
                                                           float(line_array[10]),
-                                                          float(line_array[11]))  # Right side(R4) sensor
-
-                right_color += self.colorSpaceCoverstion(float(line_array[12]), float(line_array[13]),
+                                                          float(line_array[11])]  # Right side(R4) sensor
+                
+                r3sensor = [float(line_array[12]), float(line_array[13]),
                                                          float(line_array[14]),
-                                                         float(line_array[15]))  # Right side(R3) sensor
-
-                right_color += self.colorSpaceCoverstion(float(line_array[16]), float(line_array[17]),
+                                                         float(line_array[15])]  # Right side(R3) sensor
+                r2sensor = [float(line_array[16]), float(line_array[17]),
                                                          float(line_array[18]),
-                                                         float(line_array[19]))  # Right side(R2) sensor
-
-                right_color += self.colorSpaceCoverstion(float(line_array[20]), float(line_array[21]),
+                                                         float(line_array[19])]  # Right side(R2) sensor
+                r1sensor = [float(line_array[20]), float(line_array[21]),
                                                          float(line_array[22]),
-                                                         float(line_array[23]))  # Right side(R1) sensor
-
-                right_color += self.colorSpaceCoverstion(float(line_array[24]), float(line_array[25]),
+                                                         float(line_array[23])]  # Right side(R1) sensor 
+                r0sensor = [float(line_array[24]), float(line_array[25]),
                                                          float(line_array[26]),
-                                                         float(line_array[27]))  # Right side(R0) sensor
-
-                left_color += self.colorSpaceCoverstion(float(line_array[28]), float(line_array[29]),
-                                                        float(line_array[30]), float(line_array[31]))  # middle sensor
-
-                left_color += self.colorSpaceCoverstion(float(line_array[32]), float(line_array[33]),
+                                                         float(line_array[27])]  # Right side(R0) sensor                                                        
+                msensor = [float(line_array[28]), float(line_array[29]),
+                                                        float(line_array[30]), float(line_array[31])]  # middle sensor
+                l1sensor = [float(line_array[32]), float(line_array[33]),
                                                         float(line_array[34]),
-                                                        float(line_array[35]))  # Left side(L1) sensor
-
-                left_color += self.colorSpaceCoverstion(float(line_array[36]), float(line_array[37]),
+                                                        float(line_array[35])]  # Left side(L1) sensor
+                l2sensor = [float(line_array[36]), float(line_array[37]),
                                                         float(line_array[38]),
-                                                        float(line_array[39]))  # Left side(L2) sensor
-
-                left_color += self.colorSpaceCoverstion(float(line_array[40]), float(line_array[41]),
+                                                        float(line_array[39])]  # Left side(L2) sensor
+                l3sensor = [float(line_array[40]), float(line_array[41]),
                                                         float(line_array[42]),
-                                                        float(line_array[43]))  # Left side(L3) sensor
-
-                bottom_color += self.colorSpaceCoverstion(float(line_array[44]), float(line_array[45]),
+                                                        float(line_array[43])]  # Left side(L3) sensor
+                l4sensor = [float(line_array[44]), float(line_array[45]),
                                                           float(line_array[46]),
-                                                          float(line_array[47]))  # Left side(L4) sensor
-
-                bottom_color += self.colorSpaceCoverstion(float(line_array[48]), float(line_array[49]),
+                                                          float(line_array[47])]  # Left side(L4) sensor                                    
+                l5sensor = [float(line_array[48]), float(line_array[49]),
                                                           float(line_array[50]),
-                                                          float(line_array[51]))  # Left side(L5) sensor
+                                                          float(line_array[51])]  # Left side(L5) sensor
+
+                bottom_color += self.colorSpaceCoverstion(r5sensor)  
+                bottom_color += self.colorSpaceCoverstion(r4sensor)
+
+                right_color += self.colorSpaceCoverstion(r3sensor)
+                right_color += self.colorSpaceCoverstion(r2sensor)
+                right_color += self.colorSpaceCoverstion(r1sensor)
+                right_color += self.colorSpaceCoverstion(r1sensor)
+
+                left_color += self.colorSpaceCoverstion(msensor)
+                left_color += self.colorSpaceCoverstion(l1sensor)
+                left_color += self.colorSpaceCoverstion(l2sensor)
+                left_color += self.colorSpaceCoverstion(l3sensor)
+
+                bottom_color += self.colorSpaceCoverstion(l4sensor)
+                bottom_color += self.colorSpaceCoverstion(l5sensor)
 
                 bottom_color = bottom_color + ',' + bottom_label + '\n'
                 left_color = left_color + ',' + left_label + '\n'
@@ -700,7 +706,13 @@ class Ui_MainWindow(object):
             traceback.print_exc()
             self.displayWarningPopUp(traceback.format_exc())
 
-    def colorSpaceCoverstion(self, r, g, b, c):
+    def colorSpaceCoverstion(self, rgbc):
+
+        r=rgbc[0]
+        g= rgbc[1]
+        b=rgbc[2]
+        c=rgbc[3]
+
 
         if self.colorSpaceHSVButton.isChecked():
             colorSpaceCoverstionFunction = colorSpaceUtil.switcher.get('HSV')
@@ -759,13 +771,13 @@ class Ui_MainWindow(object):
 
                     frame = frame.reshape(1, 36)
 
-                    # frame_bottom = np.append(frame[:, 0:6], frame[:, 30:36]).reshape(1, 12)  # R4, R5 and L4, L5
-                    # frame_left = frame[:, 18:30].reshape(1, 12)  # middle, L1, L2, L3
-                    # frame_right = frame[:, 6:18].reshape(1, 12)  # R3, R2, R1, R0
+                    frame_bottom = np.append(frame[:, 0:6], frame[:, 30:36]).reshape(1, 12)  # R4, R5 and L4, L5
+                    frame_left = frame[:, 18:30].reshape(1, 12)  # middle, L1, L2, L3
+                    frame_right = frame[:, 6:18].reshape(1, 12)  # R3, R2, R1, R0
 
-                    frame_left = frame[:, 0:12].reshape(1, 12)  # R4, R5, R3, R2
-                    frame_bottom = frame[:, 12:24].reshape(1, 12)  # R1, R0, middle, L1
-                    frame_right = frame[:, 24:36].reshape(1, 12)  # L2, L3,L4, L5
+                    # frame_left = frame[:, 0:12].reshape(1, 12)  # R4, R5, R3, R2
+                    # frame_bottom = frame[:, 12:24].reshape(1, 12)  # R1, R0, middle, L1
+                    # frame_right = frame[:, 24:36].reshape(1, 12)  # L2, L3,L4, L5
 
                     result_bottom = self.model_bottom.predict(frame_bottom, batch_size=1)
                     result_left = self.model_left.predict(frame_left, batch_size=1)

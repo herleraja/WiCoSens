@@ -11,7 +11,7 @@ from sklearn.metrics import precision_score, recall_score, f1_score, confusion_m
 from sklearn.preprocessing import StandardScaler
 
 # Configuration related inputs
-color_space = 'RGB'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, ICA
 start_column = 4  # starting column is 4 then we get only color sensor data data, 1 - which include accelerometer
 loadConfigurationsFromFiles = False  # True, False
@@ -97,7 +97,7 @@ def display_result(actual, predicted, title,
                    classes=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
                             24]):
     mtx = confusion_matrix(actual, predicted)
-    mtx = mtx[1:, 1:]  # remove class 0 - do nothing
+    
     # print('Confusion matrix\n{}\n'.format(mtx))
     precision = precision_score(actual, predicted, average="weighted")
     recall = recall_score(actual, predicted, average="weighted")
@@ -111,7 +111,7 @@ def display_result(actual, predicted, title,
     print('Accuracy : {}'.format(accuracy))
     print('Classification Report :\n{}'.format(classification_report(actual, predicted, digits=5)))
 
-    ml_plots_utils.plot_confusion_matrix(mtx, normalize=False, title=title)
+    ml_plots_utils.plot_confusion_matrix(mtx, normalize=False, title=title, removeNullClass=False)
 
     return precision, recall, f1score, accuracy
 

@@ -11,12 +11,17 @@ from numpy import genfromtxt
 
 def plot_confusion_matrix(con_matx,
                           normalize=False,
-                          title='Confusion matrix',
+                          title='Confusion matrix', removeNullClass=True,
                           cmap=plt.cm.OrRd):  # Blues,OrRd, YlOrRd
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
     """
+    if removeNullClass:
+        con_matx = con_matx[1:, 1:]  # remove class 0 - do nothing
+        classes = np.arange(1, len(con_matx[0]) + 1)
+    else:
+        classes = np.arange(0, len(con_matx[0]) + 1)
 
     #plt.figure(figsize=(12, 12))
 
@@ -29,7 +34,7 @@ def plot_confusion_matrix(con_matx,
 
     plt.title(updated_title)
     plt.colorbar()
-    classes = np.arange(1, len(con_matx[0]) + 1)
+    
     tick_marks = np.arange(len(con_matx[0]))
     plt.xticks(tick_marks, classes, rotation=45)
     plt.yticks(tick_marks, classes)

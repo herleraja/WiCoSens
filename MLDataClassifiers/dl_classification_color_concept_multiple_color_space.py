@@ -7,6 +7,8 @@ import numpy as np
 source_dir_path_hsv = "./datarecording_discrete/color_concept/hsv/"
 source_dir_path_xyz = "./datarecording_discrete/color_concept/xyz/"
 
+config_save_load_dir_path = "./configs/color_concept/multiple_color_space/"
+
 
 if __name__ == "__main__":
     train_bottom_data_hsv, train_bottom_labels_raw, train_bottom_labels = ml_utils.parse_file(
@@ -59,9 +61,9 @@ if __name__ == "__main__":
     history_right = model_right.fit(train_right_data, train_right_labels, epochs=10,
                                     validation_data=(test_right_data, test_right_labels), batch_size=500, verbose=2)
 
-    ml_utils.save_model(model_bottom, 'model_bottom.h5')
-    ml_utils.save_model(model_left, 'model_left.h5')
-    ml_utils.save_model(model_right, 'model_right.h5')
+    ml_utils.save_model(model_bottom, 'model_bottom.h5', config_save_load_dir_path)
+    ml_utils.save_model(model_left, 'model_left.h5',config_save_load_dir_path)
+    ml_utils.save_model(model_right, 'model_right.h5',config_save_load_dir_path)
 
 test_predicted_bottom_res = model_bottom.predict(test_bottom_data, batch_size=1)
 print('\n****************Classification result for Bottom************************')
