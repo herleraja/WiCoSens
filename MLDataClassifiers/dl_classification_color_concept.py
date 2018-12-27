@@ -5,6 +5,7 @@ import dl_classification as dl_clf
 source_dir_path = ml_utils.get_source_dir_path()
 
 if __name__ == "__main__":
+    '''
     train_bottom_data, train_bottom_labels_raw, train_bottom_labels = ml_utils.parse_file(
         source_dir_path + 'train_bottom.csv')
     train_left_data, train_left_labels_raw, train_left_labels = ml_utils.parse_file(
@@ -18,18 +19,34 @@ if __name__ == "__main__":
         source_dir_path + 'test_left.csv')
     test_right_data, test_right_labels_raw, test_right_labels = ml_utils.parse_file(
         source_dir_path + 'test_right.csv')
+    '''
+
+    train_bottom_data, train_bottom_labels_raw, train_bottom_labels = ml_utils.parse_file(
+        source_dir_path + 'train_bottom.csv', start_column=4, end_column=10)
+    train_left_data, train_left_labels_raw, train_left_labels = ml_utils.parse_file(
+        source_dir_path + 'train_left.csv', start_column=7, end_column=13)
+    train_right_data, train_right_labels_raw, train_right_labels = ml_utils.parse_file(
+        source_dir_path + 'train_right.csv', start_column=7, end_column=13)
+
+    test_bottom_data, test_bottom_labels_raw, test_bottom_labels = ml_utils.parse_file(
+        source_dir_path + 'test_bottom.csv', start_column=4, end_column=10)
+    test_left_data, test_left_labels_raw, test_left_labels = ml_utils.parse_file(
+        source_dir_path + 'test_left.csv', start_column=7, end_column=13)
+    test_right_data, test_right_labels_raw, test_right_labels = ml_utils.parse_file(
+        source_dir_path + 'test_right.csv', start_column=7, end_column=13)
+
 
     # earlyStopping = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, verbose=1, mode='auto')
 
-    model_bottom = dl_clf.build_model(5, 12)
+    model_bottom = dl_clf.build_model(5, 6)
     history_bottom = model_bottom.fit(train_bottom_data, train_bottom_labels, epochs=10,
                                       validation_data=(test_bottom_data, test_bottom_labels), batch_size=500, verbose=2)
 
-    model_left = dl_clf.build_model(7, 12)
+    model_left = dl_clf.build_model(7, 6)
     history_left = model_left.fit(train_left_data, train_left_labels, epochs=10,
                                   validation_data=(test_left_data, test_left_labels), batch_size=500, verbose=2)
 
-    model_right = dl_clf.build_model(8, 12)
+    model_right = dl_clf.build_model(8, 6)
     history_right = model_right.fit(train_right_data, train_right_labels, epochs=10,
                                     validation_data=(test_right_data, test_right_labels), batch_size=500, verbose=2)
 

@@ -15,8 +15,8 @@ color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, ICA
 start_column = 4  # starting column is 4 then we get only color sensor data data, 1 - which include accelerometer
 loadConfigurationsFromFiles = False  # True, False
-source_dir_path = "./datarecording_discrete/color_concept/" + color_space.lower() + "/"
-config_save_load_dir_path = "./configs/color_concept/" + feature_type + "/" + color_space.lower() + "/"
+source_dir_path = "./datarecording_discrete/color_concept_latest/" + color_space.lower() + "/"
+config_save_load_dir_path = "./configs/color_concept_latest/" + feature_type + "/" + color_space.lower() + "/"
 
 
 
@@ -28,12 +28,15 @@ lda = LinearDiscriminantAnalysis(n_components=10)
 ica = decomposition.FastICA(n_components=10)
 
 
-def parse_file(csv_path, start_column=4, skip_header=0):
+def parse_file(csv_path, start_column=4, end_column=-1, skip_header=0):
     dt = genfromtxt(csv_path, skip_header=skip_header, delimiter=',')
     labels_raw = dt[:, -1]
 
     # Ignore accelerometer data if start_column = 4.
-    data = dt[:, range(start_column, len(dt[0]) - 1)]
+    if end_column == -1:
+        end_column = len(dt[0]) - 1
+
+    data = dt[:, range(start_column, end_column)]
 
     labels_one_hot = keras.utils.to_categorical(labels_raw)
 
