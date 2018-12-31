@@ -3,6 +3,8 @@ import ml_utils
 import tensorflow as tf
 from keras.utils.vis_utils import plot_model
 
+
+
 source_dir_path = "./datarecording_discrete/text/"
 
 train_data, train_labels_raw, train_labels = ml_utils.parse_file(
@@ -21,8 +23,9 @@ def build_model(number_class=169):
     model.add(tf.keras.layers.LSTM(100))
     model.add(tf.keras.layers.Dense(number_class, activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    #model.summary()
-    #plot_model(model, show_shapes=True, to_file=source_dir_path + 'text_class_model.png')
+    # model.summary()
+    plot_model(model, show_shapes=True, to_file=source_dir_path + 'text_class_model.png')
+
     return model
 
 

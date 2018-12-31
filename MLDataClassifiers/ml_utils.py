@@ -11,14 +11,12 @@ from sklearn.metrics import precision_score, recall_score, f1_score, confusion_m
 from sklearn.preprocessing import StandardScaler
 
 # Configuration related inputs
-color_space = 'HSV'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+color_space = 'RGB'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, ICA
 start_column = 4  # starting column is 4 then we get only color sensor data data, 1 - which include accelerometer
 loadConfigurationsFromFiles = False  # True, False
 source_dir_path = "./datarecording_discrete/color_concept_latest/" + color_space.lower() + "/"
 config_save_load_dir_path = "./configs/color_concept_latest/" + feature_type + "/" + color_space.lower() + "/"
-
-
 
 scalar_rack = StandardScaler()
 scalar_container = StandardScaler()
@@ -100,7 +98,7 @@ def display_result(actual, predicted, title,
                    classes=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
                             24]):
     mtx = confusion_matrix(actual, predicted)
-    
+
     # print('Confusion matrix\n{}\n'.format(mtx))
     precision = precision_score(actual, predicted, average="weighted")
     recall = recall_score(actual, predicted, average="weighted")
@@ -112,6 +110,7 @@ def display_result(actual, predicted, title,
     print('Recall : ', recall)
     print('F1 Score : ', f1score)
     print('Accuracy : {}'.format(accuracy))
+    print('{:.3f}\t{:.3f} \t{:.3f} \t{:.3f}'.format(precision * 100, recall * 100, f1score * 100, accuracy * 100))
     print('Classification Report :\n{}'.format(classification_report(actual, predicted, digits=5)))
 
     ml_plots_utils.plot_confusion_matrix(mtx, normalize=False, title=title, removeNullClass=False)

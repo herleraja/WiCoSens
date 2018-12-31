@@ -169,8 +169,8 @@ if __name__ == "__main__":
         # To test the file conversion method.
 
         color_Space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
-        source_dir_path = "./MLDataClassifiers/datarecording_discrete/color_concept/rgb/"
-        destination_dir_path = "./MLDataClassifiers/datarecording_discrete/color_concept/" + color_Space.lower() + "/"
+        source_dir_path = "./MLDataLabeler/datarecording_discrete/color_concept_latest/rgb/"
+        destination_dir_path = "./MLDataClassifiers/datarecording_discrete/color_concept_latest/" + color_Space.lower() + "/"
         os.makedirs(os.path.dirname(destination_dir_path), exist_ok=True)
         '''
         fileColorSpaceConversionFunction(source_dir_path + 'rack_test_2I_4I.csv',

@@ -45,8 +45,6 @@ classifiers = [
     LogisticRegression(random_state=0, n_jobs=-1)
 ]
 
-
-
 '''
 names = ["Nearest Neighbors", "Linear SVM", 'LinearSVC']
 
@@ -121,4 +119,4 @@ ml_plots_utils.draw_bar_chart(f1scores, 'F1 Score', 'Classification Algorithms',
 ml_plots_utils.draw_bar_chart(accuracy_scores, 'Accuracy', 'Classification Algorithms', 'Accuracy %')
 ml_plots_utils.draw_bar_chart(training_time, 'Training time', 'Classification Algorithms', 'Training time (seconds)')
 ml_plots_utils.draw_bar_chart(prediction_time, 'Prediction time', 'Classification Algorithms',
-                             'Prediction time (seconds)')
+                              'Prediction time (seconds)')

@@ -4,9 +4,10 @@ import keras
 import ml_plots_utils
 import ml_utils
 import tensorflow as tf
+from keras.utils.vis_utils import plot_model
 
 
-def build_model(number_class, input_shape=36):
+def build_model(number_class, input_shape=36, plot_model_arch=False):
     model = tf.keras.Sequential()
     # Must define the input shape in the first layer of the neural network
     # model.add(tf.keras.layers.Dense(1024, input_shape=(36,), activation=tf.nn.relu,kernel_regularizer=keras.regularizers.l2(0.001)))
@@ -18,7 +19,7 @@ def build_model(number_class, input_shape=36):
     # model.add(tf.keras.layers.Flatten())
     # model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(256, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
-    model.add(tf.keras.layers.Dropout(0.3))
+    #model.add(tf.keras.layers.Dropout(0.3))
     model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
     # model.add(tf.keras.layers.Dropout(0.3))
     model.add(tf.keras.layers.Dense(number_class, activation='softmax'))
@@ -27,6 +28,10 @@ def build_model(number_class, input_shape=36):
     model.compile(loss='categorical_crossentropy',
                   optimizer='Adamax',  # rmsprop, adam, Adamax
                   metrics=['accuracy'])
+
+    if plot_model_arch:
+        plot_model(model, show_shapes=True, to_file=ml_utils.get_dir_path() + 'color_classifier_model.png')
+
     return model
 
 

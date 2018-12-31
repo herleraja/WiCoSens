@@ -1,8 +1,8 @@
 import itertools
 import os
 
-import ml_utils
 import matplotlib.pyplot as plt
+import ml_utils
 import numpy as np
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
@@ -23,7 +23,7 @@ def plot_confusion_matrix(con_matx,
     else:
         classes = np.arange(0, len(con_matx[0]) + 1)
 
-    #plt.figure(figsize=(12, 12))
+    # plt.figure(figsize=(12, 12))
 
     plt.imshow(con_matx, interpolation='nearest', cmap=cmap)
 
@@ -34,7 +34,7 @@ def plot_confusion_matrix(con_matx,
 
     plt.title(updated_title)
     plt.colorbar()
-    
+
     tick_marks = np.arange(len(con_matx[0]))
     plt.xticks(tick_marks, classes, rotation=45)
     plt.yticks(tick_marks, classes)
@@ -124,7 +124,7 @@ def draw_bar_chart(dictionary, title, x_label, y_label):
     plt.tick_params(top=False, bottom=False, left=False, right=False, labelleft=True, labelbottom=True)
     plt.xticks(range(len(dictionary)), list(dictionary.keys()), rotation=90)
     plt.tight_layout()
-    #plt.subplots_adjust(left=0.1, right=0.95, top=0.9, bottom=0.25)
+    # plt.subplots_adjust(left=0.1, right=0.95, top=0.9, bottom=0.25)
     auto_label(bar_chart)
     plt.savefig(ml_utils.get_dir_path() + title + '.png')
     plt.clf()
