@@ -344,7 +344,7 @@ class Ui_MainWindow(object):
         self.colorSpaceButtonsHorizontalLayout = QtWidgets.QHBoxLayout()
         self.colorSpaceButtonsHorizontalLayout.setObjectName("colorSpaceButtonsHorizontalLayout")
         self.colorSpaceXYZButton = QtWidgets.QPushButton(self.gridLayoutWidget_2)
-        #self.colorSpaceXYZButton.setEnabled(False)
+        # self.colorSpaceXYZButton.setEnabled(False)
         self.colorSpaceXYZButton.setCheckable(True)
         self.colorSpaceXYZButton.setAutoExclusive(True)
         self.colorSpaceXYZButton.setObjectName("colorSpaceXYZButton")
@@ -368,7 +368,7 @@ class Ui_MainWindow(object):
         self.colorSpaceRGBButton.setObjectName("colorSpaceRGBButton")
         self.colorSpaceButtonsHorizontalLayout.addWidget(self.colorSpaceRGBButton)
         self.colorSpaceHSVButton = QtWidgets.QPushButton(self.gridLayoutWidget_2)
-        #self.colorSpaceHSVButton.setEnabled(False)
+        # self.colorSpaceHSVButton.setEnabled(False)
         self.colorSpaceHSVButton.setCheckable(True)
         self.colorSpaceHSVButton.setChecked(False)
         self.colorSpaceHSVButton.setAutoExclusive(True)
@@ -611,12 +611,11 @@ class Ui_MainWindow(object):
         self.timerInSecondsLineEdit.setValidator(intValidator)
 
     def convertSensorData(self, input, appendAccelerometerData=True):
-        bottom_color=""
-        left_color=""
-        right_color =""
+        bottom_color = ""
+        left_color = ""
+        right_color = ""
         line_array = input.split(',')
-        
-        
+
         if appendAccelerometerData:
             new_line_accelerometer = line_array[0] + ',' + line_array[1] + ',' + line_array[2] + ',' + line_array[3]
             bottom_color = new_line_accelerometer
@@ -624,40 +623,41 @@ class Ui_MainWindow(object):
             right_color = new_line_accelerometer
 
         r5sensor = [float(line_array[4]), float(line_array[5]), float(line_array[6]),
-                                                  float(line_array[7])] # Right side(R5) sensor
-        r4sensor =  [float(line_array[8]), float(line_array[9]),
-                                                  float(line_array[10]),
-                                                  float(line_array[11])]  # Right side(R4) sensor
-        
+                    float(line_array[7])]  # Right side(R5) sensor
+        r4sensor = [float(line_array[8]), float(line_array[9]),
+                    float(line_array[10]),
+                    float(line_array[11])]  # Right side(R4) sensor
+
         r3sensor = [float(line_array[12]), float(line_array[13]),
-                                                 float(line_array[14]),
-                                                 float(line_array[15])]  # Right side(R3) sensor
+                    float(line_array[14]),
+                    float(line_array[15])]  # Right side(R3) sensor
         r2sensor = [float(line_array[16]), float(line_array[17]),
-                                                 float(line_array[18]),
-                                                 float(line_array[19])]  # Right side(R2) sensor
+                    float(line_array[18]),
+                    float(line_array[19])]  # Right side(R2) sensor
         r1sensor = [float(line_array[20]), float(line_array[21]),
-                                                 float(line_array[22]),
-                                                 float(line_array[23])]  # Right side(R1) sensor 
+                    float(line_array[22]),
+                    float(line_array[23])]  # Right side(R1) sensor
         r0sensor = [float(line_array[24]), float(line_array[25]),
-                                                 float(line_array[26]),
-                                                 float(line_array[27])]  # Right side(R0) sensor                                                        
+                    float(line_array[26]),
+                    float(line_array[
+                              27])]  # Right side(R0) sensor
         msensor = [float(line_array[28]), float(line_array[29]),
-                                                float(line_array[30]), float(line_array[31])]  # middle sensor
+                   float(line_array[30]), float(line_array[31])]  # middle sensor
         l1sensor = [float(line_array[32]), float(line_array[33]),
-                                                float(line_array[34]),
-                                                float(line_array[35])]  # Left side(L1) sensor
+                    float(line_array[34]),
+                    float(line_array[35])]  # Left side(L1) sensor
         l2sensor = [float(line_array[36]), float(line_array[37]),
-                                                float(line_array[38]),
-                                                float(line_array[39])]  # Left side(L2) sensor
+                    float(line_array[38]),
+                    float(line_array[39])]  # Left side(L2) sensor
         l3sensor = [float(line_array[40]), float(line_array[41]),
-                                                float(line_array[42]),
-                                                float(line_array[43])]  # Left side(L3) sensor
+                    float(line_array[42]),
+                    float(line_array[43])]  # Left side(L3) sensor
         l4sensor = [float(line_array[44]), float(line_array[45]),
-                                                  float(line_array[46]),
-                                                  float(line_array[47])]  # Left side(L4) sensor                                    
+                    float(line_array[46]),
+                    float(line_array[47])]  # Left side(L4) sensor
         l5sensor = [float(line_array[48]), float(line_array[49]),
-                                                  float(line_array[50]),
-                                                  float(line_array[51])]  # Left side(L5) sensor
+                    float(line_array[50]),
+                    float(line_array[51])]  # Left side(L5) sensor
         '''
         bottom_color += self.colorSpaceCoverstion(r5sensor)  
         bottom_color += self.colorSpaceCoverstion(r4sensor)
@@ -672,21 +672,21 @@ class Ui_MainWindow(object):
         bottom_color += self.colorSpaceCoverstion(l4sensor)
         bottom_color += self.colorSpaceCoverstion(l5sensor)
         '''
-        bottom_color += self.colorSpaceCoverstion(r5sensor)  
+        bottom_color += self.colorSpaceCoverstion(r5sensor)
         bottom_color += self.colorSpaceCoverstion(r4sensor)
         bottom_color += self.colorSpaceCoverstion(r3sensor)
         bottom_color += self.colorSpaceCoverstion(l5sensor)
-        
+
         right_color += self.colorSpaceCoverstion(r1sensor)
         right_color += self.colorSpaceCoverstion(r2sensor)
         right_color += self.colorSpaceCoverstion(r3sensor)
         right_color += self.colorSpaceCoverstion(r4sensor)
-        #right_color += self.colorSpaceCoverstion(r5sensor)
+        # right_color += self.colorSpaceCoverstion(r5sensor)
         left_color += self.colorSpaceCoverstion(l5sensor)
         left_color += self.colorSpaceCoverstion(l4sensor)
         left_color += self.colorSpaceCoverstion(l3sensor)
         left_color += self.colorSpaceCoverstion(l2sensor)
-        return bottom_color , left_color , right_color
+        return bottom_color, left_color, right_color
 
     def captureSensorData(self):
         try:
@@ -696,10 +696,10 @@ class Ui_MainWindow(object):
             right_label = self.rightClassLabelLineEdit.text()
 
             new_line = self.ser.readline().decode('utf-8').rstrip()
-            
+
             if new_line.__len__() == 52:
-                bottom_color , left_color , right_color = self.convertSensorData(new_line)
-                            
+                bottom_color, left_color, right_color = self.convertSensorData(new_line)
+
                 bottom_color = bottom_color + ',' + bottom_label + '\n'
                 left_color = left_color + ',' + left_label + '\n'
                 right_color = right_color + ',' + right_label + '\n'
@@ -727,11 +727,10 @@ class Ui_MainWindow(object):
 
     def colorSpaceCoverstion(self, rgbc):
 
-        r=rgbc[0]
-        g= rgbc[1]
-        b=rgbc[2]
-        c=rgbc[3]
-
+        r = rgbc[0]
+        g = rgbc[1]
+        b = rgbc[2]
+        c = rgbc[3]
 
         if self.colorSpaceHSVButton.isChecked():
             colorSpaceCoverstionFunction = colorSpaceUtil.switcher.get('HSV')
@@ -777,7 +776,7 @@ class Ui_MainWindow(object):
                 frame_raw = self.ser.readline().decode('utf-8').rstrip()
 
                 ## frame contains accel+ color data
-                dt = frame_raw.split(',')                  
+                dt = frame_raw.split(',')
 
                 if dt.__len__() == 52:
 
@@ -789,39 +788,38 @@ class Ui_MainWindow(object):
                                           colorSpaceConversionFunction(float(dt[i]), float(dt[i + 1]), float(dt[i + 2]),
                                                                        float(dt[i + 3])))
 
-
                     frame = frame.reshape(1, 36)
 
-                    #frame_bottom = np.append(frame[:, 0:6], frame[:, 30:36]).reshape(1, 12)  # R4, R5 and L4, L5
-                    #frame_left = frame[:, 18:30].reshape(1, 12)  # middle, L1, L2, L3
-                    #frame_right = frame[:, 6:18].reshape(1, 12)  # R3, R2, R1, R0
+                    # frame_bottom = np.append(frame[:, 0:6], frame[:, 30:36]).reshape(1, 12)  # R4, R5 and L4, L5
+                    # frame_left = frame[:, 18:30].reshape(1, 12)  # middle, L1, L2, L3
+                    # frame_right = frame[:, 6:18].reshape(1, 12)  # R3, R2, R1, R0
 
-                    #OR 
-                    # frame_left = frame[:, 0:12].reshape(1, 12)  # R4, R5, R3, R2
+                    # OR
                     # frame_bottom = frame[:, 12:24].reshape(1, 12)  # R1, R0, middle, L1
+                    # frame_left = frame[:, 0:12].reshape(1, 12)  # R4, R5, R3, R2
                     # frame_right = frame[:, 24:36].reshape(1, 12)  # L2, L3,L4, L5
 
-                    #OR    
-                    #frame_bottom = np.append(frame[:, 0:9], frame[:, 33:36]).reshape(1, 12)  # R5, R4 and R3, L5
+                    # OR
+                    # frame_bottom = np.append(frame[:, 0:9], frame[:, 33:36]).reshape(1, 12)  # R5, R4 and R3, L5
 
-                    #frame_left_1 = np.append(frame[:, 33:36], frame[:, 30:33])
-                    #frame_left_2 = np.append( frame[:, 27:30], frame[:, 24:27])
-                    #frame_left = np.append(frame_left_1, frame_left_2 ).reshape(1, 12)  # L5, L4, L3, L2
+                    # frame_left_1 = np.append(frame[:, 33:36], frame[:, 30:33])
+                    # frame_left_2 = np.append( frame[:, 27:30], frame[:, 24:27])
+                    # frame_left = np.append(frame_left_1, frame_left_2 ).reshape(1, 12)  # L5, L4, L3, L2
 
-                    #frame_right_1 = np.append(frame[:, 12:15], frame[:, 9:12])
-                    #frame_right_2 = np.append(frame[:, 6:9], frame[:, 3:6])
-                    #frame_right = np.append(frame_right_1,frame_right_2 ).reshape(1, 12)  # R1, R2, R3, R4
-                    
-                    #OR 
-                    #frame_bottom = frame[:, 0:3].reshape(1, 6)  # R5
-                    #frame_left = frame[:, 30:33].reshape(1, 6)  # L4
-                    #frame_right = frame[:, 9:12].reshape(1, 6)  # R2
+                    # frame_right_1 = np.append(frame[:, 12:15], frame[:, 9:12])
+                    # frame_right_2 = np.append(frame[:, 6:9], frame[:, 3:6])
+                    # frame_right = np.append(frame_right_1,frame_right_2 ).reshape(1, 12)  # R1, R2, R3, R4
 
-                                        #OR 
+                    # OR
+                    # frame_bottom = frame[:, 0:3].reshape(1, 6)  # R5
+                    # frame_left = frame[:, 30:33].reshape(1, 6)  # L4
+                    # frame_right = frame[:, 9:12].reshape(1, 6)  # R2
+
+                    # OR
                     frame_bottom = frame[:, 0:6].reshape(1, 6)  # R5, R4
-                    frame_left = np.append( frame[:, 30:33], frame[:, 27:30]).reshape(1, 6)  # L4, L3
-                    frame_right = np.append( frame[:, 9:12],frame[:, 6:9]).reshape(1, 6)  # R2, R3
-               
+                    frame_left = np.append(frame[:, 30:33], frame[:, 27:30]).reshape(1, 6)  # L4, L3
+                    frame_right = np.append(frame[:, 9:12], frame[:, 6:9]).reshape(1, 6)  # R2, R3
+
                     result_bottom = self.model_bottom.predict(frame_bottom, batch_size=1)
                     result_left = self.model_left.predict(frame_left, batch_size=1)
                     result_right = self.model_right.predict(frame_right, batch_size=1)

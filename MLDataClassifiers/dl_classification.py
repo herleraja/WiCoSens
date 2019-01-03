@@ -19,7 +19,7 @@ def build_model(number_class, input_shape=36, plot_model_arch=False):
     # model.add(tf.keras.layers.Flatten())
     # model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(256, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
-    #model.add(tf.keras.layers.Dropout(0.3))
+    model.add(tf.keras.layers.Dropout(0.3))
     model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
     # model.add(tf.keras.layers.Dropout(0.3))
     model.add(tf.keras.layers.Dense(number_class, activation='softmax'))
@@ -28,7 +28,6 @@ def build_model(number_class, input_shape=36, plot_model_arch=False):
     model.compile(loss='categorical_crossentropy',
                   optimizer='Adamax',  # rmsprop, adam, Adamax
                   metrics=['accuracy'])
-
     if plot_model_arch:
         plot_model(model, show_shapes=True, to_file=ml_utils.get_dir_path() + 'color_classifier_model.png')
 
