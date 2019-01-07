@@ -14,12 +14,12 @@ def build_model(number_class, input_shape=36, plot_model_arch=False):
     # model.add(tf.keras.layers.Dropout(0.3))
     # model.add(tf.keras.layers.Dense(1024, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
     # model.add(tf.keras.layers.Dropout(0.3))
-    model.add(tf.keras.layers.Dense(612, input_shape=(input_shape,), activation=tf.nn.relu,
+    model.add(tf.keras.layers.Dense(512, input_shape=(input_shape,), activation=tf.nn.relu,
                                     kernel_regularizer=keras.regularizers.l2(0.001)))
     # model.add(tf.keras.layers.Flatten())
     # model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(256, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
-    model.add(tf.keras.layers.Dropout(0.3))
+    #model.add(tf.keras.layers.Dropout(0.3))
     model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu, kernel_regularizer=keras.regularizers.l2(0.001)))
     # model.add(tf.keras.layers.Dropout(0.3))
     model.add(tf.keras.layers.Dense(number_class, activation='softmax'))
