@@ -811,9 +811,9 @@ class Ui_MainWindow(object):
                     # frame_right = np.append(frame_right_1,frame_right_2 ).reshape(1, 12)  # R1, R2, R3, R4
 
                     # OR
-                    # frame_bottom = frame[:, 0:3].reshape(1, 6)  # R5
-                    # frame_left = frame[:, 30:33].reshape(1, 6)  # L4
-                    # frame_right = frame[:, 9:12].reshape(1, 6)  # R2
+                    # frame_bottom = frame[:, 0:3].reshape(1, 3)  # R5
+                    # frame_left = frame[:, 30:33].reshape(1, 3)  # L4
+                    # frame_right = frame[:, 9:12].reshape(1, 3)  # R2
 
                     # OR
                     frame_bottom = frame[:, 0:6].reshape(1, 6)  # R5, R4
@@ -829,13 +829,13 @@ class Ui_MainWindow(object):
                     result_right_predicted = result_right.argmax(axis=-1)[0]
 
                     # confidence greater than 50% then only append the data
-                    if result_bottom_predicted != 0 and (result_bottom[0][result_bottom_predicted] * 100) > 70:
+                    if result_bottom_predicted != 0 and (result_bottom[0][result_bottom_predicted] * 100) > 90:
                         self.bottom_color_list.append(result_bottom_predicted)
 
-                    if result_left_predicted != 0 and (result_left[0][result_left_predicted] * 100) > 70:
+                    if result_left_predicted != 0 and (result_left[0][result_left_predicted] * 100) > 80:
                         self.left_color_list.append(result_left_predicted)
 
-                    if result_right_predicted != 0 and (result_right[0][result_right_predicted] * 100) > 90:
+                    if result_right_predicted != 0 and (result_right[0][result_right_predicted] * 100) > 80:
                         self.right_color_list.append(result_right_predicted)
 
                     self.no_records -= 1
