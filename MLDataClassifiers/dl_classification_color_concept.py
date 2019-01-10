@@ -1,6 +1,7 @@
-import keras
-import ml_utils
 import dl_classification as dl_clf
+import ml_utils
+
+from sklearn.preprocessing import StandardScaler
 
 source_dir_path = ml_utils.get_source_dir_path()
 
@@ -35,6 +36,22 @@ if __name__ == "__main__":
     test_right_data, test_right_labels_raw, test_right_labels = ml_utils.parse_file(
         source_dir_path + 'test_right.csv', start_column=7, end_column=13)
 
+    if ml_utils.get_feature_type() == 'PREPROCESSED':
+        bottom_preprocessor = StandardScaler()
+        left_preprocessor = StandardScaler()
+        right_preprocessor = StandardScaler()
+
+        bottom_preprocessor.fit(train_bottom_data)
+        left_preprocessor.fit(train_left_data)
+        right_preprocessor.fit(train_right_data)
+
+        train_bottom_data = bottom_preprocessor.transform(train_bottom_data)
+        train_left_data = left_preprocessor.transform(train_left_data)
+        train_right_data = right_preprocessor.transform(train_right_data)
+
+        test_bottom_data = bottom_preprocessor.transform(test_bottom_data)
+        test_left_data = left_preprocessor.transform(test_left_data)
+        test_right_data = right_preprocessor.transform(test_right_data)
 
     # earlyStopping = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, verbose=1, mode='auto')
 
@@ -59,19 +76,19 @@ print('\n****************Classification result for Bottom***********************
 ml_utils.display_result(test_bottom_labels_raw, test_predicted_bottom_res.argmax(axis=1),
                         'Bottom')  # Print the classification result
 
-#for result in test_predicted_bottom_res:
+# for result in test_predicted_bottom_res:
 #    ml_utils.display_confidence(result)
 
 test_predicted_left_res = model_left.predict(test_left_data, batch_size=1)
 print('\n****************Classification result for Left************************')
 ml_utils.display_result(test_left_labels_raw, test_predicted_left_res.argmax(axis=1),
                         'Left')  # Print the classification result
-#for result in test_predicted_left_res:
+# for result in test_predicted_left_res:
 #    ml_utils.display_confidence(result)
 
 test_predicted_right_res = model_right.predict(test_right_data, batch_size=1)
 print('\n****************Classification result for Right************************')
 ml_utils.display_result(test_right_labels_raw, test_predicted_right_res.argmax(axis=1),
                         'Right')  # Print the classification result
-#for result in test_predicted_right_res:
+# for result in test_predicted_right_res:
 #    ml_utils.display_confidence(result)

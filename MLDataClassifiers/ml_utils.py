@@ -11,8 +11,8 @@ from sklearn.metrics import precision_score, recall_score, f1_score, confusion_m
 from sklearn.preprocessing import StandardScaler
 
 # Configuration related inputs
-color_space = 'RGB'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
-feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, ICA
+color_space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
+feature_type = 'PREPROCESSED'  # RAW, PREPROCESSED, PCA, LDA, ICA
 start_column = 4  # starting column is 4 then we get only color sensor data data, 1 - which include accelerometer
 loadConfigurationsFromFiles = False  # True, False
 source_dir_path = "./datarecording_discrete/color_concept_latest/" + color_space.lower() + "/"
@@ -133,6 +133,7 @@ def display_confidence(array, n=3):
 
 
 def get_source_dir_path():
+    print('File loaded from : {}'.format(source_dir_path))
     return source_dir_path
 
 
