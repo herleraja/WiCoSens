@@ -24,12 +24,12 @@ def build_model(number_class=169):
     model.add(tf.keras.layers.Dense(number_class, activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     # model.summary()
-    plot_model(model, show_shapes=True, to_file=source_dir_path + 'text_class_model.png')
+    #plot_model(model, show_shapes=True, to_file=source_dir_path + 'text_class_model.png')
 
     return model
 
 
-text_class_model = build_model(169)
+text_class_model = build_model(113)
 
 earlyStopping = keras.callbacks.EarlyStopping(monitor='loss', patience=10, verbose=1, mode='auto')
 
