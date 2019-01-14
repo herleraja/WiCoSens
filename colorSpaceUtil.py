@@ -205,7 +205,6 @@ if __name__ == "__main__":
                                          destination_dir_path + 'train_right.csv',
                                          color_Space=color_Space)
 
-
         print("The files are converted to ***", color_Space, "*** color space")
 
 
