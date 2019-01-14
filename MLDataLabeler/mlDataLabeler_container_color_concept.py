@@ -18,7 +18,7 @@ import colorSpaceUtil
 
 
 class Ui_MainWindow(object):
-    ser = bottom_file = left_file = right_file = model_bottom = model_left = model_right = text_class_model = None
+    ser = bottom_file = left_file = right_file = model_bottom = model_left = model_right = text_class_model = bottom_preprocessor = left_preprocessor = right_preprocessor = None
     container_dict = color_concept_dict = {}
     start_time = 100
     # maxSamplesPerKeyCount = 2
@@ -32,7 +32,8 @@ class Ui_MainWindow(object):
     no_records = 100
 
     color_space = 'HSV'
-    config_save_load_dir_path = "./resources/Classifier/color_concept_latest/RAW/" + color_space.lower() + "/"
+    feature_type = 'RAW'  # RAW, PREPROCESSED
+    config_save_load_dir_path = "./resources/Classifier/" + feature_type + "/" + color_space.lower() + "/"
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -487,6 +488,11 @@ class Ui_MainWindow(object):
         self.addButtonOperations()
         self.addFiledsValidators()
 
+        if self.feature_type == 'PREPROCESSED':
+            self.bottom_preprocessor = pickle.load(open(self.config_save_load_dir_path + "bottom_preprocessor.p", "rb"))
+            self.left_preprocessor = pickle.load(open(self.config_save_load_dir_path + "left_preprocessor.p", "rb"))
+            self.right_preprocessor = pickle.load(open(self.config_save_load_dir_path + "right_preprocessor.p", "rb"))
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Data Collection"))
@@ -530,7 +536,7 @@ class Ui_MainWindow(object):
         self.baudrateComboBox.setItemText(11, _translate("MainWindow", "600"))
         self.baudrateComboBox.setItemText(12, _translate("MainWindow", "300"))
         self.portLabel.setText(_translate("MainWindow", "Port"))
-        self.portlineEdit.setText(_translate("MainWindow", "COM6"))
+        self.portlineEdit.setText(_translate("MainWindow", "COM3"))
         self.recordingTimerLabel.setText(_translate("MainWindow", "Recording Timer"))
         self.colorSpaceLabel.setText(_translate("MainWindow", "Color Space"))
         self.sensorEnableDisableLabel.setText(_translate("MainWindow", "Enable / Disable Color Sensor"))
@@ -819,6 +825,11 @@ class Ui_MainWindow(object):
                     frame_bottom = frame[:, 0:6].reshape(1, 6)  # R5, R4
                     frame_left = np.append(frame[:, 30:33], frame[:, 27:30]).reshape(1, 6)  # L4, L3
                     frame_right = np.append(frame[:, 9:12], frame[:, 6:9]).reshape(1, 6)  # R2, R3
+
+                    if self.feature_type == 'PREPROCESSED':
+                        frame_bottom = self.bottom_preprocessor.transform(frame_bottom)
+                        frame_left = self.left_preprocessor.transform(frame_left)
+                        frame_right = self.right_preprocessor.transform(frame_right)
 
                     result_bottom = self.model_bottom.predict(frame_bottom, batch_size=1)
                     result_left = self.model_left.predict(frame_left, batch_size=1)

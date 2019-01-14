@@ -1,5 +1,7 @@
 import dl_classification as dl_clf
 import ml_utils
+import os
+import pickle
 
 from sklearn.preprocessing import StandardScaler
 
@@ -44,6 +46,11 @@ if __name__ == "__main__":
         bottom_preprocessor.fit(train_bottom_data)
         left_preprocessor.fit(train_left_data)
         right_preprocessor.fit(train_right_data)
+
+        os.makedirs(os.path.dirname(ml_utils.get_dir_path()), exist_ok=True)
+        pickle.dump(bottom_preprocessor, open(ml_utils.get_dir_path() + "bottom_preprocessor.p", "wb"))
+        pickle.dump(left_preprocessor, open(ml_utils.get_dir_path() + "left_preprocessor.p", "wb"))
+        pickle.dump(right_preprocessor, open(ml_utils.get_dir_path() + "right_preprocessor.p", "wb"))
 
         train_bottom_data = bottom_preprocessor.transform(train_bottom_data)
         train_left_data = left_preprocessor.transform(train_left_data)

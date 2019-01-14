@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 
 # Configuration related inputs
 color_space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
-feature_type = 'PREPROCESSED'  # RAW, PREPROCESSED, PCA, LDA, ICA
+feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, ICA
 start_column = 4  # starting column is 4 then we get only color sensor data data, 1 - which include accelerometer
 loadConfigurationsFromFiles = False  # True, False
 source_dir_path = "./datarecording_discrete/color_concept_latest/" + color_space.lower() + "/"
