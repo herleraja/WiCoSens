@@ -18,7 +18,7 @@ import colorSpaceUtil
 
 
 class Ui_MainWindow(object):
-    ser = bottom_file = left_file = right_file = model_bottom = model_left = model_right = text_class_model = bottom_preprocessor = left_preprocessor = right_preprocessor = None
+    ser = bottom_file = left_file = right_file =result_file = model_bottom = model_left = model_right = text_class_model = bottom_preprocessor = left_preprocessor = right_preprocessor = None
     container_dict = color_concept_dict = {}
     start_time = 100
     # maxSamplesPerKeyCount = 2
@@ -492,6 +492,11 @@ class Ui_MainWindow(object):
             self.bottom_preprocessor = pickle.load(open(self.config_save_load_dir_path + "bottom_preprocessor.p", "rb"))
             self.left_preprocessor = pickle.load(open(self.config_save_load_dir_path + "left_preprocessor.p", "rb"))
             self.right_preprocessor = pickle.load(open(self.config_save_load_dir_path + "right_preprocessor.p", "rb"))
+        
+        write_path = self.recordingFolderLocationLineEdit.text()
+        os.makedirs(os.path.dirname(write_path), exist_ok=True)
+        result_file_name = write_path + "result.csv"
+        self.result_file = open(result_file_name, 'a')
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -536,7 +541,7 @@ class Ui_MainWindow(object):
         self.baudrateComboBox.setItemText(11, _translate("MainWindow", "600"))
         self.baudrateComboBox.setItemText(12, _translate("MainWindow", "300"))
         self.portLabel.setText(_translate("MainWindow", "Port"))
-        self.portlineEdit.setText(_translate("MainWindow", "COM3"))
+        self.portlineEdit.setText(_translate("MainWindow", "COM6"))
         self.recordingTimerLabel.setText(_translate("MainWindow", "Recording Timer"))
         self.colorSpaceLabel.setText(_translate("MainWindow", "Color Space"))
         self.sensorEnableDisableLabel.setText(_translate("MainWindow", "Enable / Disable Color Sensor"))
@@ -840,13 +845,13 @@ class Ui_MainWindow(object):
                     result_right_predicted = result_right.argmax(axis=-1)[0]
 
                     # confidence greater than 50% then only append the data
-                    if result_bottom_predicted != 0 and (result_bottom[0][result_bottom_predicted] * 100) > 90:
+                    if result_bottom_predicted != 0 and (result_bottom[0][result_bottom_predicted] * 100) > 70:
                         self.bottom_color_list.append(result_bottom_predicted)
 
-                    if result_left_predicted != 0 and (result_left[0][result_left_predicted] * 100) > 80:
+                    if result_left_predicted != 0 and (result_left[0][result_left_predicted] * 100) > 70:
                         self.left_color_list.append(result_left_predicted)
 
-                    if result_right_predicted != 0 and (result_right[0][result_right_predicted] * 100) > 80:
+                    if result_right_predicted != 0 and (result_right[0][result_right_predicted] * 100) > 70:
                         self.right_color_list.append(result_right_predicted)
 
                     self.no_records -= 1
@@ -873,6 +878,12 @@ class Ui_MainWindow(object):
 
                 print("Box Number: ", boxNumber)
 
+                # Push the result into the file for verification purposes.
+                prediction_details = str(int(bottom_color)) + ',' + str(int(left_color)) +',' +str(int(right_color)) + ',' + str(boxNumber[0]) + '\n'
+
+                self.result_file.write(prediction_details)
+                self.result_file.flush()
+
                 #  Break the while loop and we repeat the step again.
                 #  Reset the parameters
                 self.no_records = 100
@@ -882,6 +893,7 @@ class Ui_MainWindow(object):
 
             if not self.startPredictBtn.isEnabled():
                 QtCore.QTimer.singleShot(1, self.predictContainerNumber)
+                
 
         except:
 
@@ -997,7 +1009,7 @@ class Ui_MainWindow(object):
         bottom_file_name = write_path + file_name + "_bottom.csv"
         left_file_name = write_path + file_name + "_left.csv"
         right_file_name = write_path + file_name + "_right.csv"
-
+        
         self.bottom_file = open(bottom_file_name, 'a')
         self.left_file = open(left_file_name, 'a')
         self.right_file = open(right_file_name, 'a')
@@ -1123,6 +1135,9 @@ class Ui_MainWindow(object):
 
         if self.right_file is not None and not self.right_file.closed:
             self.right_file.close()
+
+        if self.result_file is not None and not self.result_file.closed:
+            self.result_file.close()
 
         self.save_dictionary('container_dict.txt')
 
