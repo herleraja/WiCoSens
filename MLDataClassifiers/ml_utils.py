@@ -113,7 +113,7 @@ def display_result(actual, predicted, title,
     print('{:.3f}\t{:.3f} \t{:.3f} \t{:.3f}'.format(precision * 100, recall * 100, f1score * 100, accuracy * 100))
     print('Classification Report :\n{}'.format(classification_report(actual, predicted, digits=5)))
 
-    ml_plots_utils.plot_confusion_matrix(mtx, normalize=False, title=title, removeNullClass=False)
+    ml_plots_utils.plot_confusion_matrix_2(mtx, normalize=False, title=title, removeNullClass=False)
 
     return precision, recall, f1score, accuracy
 

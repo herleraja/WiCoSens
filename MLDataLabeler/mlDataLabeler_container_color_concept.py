@@ -18,7 +18,7 @@ import colorSpaceUtil
 
 
 class Ui_MainWindow(object):
-    ser = bottom_file = left_file = right_file =result_file = model_bottom = model_left = model_right = text_class_model = bottom_preprocessor = left_preprocessor = right_preprocessor = None
+    ser = bottom_file = left_file = right_file = result_file = model_bottom = model_left = model_right = text_class_model = bottom_preprocessor = left_preprocessor = right_preprocessor = None
     container_dict = color_concept_dict = {}
     start_time = 100
     # maxSamplesPerKeyCount = 2
@@ -492,7 +492,7 @@ class Ui_MainWindow(object):
             self.bottom_preprocessor = pickle.load(open(self.config_save_load_dir_path + "bottom_preprocessor.p", "rb"))
             self.left_preprocessor = pickle.load(open(self.config_save_load_dir_path + "left_preprocessor.p", "rb"))
             self.right_preprocessor = pickle.load(open(self.config_save_load_dir_path + "right_preprocessor.p", "rb"))
-        
+
         write_path = self.recordingFolderLocationLineEdit.text()
         os.makedirs(os.path.dirname(write_path), exist_ok=True)
         result_file_name = write_path + "result.csv"
@@ -879,7 +879,8 @@ class Ui_MainWindow(object):
                 print("Box Number: ", boxNumber)
 
                 # Push the result into the file for verification purposes.
-                prediction_details = str(int(bottom_color)) + ',' + str(int(left_color)) +',' +str(int(right_color)) + ',' + str(boxNumber[0]) + '\n'
+                prediction_details = str(int(bottom_color)) + ',' + str(int(left_color)) + ',' + str(
+                    int(right_color)) + ',' + str(boxNumber[0]) + '\n'
 
                 self.result_file.write(prediction_details)
                 self.result_file.flush()
@@ -893,7 +894,7 @@ class Ui_MainWindow(object):
 
             if not self.startPredictBtn.isEnabled():
                 QtCore.QTimer.singleShot(1, self.predictContainerNumber)
-                
+
 
         except:
 
@@ -1009,7 +1010,7 @@ class Ui_MainWindow(object):
         bottom_file_name = write_path + file_name + "_bottom.csv"
         left_file_name = write_path + file_name + "_left.csv"
         right_file_name = write_path + file_name + "_right.csv"
-        
+
         self.bottom_file = open(bottom_file_name, 'a')
         self.left_file = open(left_file_name, 'a')
         self.right_file = open(right_file_name, 'a')

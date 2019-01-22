@@ -36,8 +36,8 @@ def plot_confusion_matrix(con_matx,
     plt.colorbar()
 
     tick_marks = np.arange(len(con_matx[0]))
-    plt.xticks(tick_marks, classes, rotation=45)
-    plt.yticks(tick_marks, classes)
+    plt.xticks(tick_marks, classes, rotation=90, fontsize=8)
+    plt.yticks(tick_marks, classes, fontsize=8)
 
     if normalize:
         con_matx = con_matx.astype('float') / con_matx.sum(axis=1)[:, np.newaxis] * 100.0
@@ -58,6 +58,14 @@ def plot_confusion_matrix(con_matx,
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.subplots_adjust(left=0.1, right=0.95, top=0.95, bottom=0.1)
+
+    ax = plt.gca()
+    ax.grid()
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    # ax.spines['bottom'].set_visible(False)
+    # ax.spines['left'].set_visible(False)
+
 
     # plt.show()
     os.makedirs(os.path.dirname(ml_utils.get_dir_path()), exist_ok=True)
@@ -143,6 +151,54 @@ def plot_color_separation(data_x, data_y, data_z, color, title, x_label='X', y_l
     plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
     plt.savefig(ml_utils.get_dir_path() + title + '.png')
     # plt.show()
+    plt.clf()
+
+
+def plot_confusion_matrix_2(cm,
+                          normalize=False,
+                          title='Confusion matrix', removeNullClass=True,
+                          cmap=plt.cm.OrRd):
+    FONT_SIZE = 8
+
+    accuracy = np.trace(cm) / float(np.sum(cm))
+    misclass = 1 - accuracy
+
+    if cmap is None:
+        cmap = plt.get_cmap('Blues')
+
+    plt.figure(figsize=(8 * 2, 6 * 2))  # 8, 6
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    #plt.title(title)
+    plt.colorbar()
+
+    classes = np.arange(0, len(cm[0]) + 1)
+    tick_marks = np.arange(len(cm[0]))
+    plt.xticks(tick_marks, classes, rotation=90, fontsize=FONT_SIZE)
+    plt.yticks(tick_marks, classes, fontsize=FONT_SIZE)
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+
+    thresh = cm.max() / 1.5 if normalize else cm.max() / 2
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        if normalize:
+            plt.text(j, i, "{:0.4f}".format(cm[i, j]),
+                     horizontalalignment="center",
+                     fontsize=FONT_SIZE,
+                     color="white" if cm[i, j] > thresh else "black")
+        else:
+            plt.text(j, i, "{:,}".format(cm[i, j]),
+                     horizontalalignment="center",
+                     fontsize=FONT_SIZE,
+                     color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label\naccuracy={:0.4f}; misclass={:0.4f}'.format(accuracy, misclass))
+    #plt.show()
+
+    os.makedirs(os.path.dirname(ml_utils.get_dir_path()), exist_ok=True)
+    plt.savefig(ml_utils.get_dir_path() + title + '_confusion_matrix.png')
     plt.clf()
 
 
