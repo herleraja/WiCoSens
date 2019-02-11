@@ -8,6 +8,11 @@ from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 from numpy import genfromtxt
 
+"""
+This file contains plotting utilities such as displaying the training time, drawing confusion matrix.
+
+"""
+
 
 def plot_confusion_matrix(con_matx,
                           normalize=False,
@@ -65,7 +70,6 @@ def plot_confusion_matrix(con_matx,
     ax.spines['right'].set_visible(False)
     # ax.spines['bottom'].set_visible(False)
     # ax.spines['left'].set_visible(False)
-
 
     # plt.show()
     os.makedirs(os.path.dirname(ml_utils.get_dir_path()), exist_ok=True)
@@ -155,9 +159,9 @@ def plot_color_separation(data_x, data_y, data_z, color, title, x_label='X', y_l
 
 
 def plot_confusion_matrix_2(cm,
-                          normalize=False,
-                          title='Confusion matrix', removeNullClass=True,
-                          cmap=plt.cm.OrRd):
+                            normalize=False,
+                            title='Confusion matrix', removeNullClass=True,
+                            cmap=plt.cm.OrRd):
     FONT_SIZE = 8
 
     accuracy = np.trace(cm) / float(np.sum(cm))
@@ -168,7 +172,7 @@ def plot_confusion_matrix_2(cm,
 
     plt.figure(figsize=(8 * 2, 6 * 2))  # 8, 6
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    #plt.title(title)
+    # plt.title(title)
     plt.colorbar()
 
     classes = np.arange(0, len(cm[0]) + 1)
@@ -195,7 +199,7 @@ def plot_confusion_matrix_2(cm,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label\naccuracy={:0.4f}; misclass={:0.4f}'.format(accuracy, misclass))
-    #plt.show()
+    # plt.show()
 
     os.makedirs(os.path.dirname(ml_utils.get_dir_path()), exist_ok=True)
     plt.savefig(ml_utils.get_dir_path() + title + '_confusion_matrix.png')

@@ -10,6 +10,21 @@ from sklearn.metrics import precision_score, recall_score, f1_score, confusion_m
     classification_report
 from sklearn.preprocessing import StandardScaler
 
+"""
+This is an utility file. Here we can change the configuration related settings. 
+The data to be loaded from the file path can be specified here.
+
+To translate the color space from RGB to any other color format please look into the " colorSpaceUtil.py " file. 
+
+
+The below configuration setting loads the 'XYZ' color space data as input with 'RAW' features from 
+"./datarecording_discrete/color_concept_latest/"  folder.
+
+
+Once the ML training is done, the configuration setting stored in location specified in 'config_save_load_dir_path' variable.
+
+"""
+
 # Configuration related inputs
 color_space = 'XYZ'  # HSV, Lab, YCbCr,HSVDegree, XYZ, RGB
 feature_type = 'RAW'  # RAW, PREPROCESSED, PCA, LDA, ICA

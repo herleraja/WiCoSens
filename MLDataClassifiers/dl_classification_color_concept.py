@@ -1,28 +1,19 @@
-import dl_classification as dl_clf
-import ml_utils
 import os
 import pickle
 
+import dl_classification as dl_clf
+import ml_utils
 from sklearn.preprocessing import StandardScaler
+
+"""
+We build handcrafted ML model and train the model using data from left, right and bottom color sensors. 
+The data loaded form 'source_dir_path' which is a configuration setting in 'ml_utils.py' file.
+
+"""
 
 source_dir_path = ml_utils.get_source_dir_path()
 
 if __name__ == "__main__":
-    '''
-    train_bottom_data, train_bottom_labels_raw, train_bottom_labels = ml_utils.parse_file(
-        source_dir_path + 'train_bottom.csv')
-    train_left_data, train_left_labels_raw, train_left_labels = ml_utils.parse_file(
-        source_dir_path + 'train_left.csv')
-    train_right_data, train_right_labels_raw, train_right_labels = ml_utils.parse_file(
-        source_dir_path + 'train_right.csv')
-
-    test_bottom_data, test_bottom_labels_raw, test_bottom_labels = ml_utils.parse_file(
-        source_dir_path + 'test_bottom.csv')
-    test_left_data, test_left_labels_raw, test_left_labels = ml_utils.parse_file(
-        source_dir_path + 'test_left.csv')
-    test_right_data, test_right_labels_raw, test_right_labels = ml_utils.parse_file(
-        source_dir_path + 'test_right.csv')
-    '''
 
     train_bottom_data, train_bottom_labels_raw, train_bottom_labels = ml_utils.parse_file(
         source_dir_path + 'train_bottom.csv', start_column=4, end_column=10)

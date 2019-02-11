@@ -6,6 +6,10 @@ import tensorflow as tf
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import GridSearchCV
 
+"""
+The following file used to optimize our ML model. Please run the code using GPUs since it takes many days to run.
+"""
+
 
 def build_model(optimizer, activation=tf.nn.relu):
     print('activation:', activation, 'optimizer', optimizer)

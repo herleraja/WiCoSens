@@ -16,6 +16,15 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 import colorSpaceUtil
 
+"""
+This is GUI file, used to label the data and predict the containers. 
+Please load the updated trained model in '/resources/Classifier/' folder.
+
+Please also follow the proper folder structure.  ie. The current setting we get the ML trained model data from 
+'/resources/Classifier/RAW/HSV' folder.
+
+"""
+
 
 class Ui_MainWindow(object):
     ser = bottom_file = left_file = right_file = result_file = model_bottom = model_left = model_right = text_class_model = bottom_preprocessor = left_preprocessor = right_preprocessor = None
@@ -29,8 +38,8 @@ class Ui_MainWindow(object):
     left_color_list = [0]
     right_color_list = [0]
 
-    no_records = 100
-
+    # Configuration settings
+    no_records = 100  # Number of records before predicting. 100Hz is for 2 sec.
     color_space = 'HSV'
     feature_type = 'RAW'  # RAW, PREPROCESSED
     config_save_load_dir_path = "./resources/Classifier/" + feature_type + "/" + color_space.lower() + "/"
@@ -708,6 +717,9 @@ class Ui_MainWindow(object):
 
             new_line = self.ser.readline().decode('utf-8').rstrip()
 
+            self.sensorTextEdit.append(new_line + '\n')
+            self.sensorTextEdit.repaint()
+
             if new_line.__len__() == 52:
                 bottom_color, left_color, right_color = self.convertSensorData(new_line)
 
@@ -722,9 +734,6 @@ class Ui_MainWindow(object):
                 self.bottom_file.flush()
                 self.left_file.flush()
                 self.right_file.flush()
-
-                self.sensorTextEdit.append(new_line)
-                self.sensorTextEdit.repaint()
 
             if not self.startCaptureBtn.isEnabled():
                 QtCore.QTimer.singleShot(1, self.captureSensorData)
@@ -1058,7 +1067,7 @@ class Ui_MainWindow(object):
     def resetFields(self):
         if self.startCaptureBtn.isEnabled():
             self.fileNameLineEdit.clear()
-            self.leftClassLabelLineEdit.clear()
+            # self.leftClassLabelLineEdit.clear()
             self.sensorTextEdit.clear()
             self.colSensorButton1.setChecked(True)
             self.colSensorButton2.setChecked(True)

@@ -13,14 +13,11 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC, LinearSVC
 from sklearn.tree import DecisionTreeClassifier
 
-n_neighbors = 7
+"""
+The following file used to compare or analyze multiple ML algorithm and out machine learning model.
+"""
 
-'''
-(train_container_data, train_container_labels, train_container_labels_raw), (
-    train_rack_data, train_rack_labels, train_rack_labels_raw) = ml_utils.get_trainig_data(start_column=4, feature_type='raw')
-(test_rack_data, test_rack_labels, test_rack_labels_raw), (
-    test_container_data, test_container_labels, test_container_labels_raw) = ml_utils.get_testing_data(start_column=4, feature_type='raw')
-'''
+n_neighbors = 7
 
 source_dir_path = ml_utils.get_source_dir_path()
 
@@ -52,15 +49,6 @@ classifiers = [
     LogisticRegression(random_state=0, n_jobs=-1)
 ]
 
-'''
-names = ["Nearest Neighbors", "Linear SVM", 'LinearSVC']
-
-classifiers = [
-    KNeighborsClassifier(n_neighbors, weights='distance', n_jobs=-1),
-    SVC(kernel="linear", C=0.025),
-    LinearSVC(C=0.025)
-]
-'''
 precisions = {}
 recalls = {}
 f1scores = {}

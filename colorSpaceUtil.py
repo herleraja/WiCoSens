@@ -5,6 +5,11 @@ import traceback
 import numpy as np
 from numpy import genfromtxt
 
+"""
+We use this package to convert the data from one color space into other color space.
+The configuration setting is available in the main condition.
+"""
+
 
 def rgbc2YCbCr(r, g, b, c=0):
     if c != 0:
@@ -172,18 +177,7 @@ if __name__ == "__main__":
         source_dir_path = "./MLDataLabeler/datarecording_discrete/color_concept_latest/rgb/"
         destination_dir_path = "./MLDataClassifiers/datarecording_discrete/color_concept_latest/" + color_Space.lower() + "/"
         os.makedirs(os.path.dirname(destination_dir_path), exist_ok=True)
-        '''
-        fileColorSpaceConversionFunction(source_dir_path + 'rack_test_2I_4I.csv',
-                                         destination_dir_path + 'rack_test_2I_4I.csv', color_Space=color_Space)
-        fileColorSpaceConversionFunction(source_dir_path + 'rack_train_2I_4I.csv',
-                                         destination_dir_path + 'rack_train_2I_4I.csv', color_Space=color_Space)
-        fileColorSpaceConversionFunction(source_dir_path + 'container_test_2I_4I.csv',
-                                         destination_dir_path + 'container_test_2I_4I.csv',
-                                         color_Space=color_Space)
-        fileColorSpaceConversionFunction(source_dir_path + 'container_train_2I_4I.csv',
-                                         destination_dir_path + 'container_train_2I_4I.csv',
-                                         color_Space=color_Space)
-'''
+
         fileColorSpaceConversionFunction(source_dir_path + 'test_bottom.csv',
                                          destination_dir_path + 'test_bottom.csv',
                                          color_Space=color_Space)

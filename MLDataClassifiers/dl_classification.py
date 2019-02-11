@@ -6,6 +6,13 @@ import ml_utils
 import tensorflow as tf
 from keras.utils.vis_utils import plot_model
 
+"""
+This file consist of handcrafted ML Model. The all ML model uses this 'build_model' to create a model.
+
+The main method does not work due to the change in the implementation.
+ 
+Please use 'dl_classification_color_concept.py' file to run the following model. 
+"""
 
 def build_model(number_class, input_shape=36, plot_model_arch=False):
     model = tf.keras.Sequential()
