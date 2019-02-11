@@ -17,6 +17,12 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 import colorSpaceUtil
 
 """
+
+Note:
+If you get error 'The sample reached maximum size limit / all the container samples taken"
+Then Either delete the 'container_dict' file or to take more samples please change **maxSamplesPerKeyCount** variable.
+
+
 This is GUI file, used to label the data and predict the containers. 
 Please load the updated trained model in '/resources/Classifier/' folder.
 
@@ -1031,9 +1037,7 @@ class Ui_MainWindow(object):
 
         if sum(self.container_dict.values()) == (
                 randomNumberUpperLimit - randomNumberLowerLimit - self.skip_container_numbers.__len__() + 1) * maxSamplesPerKeyCount:
-            print(
-                "\n\nThe sample reached maximum size limit / all the container samples taken. "
-                "To take more samples please change **maxSamplesPerKeyCount** variable.\n\n")
+            print("\n\nThe sample reached maximum size limit / all the container samples taken.\n\n")
             exit()
 
         while True:
